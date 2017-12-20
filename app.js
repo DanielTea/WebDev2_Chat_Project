@@ -12,7 +12,9 @@ var users = require('./routes/users');
 
 var app = express();
 
-mongoose.connect(process.env.DB_MONGO_URI);
+mongoose.connect(process.env.DB_MONGO_URI, {
+    useMongoClient: true
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
