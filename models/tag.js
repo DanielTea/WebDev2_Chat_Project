@@ -6,6 +6,7 @@ var tagSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message'
     }],
+    description: String,
     updatedAt: Date,
     createdAt: Date
 });

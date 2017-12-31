@@ -31,3 +31,6 @@ npm-debug.log
 
 # Local config variables
 .env
+
+#package
+package-lock.json
