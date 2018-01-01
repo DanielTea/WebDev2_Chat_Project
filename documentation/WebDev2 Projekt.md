@@ -1,7 +1,6 @@
 
 
 
-
 # WebDev2 Projekt#
 
 [TOC]
@@ -21,7 +20,7 @@ EJS.js
 
 MongoDB
 
-Soccet.IO
+Socket.IO
 
 jQuery
 
