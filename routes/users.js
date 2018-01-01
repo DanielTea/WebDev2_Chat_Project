@@ -29,13 +29,10 @@ router.post('/', function (req) {
 });
 
 
-router.post('/getProfile', function (req, res) {
+router.get('/:id', function (req, res) {
     var objectId = require('mongodb').ObjectId;
-    console.log(req.body.id);
-
-    var id = new objectId(req.body.id);
+    var id = new objectId(req.params.id);
     User.findById(id, function (err, profile){
-        console.log('%s %s has %s as e-mail.', profile.firstName, profile.lastName, profile.email);
         res.send(profile)
     });
 

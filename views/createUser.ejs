@@ -26,8 +26,13 @@
             $("#getProfile").click(function(){
                 var profileId;
                 profileId = $("#profileId").val();
-                $.post("http://"+window.location.hostname+":3000/users/getProfile",{id: profileId}, function(data){
-                    console.log(data.birthDate)
+                $.get("http://"+window.location.hostname+":3000/users/"+profileId, function(data){
+                    $("#bday").val(data.birthDate);
+                    $("#firstName").val(data.firstName);
+                    $("#lastName").val(data.lastName);
+                    $("#email").val(data.email);
+                    $("#status").val(data.status);
+                    $("#password").val(data.password);
                 });
             });
 
