@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/head %>
+	<% function blobToUrl(blob){
+	//Cross browser support
+	window.URL = window.URL || window.webkitURL;
+	return window.URL.createObjectURL(blob);
+	} %>
+  </head>
+  <body>
+    <nav><%include ../partials/nav %></nav>
+	<main id="showProfile">
+		<img class="profilePicture" src="<%= blobToUrl(profile.picture) %>">
+		<section class="profileName"><%= profile.firstName %> <%= profile.lastName %></section>
+		<section class="profileStatus"><%= profile.status %></section>
+		<a class="profileMail" href="mailto:<%= profile.email %>"><%= profile.email %> </a>
+	</main>
+	<footer><% include ../partials/footer %></footer>
+  </body>
+</html>

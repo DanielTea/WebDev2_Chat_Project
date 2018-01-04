@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/head %>
+	
+	<% function blobToUrl(blob){
+	//Cross browser support
+	window.URL = window.URL || window.webkitURL;
+	return window.URL.createObjectURL(blob);
+	} %>
+  </head>
+  <body>
+	<main id="browseProfiles">
+		<ul id="profileCards">
+			<% profiles.forEach(function(profile) { %>
+				<li class="profileCard">
+					<img class="profilePicture" src="<%= blobToUrl(profile.picture) %>">
+					<section class="profileName"><%= profile.firstName %> <%= profile.lastName %></section>
+					<section class="profileStatus"><%= profile.status %></section>
+					<a class="profileMail" href="mailto:<%= profile.email %>"><%= profile.email %> </a>					
+				</li>
+			<% }); %>
+		<ul>
+	</main>
+    <nav><% include ../partials/nav %></nav>
+	<footer><% include ../partials/footer %></footer>
+  </body>
+</html>

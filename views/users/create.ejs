@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/head %>
+  </head>
+  <body>
+    <nav><% include ../partials/nav %></nav>
+	<main id="welcomeScreen">
+		Welcome <%= user.firstName %> <%= user.lastName %>.</br>
+		Your profile has been created!</br>
+		You can start exploring by browsing the Tags, or by adding a private conversation.
+	</main>
+	<footer><% include ../partials/footer %></footer>
+  </body>
+</html>
