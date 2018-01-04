@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 var chatSchema = mongoose.Schema({
+    name: String,
     users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
