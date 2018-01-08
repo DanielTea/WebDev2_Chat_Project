@@ -28,6 +28,15 @@ router.post('/', function (req) {
 
 });
 
+router.patch('/:id', function(req){
+
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
+    User.update(id, req.body)
+
+
+});
+
 
 router.get('/:id', function (req, res) {
     var objectId = require('mongodb').ObjectId;

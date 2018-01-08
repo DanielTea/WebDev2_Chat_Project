@@ -11,6 +11,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+// var mongoURI = " var dbURI = "mongodb://127.0.0.1:27017"
 
 mongoose.connect(process.env.DB_MONGO_URI, {
     useMongoClient: true

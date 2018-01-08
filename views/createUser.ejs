@@ -15,7 +15,7 @@
                 email=$("#email").val();
                 status=$("#status").val();
                 password=$("#password").val();
-                $.post("http://"+window.location.hostname+":3000/users",{firstName: firstName, lastName: lastName, birthDate: birthday, email: email, status: status, password: password}, function(data){
+                $.post("http://"+window.location.hostname+":3000/users", {firstName: firstName, lastName: lastName, birthDate: birthday, email: email, status: status, password: password}, function(data){
                     if(data==='done')
                     {
                         alert("login success");
@@ -24,6 +24,24 @@
             });
 
             $("#getProfile").click(function(){
+                var firstName,lastName, birthday, email, status, password;
+                birthday = $("#bday").val();
+                firstName=$("#firstName").val();
+                lastName=$("#lastName").val();
+                email=$("#email").val();
+                status=$("#status").val();
+                password=$("#password").val();
+                var profileId;
+                profileId = $("#profileId").val();
+                $.patch("http://"+window.location.hostname+":3000/users/"+profileId, {firstName: firstName, lastName: lastName, birthDate: birthday, email: email, status: status, password: password}, function(data){
+                    if(data==='done')
+                    {
+                        alert("login success");
+                    }
+                });
+            });
+
+            $("#updateProfile").click(function(){
                 var profileId;
                 profileId = $("#profileId").val();
                 $.get("http://"+window.location.hostname+":3000/users/"+profileId, function(data){
@@ -55,7 +73,8 @@ Password: <input type="password" id="password" size="40"><br>
 <br>
 <br>
 Profile ID: <input type="TEXT" id="profileId" size="40"><br>
-<input type="button" id="getProfile" value="GetProfile">
+<input type="button" id="getProfile" value="GetProfile"><br>
+<input type="button" id="updateProfile" value="UpdateProfile">
 
 </body>
 </html>
