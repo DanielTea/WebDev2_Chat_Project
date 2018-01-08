@@ -6,12 +6,19 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var sassMiddleware = require('node-sass-middleware');
 var mongoose = require('mongoose');
+var methodOverride = require('method-override')
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 // var mongoURI = " var dbURI = "mongodb://127.0.0.1:27017"
+
+app.use(methodOverride('_method'));
+app.use(methodOverride('X-HTTP-Method'));          // Microsoft
+app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
+app.use(methodOverride('X-Method-Override'));      // IBM
 
 mongoose.connect(process.env.DB_MONGO_URI, {
     useMongoClient: true

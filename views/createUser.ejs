@@ -23,7 +23,7 @@
                 });
             });
 
-            $("#getProfile").click(function(){
+            $("#updateProfile").click(function(){
                 var firstName,lastName, birthday, email, status, password;
                 birthday = $("#bday").val();
                 firstName=$("#firstName").val();
@@ -41,7 +41,7 @@
                 });
             });
 
-            $("#updateProfile").click(function(){
+            $("#getProfile").click(function(){
                 var profileId;
                 profileId = $("#profileId").val();
                 $.get("http://"+window.location.hostname+":3000/users/"+profileId, function(data){
@@ -61,6 +61,12 @@
 <body>
 <h1><%= title %></h1>
 <p>Welcome to <%= title %></p>
+
+<form action="/users/5?_method=PATCH" method="post">
+    <input name="firstName" type="text">
+    <button type="submit">Submit</button>
+
+</form>
 
 First Name: <input type="TEXT" id="firstName" size="40"><br>
 Last Name: <input type="TEXT" id="lastName" size="40"><br>

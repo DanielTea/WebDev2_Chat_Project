@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <% include ../partials/head %>
-  </head>
-  <body>
-    <nav><%include ../partials/nav %></nav>
-	<main id="updateProfile">
-		Your profile has been updated:</br>
-		<img class="profilePicture" src="<%= blobToUrl(profile.picture) %>">
-		<section class="profileName"><%= profile.firstName %> <%= profile.lastName %></section>
-		<section class="profileStatus"><%= profile.status %></section>
-		<a class="profileMail" href="mailto:<%= profile.email %>"><%= profile.email %> </a>
-	</main>
-	<footer><% include ../partials/footer %></footer>
-  </body>
-</html>
+<form action="/users/5?_method=PATCH" method="post">
+	<input name="firstName" type="text">
+	<button type="submit">Submit</button>
+
+</form>
