@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/head %>
+  </head>
+  <body>
+	<main id="browseChats">
+		<ul id="chatCards">
+            <li class="chatCard">
+                <section class="chatName"><%= chat.name %></section>
+                <section class="chatCreated"><%= chat.createdAt %></section>                    
+                <section class="chatUpdated"><%= chat.updatedAt %></section>                 
+            </li>
+		<ul>
+        <ul id="browseMessages">
+            <% messages.forEach(function(message) { %>
+				<li class="chatCard">
+					<section class="messageContent"><%= message.content %></section>
+					<section class="messageMultimedia"><%= message.multimedia %></section>
+					<section class="messageCreated"><%= message.createdAt %></section>                    
+					<section class="messageUpdated"><%= message.updatedAt %></section>                 
+				</li>
+			<% }); %>
+        </ul>
+	</main>
+    <nav><% include ../partials/nav %></nav>
+	<footer><% include ../partials/footer %></footer>
+  </body>
+</html>
