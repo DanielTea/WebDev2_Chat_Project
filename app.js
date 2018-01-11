@@ -6,19 +6,18 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var sassMiddleware = require('node-sass-middleware');
 var mongoose = require('mongoose');
+var session = require('express-session');
+var flash = require('connect-flash');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+var passport = require('passport');
+var LocalStrategy = LocalStrategy = require('passport-local').Strategy;
 
 var app = express();
 
+mongoose.Promise = require('bluebird');
 mongoose.connect(process.env.DB_MONGO_URI, {
     useMongoClient: true
 });
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -28,6 +27,58 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(cookieParser());
+var secure_cookie = process.env.HTTPS_SECURED == 'true';
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: secure_cookie
+    }
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+const User = require('./models/user');
+passport.use(new LocalStrategy({
+        passReqToCallback: true
+    },
+    (req, email, password, done) => {
+        User.findOne({
+            email: email
+        }, (err, user) => {
+            if (err) {
+                return done(err);
+            }
+            if (!user) {
+                console.log('user does not exist');
+                return done(null, false, req.flash('error', 'Sorry, email/password combination was invalid.'));
+            }
+            if (!user.validatePassword(password)) {
+                console.log('password is not correct.');
+                return done(null, false, req.flash('error', 'Sorry, email/password combination was invalid.'));
+            }
+            console.log('login successful.');
+            return done(null, user, req.flash('success', 'Yeah! You got logged in.'));
+        });
+    }
+));
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => {
+        done(err, user);
+    });
+});
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 app.use(sassMiddleware({
     src: path.join(__dirname, 'public'),
     dest: path.join(__dirname, 'public'),
@@ -36,18 +87,19 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/', require('./routes/index'));
+app.use('/', require('./routes/login'));
+app.use('/users', require('./routes/users'));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
