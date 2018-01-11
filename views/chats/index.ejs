@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/head %>
+  </head>
+  <body>
+	<main id="browseChats">
+		<ul id="chatCards">
+			<% chats.forEach(function(chat) { %>
+				<li class="chatCard">
+					<section class="chatName"><%= chat.name %></section>
+					<section class="chatCreated"><%= chat.createdAt %></section>                    
+					<section class="chatUpdated"><%= chat.updatedAt %></section>                 
+				</li>
+			<% }); %>
+		<ul>
+	</main>
+    <nav><% include ../partials/nav %></nav>
+	<footer><% include ../partials/footer %></footer>
+  </body>
+</html>

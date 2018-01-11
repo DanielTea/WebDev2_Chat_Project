@@ -8,11 +8,17 @@ var sassMiddleware = require('node-sass-middleware');
 var mongoose = require('mongoose');
 var session = require('express-session');
 var flash = require('connect-flash');
+var methodOverride = require('method-override')
 
 var passport = require('passport');
 var LocalStrategy = LocalStrategy = require('passport-local').Strategy;
 
 var app = express();
+
+app.use(methodOverride('_method'));
+app.use(methodOverride('X-HTTP-Method'));          // Microsoft
+app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
+app.use(methodOverride('X-Method-Override'));      // IBM
 
 mongoose.Promise = require('bluebird');
 mongoose.connect(process.env.DB_MONGO_URI, {
