@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <% include ../partials/head %>
-	<% function blobToUrl(blob){
-	//Cross browser support
-	window.URL = window.URL || window.webkitURL;
-	return window.URL.createObjectURL(blob);
-	} %>
-  </head>
-  <body>
-    <nav><%include ../partials/nav %></nav>
-	<main id="showProfile">
-		<img class="profilePicture" src="<%= blobToUrl(profile.picture) %>">
-		<section class="profileName"><%= profile.firstName %> <%= profile.lastName %></section>
-		<section class="profileStatus"><%= profile.status %></section>
-		<a class="profileMail" href="mailto:<%= profile.email %>"><%= profile.email %> </a>
-	</main>
-	<footer><% include ../partials/footer %></footer>
-  </body>
-</html>
+<% include ../partials/head %>
+<% include ../partials/nav %>
+<main>
+    <div class="card-body">
+        <h5 class="card-title"><%= user.firstName %> <%= user.lastName %></h5>
+        <h6 class="card-subtitle mb-2 text-muted"><%= user.status %></h6>
+        <a href="mailto:<%= user.email %>" class="card-link"><%= user.email %></a>
+    </div>
+</main>
+<% include ../partials/footer %>

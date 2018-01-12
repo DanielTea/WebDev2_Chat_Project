@@ -1,15 +1,28 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <% include ../partials/head %>
-  </head>
-  <body>
-    <nav><% include ../partials/nav %></nav>
-	<main id="welcomeScreen">
-		Welcome <%= user.firstName %> <%= user.lastName %>.</br>
-		Your profile has been created!</br>
-		You can start exploring by browsing the Tags, or by adding a private conversation.
-	</main>
-	<footer><% include ../partials/footer %></footer>
-  </body>
-</html>
+<% include ../partials/head %>
+<% include ../partials/nav %>
+<main>
+    <form action="/users/" method="post">
+        <div class="form-group">
+            <label for="firstName">First name</label>
+            <input type="text" name="firstName" id="firstName">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last name</label>
+            <input type="text" name="lastName" id="lastName">
+        </div>
+        <div class="form-group">
+            <label for="birthDate">Birth date</label>
+            <input type="date" name="birthDate" id="birthDate">
+        </div>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" name="email" id="email">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
+    </form>
+</main>
+<% include ../partials/footer %>

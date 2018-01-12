@@ -1,5 +1,50 @@
-<form action="/users/5?_method=PATCH" method="post">
-	<input name="firstName" type="text">
-	<button type="submit">Submit</button>
+<% include ../partials/head %>
+<% include ../partials/nav %>
+<main>
+    <form action="/users/<%= user._id%>?method=PATCH" method="post">
+        <div class="form-group">
+            <label for="status">Status</label>
+            <input type="text" name="status" id="status" placeholder="<%= user.status %>">
+        </div>
+        <div class="form-group">
+            <label for="picture">Picture link</label>
+            <input type="url" name="picture" id="picture" placeholder="<%= user.picture %>">
+            <div>
+                <p class="text-center">Preview:</p>
+                <img src="<%= user.picture %>" class="img-thumbnail">
+            </div>
+        </div>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#profileSettings">
+            Show / Hide Profile Settings
+        </button>
+        <div class="collapse" id="profileSettings">
+            <div class="form-group">
+                <label for="firstName">First name</label>
+                <input type="text" name="firstName" id="firstName" placeholder="<%= user.firstName %>">
 
-</form>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last name</label>
+                <input type="text" name="lastName" id="lastName" placeholder="<%= user.lastName %>">
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Birth date</label>
+                <input type="date" name="birthDate" id="birthDate" placeholder="<%= user.birthDate %>">
+            </div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="text" name="email" id="email" placeholder="<%= user.email %>">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save changes</button>
+    </form>
+    <div>
+        <a class="btn btn-danger" href="/users/delete">Delete profile</a>
+    </div>
+</main>
+<% include ../partials/footer %>
