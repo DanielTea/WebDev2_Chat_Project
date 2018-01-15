@@ -12,7 +12,7 @@ router.get('/seed-database', (req, res) => {
             email: faker.internet.exampleEmail(),
             birthDate: faker.date.past(),
             status: faker.lorem.sentence(),
-            pictureUrl: faker.image.imageUrl()
+            pictureUrl: faker.internet.avatar()
         });
         user.password = user.generateHash('hdm');
 

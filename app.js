@@ -82,7 +82,7 @@ passport.deserializeUser((id, done) => {
 });
 
 app.use((req, res, next) => {
-  app.locals.user = req.user;
+  app.locals.activeUser = req.user;
   next();
 });
 
