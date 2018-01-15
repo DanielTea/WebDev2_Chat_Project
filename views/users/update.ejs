@@ -1,5 +1,6 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
+
 <main>
     <form action="/users/<%= user._id%>?method=PATCH" method="post">
         <div class="form-group">
@@ -47,4 +48,5 @@
         <a class="btn btn-danger" href="/users/delete">Delete profile</a>
     </div>
 </main>
+
 <% include ../partials/footer %>
