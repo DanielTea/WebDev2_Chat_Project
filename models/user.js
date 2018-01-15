@@ -19,10 +19,7 @@ var userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tag'
     }],
-    picture: {
-        data: Buffer,
-        contentType: String
-    },
+    pictureUrl: String,
     updatedAt: Date,
     createdAt: Date
 });

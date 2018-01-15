@@ -4,7 +4,7 @@
     <div class="card-group">
         <% users.forEach(function(profile) { %>
         <div class="card">
-            <img class="card-img-top" src="<%= profile.picture %>">
+            <img class="card-img-top" src="<%= profile.pictureUrl %>">
             <div class="card-body">
                 <h5 class="card-title"><%= profile.firstName %> <%= profile.lastName %></h5>
                 <h6 class="card-subtitle mb-2 text-muted"><%= profile.status %></h6>

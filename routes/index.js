@@ -6,7 +6,6 @@ var passport = require('passport');
 router.get('/', function(req, res, next) {
     res.render('index', {
         title: 'Express',
-        user: req.user,
         error: req.flash('error'),
         success: req.flash('success')
     });

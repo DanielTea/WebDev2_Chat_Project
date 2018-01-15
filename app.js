@@ -16,9 +16,9 @@ var LocalStrategy = LocalStrategy = require('passport-local').Strategy;
 var app = express();
 
 app.use(methodOverride('_method'));
-app.use(methodOverride('X-HTTP-Method'));          // Microsoft
+app.use(methodOverride('X-HTTP-Method')); // Microsoft
 app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
-app.use(methodOverride('X-Method-Override'));      // IBM
+app.use(methodOverride('X-Method-Override')); // IBM
 
 mongoose.Promise = require('bluebird');
 mongoose.connect(process.env.DB_MONGO_URI, {
@@ -79,6 +79,11 @@ passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => {
         done(err, user);
     });
+});
+
+app.use((req, res, next) => {
+  app.locals.user = req.user;
+  next();
 });
 
 // view engine setup
