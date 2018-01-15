@@ -30,13 +30,13 @@ router.post('/', function (req) {
 
 router.patch('/:id', function(req, res){
 
-    // var objectId = require('mongodb').ObjectId;
-    // var id = new objectId(req.params.id);
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
 
 
     console.log(req.body);
-    res.send("hi")
-    // User.update(id, req.body)
+    // res.send("hi")
+    User.update(id, req.body)
 
 
 });
