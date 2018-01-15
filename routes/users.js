@@ -21,7 +21,7 @@ router.get('/create', function(req, res) {
     });
 });
 
-router.post('/', function(req) {
+router.post('/', function(req, res) {
     var newProfile = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
