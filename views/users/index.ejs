@@ -10,12 +10,11 @@
                 <h6 class="card-subtitle mb-2 text-muted"><%= profile.status %></h6>
                 <a href="mailto:<%= profile.email %>" class="card-link"><%= profile.email %></a>
                 <p>
-                    <a href="<%= profile._id %>" class="card-link">Show profile</a>
+                    <a href="users/<%= profile._id %>" class="card-link">Show profile</a>
                 </p>
-
             </div>
-        <% }); %>
         </div>
+        <% }); %>
     </div>
 </main>
 <% include ../partials/footer %>

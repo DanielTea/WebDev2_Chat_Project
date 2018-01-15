@@ -1,0 +1,15 @@
+<% include ../partials/head %>
+<% include ../partials/nav %>
+<main>
+    <div class="card-group">
+        <% tags.forEach(function(tag) { %>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><%= tag.name %></h5>
+                <a href="tags/<%= tag._id %>" class="card-link">Show Info</a>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+</main>
+<% include ../partials/footer %>

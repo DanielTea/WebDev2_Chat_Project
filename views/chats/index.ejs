@@ -1,21 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <% include ../partials/head %>
-  </head>
-  <body>
-	<main id="browseChats">
-		<ul id="chatCards">
-			<% chats.forEach(function(chat) { %>
-				<li class="chatCard">
-					<section class="chatName"><%= chat.name %></section>
-					<section class="chatCreated"><%= chat.createdAt %></section>                    
-					<section class="chatUpdated"><%= chat.updatedAt %></section>                 
-				</li>
-			<% }); %>
-		<ul>
-	</main>
-    <nav><% include ../partials/nav %></nav>
-	<footer><% include ../partials/footer %></footer>
-  </body>
-</html>
+<% include ../partials/head %>
+<% include ../partials/nav %>
+<div class="row">
+    <nav class="col-md-2 sidebar">
+        <ul class="nav">
+            <% chats.forEach(function(chat) { %>
+            <li class="nav-item">
+                <a href="/chats/<%= chat._id %>" class="nav-link"></a><%= chat.name %>
+            </li>
+            <% }); %>
+        </ul>
+    </nav>
+</div>
+<main></main>
+<% include ../partials/footer %>
