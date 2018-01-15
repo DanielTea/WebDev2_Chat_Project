@@ -2,7 +2,7 @@
 <% include ../partials/nav %>
 
 <main>
-    <form action="/users/<%= user._id%>?method=PATCH" method="post">
+    <form action="/users/<%= user._id%>?_method=PATCH" method="post">
         <div class="form-group">
             <label for="status">Status</label>
             <input type="text" name="status" id="status" placeholder="<%= user.status %>">

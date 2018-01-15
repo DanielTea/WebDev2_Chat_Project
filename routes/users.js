@@ -67,8 +67,9 @@ router.patch('/:id', function(req) {
 
 
     console.log(req.body.firstName);
-    res.send("hi")
-    // User.update(id, req.body)
+    console.log(req.body.lastName);
+    // res.send("hi")
+    User.update(id, req.body)
 
     User.findById(id, function(err, user) {
         res.render('users/update', {
