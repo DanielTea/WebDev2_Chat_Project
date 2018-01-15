@@ -15,6 +15,26 @@ router.get('/', function(req, res) {
     }
 });
 
+router.get('/:id/update', function(req, res) {
+    try {
+        var objectId = require('mongodb').ObjectId;
+        var id = new objectId(req.params.id);
+
+
+
+        User.findById(id, function(err, user) {
+
+            console.log(user.firstName);
+            res.render('users/update', {
+                user: user
+            });
+        });
+
+    } catch (err) {
+        throw err;
+    }
+});
+
 router.get('/create', function(req, res) {
     res.render('users/create', {
         req: req
@@ -40,15 +60,21 @@ router.post('/', function(req, res) {
     });
 });
 
-router.patch('/:id', function(req, res) {
+router.patch('/:id', function(req) {
 
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
 
 
-    console.log(req.body);
-    // res.send("hi")
-    User.update(id, req.body)
+    console.log(req.body.firstName);
+    res.send("hi")
+    // User.update(id, req.body)
+
+    User.findById(id, function(err, user) {
+        res.render('users/update', {
+            user: user
+        });
+    });
 
 
 });
@@ -57,6 +83,7 @@ router.patch('/:id', function(req, res) {
 router.get('/:id', function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
+
     User.findById(id, function(err, user) {
         res.render('users/show.ejs', {
             user: user
