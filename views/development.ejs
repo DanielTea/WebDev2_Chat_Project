@@ -1,0 +1,208 @@
+<% include partials/head %>
+<% include partials/nav %>
+<main class="container">
+    <div class="jumbotron">
+        <h1 class="display-6">Database seeding</h1>
+        <p class="lead">To seed the database with random values or purge all collections, please use the buttons down below.</p>
+        <hr class="my-4">
+        <div class="row justify-content-around">
+            <div class="col-xs-6">
+                <button class="btn btn-primary btn-lg" id="seed-button">Seed database</button>
+            </div>
+            <div class="col-xs-6">
+                <button class="btn btn-danger btn-lg" id="purge-button">Purge database</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div style="margin: 30px 0 10px 0">
+                        <svg class="circular-loader"viewBox="25 25 50 50" id="icon-load" class="d-none" height="64" width="64">
+                            <defs>
+                                <style>
+                                .circular-loader {
+                                  -webkit-animation: rotate 3s linear infinite;
+                                          animation: rotate 3s linear infinite;
+                                  -webkit-transform-origin: center center;
+                                      -ms-transform-origin: center center;
+                                          transform-origin: center center;
+                                }
+                                .loader-path {
+                                    stroke-dasharray: 150,200;
+                                    stroke-dashoffset: -10;
+                                    -webkit-animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+                                          animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+                                    stroke-linecap: round;
+                                    stroke: #28a745;
+                                    }
+
+                                    @-webkit-keyframes rotate {
+                                    100% {
+                                    -webkit-transform: rotate(360deg);
+                                            transform: rotate(360deg);
+                                    }
+                                    }
+
+                                    @keyframes rotate {
+                                    100% {
+                                    -webkit-transform: rotate(360deg);
+                                            transform: rotate(360deg);
+                                    }
+                                    }
+                                    @-webkit-keyframes dash {
+                                    0% {
+                                    stroke-dasharray: 1,200;
+                                    stroke-dashoffset: 0;
+                                    }
+                                    50% {
+                                    stroke-dasharray: 89,200;
+                                    stroke-dashoffset: -35;
+                                    }
+                                    100% {
+                                    stroke-dasharray: 89,200;
+                                    stroke-dashoffset: -124;
+                                    }
+                                    }
+                                    @keyframes dash {
+                                    0% {
+                                    stroke-dasharray: 1,200;
+                                    stroke-dashoffset: 0;
+                                    }
+                                    50% {
+                                    stroke-dasharray: 89,200;
+                                    stroke-dashoffset: -35;
+                                    }
+                                    100% {
+                                    stroke-dasharray: 89,200;
+                                    stroke-dashoffset: -124;
+                                    }
+                                    }
+                                </style>
+                            </defs>
+                            <g class="circular-loader">
+                                <circle class="loader-path" cx="50" cy="50" r="20" fill="none" stroke="#70c542" stroke-width="2" />
+                            </g>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" id="icon-success" class="d-none" height="64" width="64" viewBox="0 0 90.27 90.27">
+                            <defs>
+                                <style>
+                                    .circle {
+                                        fill: #28a745;
+                                    }
+                                    .circle-check {
+                                        fill: none;
+                                        stroke: #fff;
+                                        stroke-linecap: round;
+                                        stroke-miterlimit: 10;
+                                        stroke-width: 4px;
+                                    }
+                                </style>
+                            </defs>
+                            <circle class="circle" cx="45.14" cy="45.14" r="45.14"/>
+                            <polyline class="circle-check" points="63.4 28.8 37.93 63.47 24.87 50.52"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" id="icon-error" class="d-none" height="64" width="64" viewBox="0 0 90.27 90.27">
+                            <defs>
+                                <style>
+                                    .circle-2 {
+                                        fill: #dc3545;
+                                    }
+                                    .x-single {
+                                        fill: #fff;
+                                    }
+                                </style>
+                            </defs>
+                            <circle class="circle-2" cx="45.14" cy="45.14" r="45.14"/>
+                            <g class="x">
+                              <rect class="x-single" x="21.77" y="43.49" width="46.74" height="3.36" transform="translate(-18.72 45.15) rotate(-45)"/>
+                              <rect class="x-single" x="43.47" y="21.81" width="3.36" height="46.74" transform="translate(-18.72 45.16) rotate(-45)"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <h5 id="error-title" class="d-none">Error:</h5>
+                    <p id="modal-message" style="margin: 20px 0"></p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-link" href="/">Home</a>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<% include partials/scripts %>
+<script>
+    var seedButton = $('#seed-button');
+    var purgeButton = $('#purge-button');
+    var buttons = [seedButton, purgeButton];
+    var modal = $('#modal');
+    var modalMessage = $('#modal-message');
+
+    function disableButtons() {
+        buttons.forEach((button) => {
+            button.attr('disabled', 'disabled');
+        });
+    }
+
+    function enableButtons() {
+        buttons.forEach((button) => {
+            button.removeAttr('disabled');
+        });
+    }
+
+    function showModal(data = null, error = false) {
+        var iconSuccess = $('#icon-success');
+        var iconError = $('#icon-error');
+        var iconLoad = $('#icon-load');
+        var errorTitle = $('#error-title');
+        if (error && data) {
+            iconSuccess.addClass('d-none');
+            iconLoad.addClass('d-none');
+            iconError.removeClass('d-none');
+            modalMessage.removeClass('d-none');
+            errorTitle.removeClass('d-none');
+            modalMessage.text(data.responseText);
+        } else if(data) {
+            iconError.addClass('d-none');
+            iconLoad.addClass('d-none');
+            iconSuccess.removeClass('d-none');
+            modalMessage.removeClass('d-none');
+            errorTitle.addClass('d-none');
+            modalMessage.text(data);
+        } else {
+            iconLoad.removeClass('d-none');
+            iconSuccess.addClass('d-none');
+            iconError.addClass('d-none');
+            errorTitle.addClass('d-none');
+            modalMessage.addClass('d-none');
+            modalMessage.text();
+        }
+        modal.modal();
+        enableButtons();
+    }
+
+    function postRequest(url) {
+        $.post(url)
+            .done((data) => showModal(data))
+            .fail((data) => showModal(data, true));
+    }
+
+    seedButton.click((e) => {
+        e.preventDefault();
+        disableButtons();
+        postRequest('/development/seed-database');
+        showModal();
+    });
+
+    purgeButton.click((e) => {
+        e.preventDefault();
+        disableButtons();
+        postRequest('/development/purge-database');
+        showModal();
+    });
+</script>
+<% include partials/footer %>
