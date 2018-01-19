@@ -1,4 +1,5 @@
 var express = require('express');
+var mongoose = require('mongoose');
 var router = express.Router();
 var User = require('../models/user');
 const bcrypt = require('bcryptjs');
@@ -20,11 +21,7 @@ router.get('/:id/update', function(req, res) {
         var objectId = require('mongodb').ObjectId;
         var id = new objectId(req.params.id);
 
-
-
         User.findById(id, function(err, user) {
-
-            console.log(user.firstName);
             res.render('users/update', {
                 user: user
             });
@@ -60,19 +57,32 @@ router.post('/', function(req, res) {
     });
 });
 
-router.patch('/:id', function(req) {
+router.patch('/:id', function(req, res) {
 
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
+    var data = req.body;
+
+    if(req.body.password != ""){
+        // data.password = User.generateHash(data.password);
+        console.log(data)
+    }
+    else{
+        delete data.password
+        console.log(data)
+    }
+
+    User.update({_id: req.params.id}, { $set: data}, function(err) {
+            if(err) { throw err; }
+            else {console.log("update successful")}
+        }
+
+    );
 
 
-    console.log(req.body.firstName);
-    console.log(req.body.lastName);
-    // res.send("hi")
-    User.update(id, req.body)
 
     User.findById(id, function(err, user) {
-        res.render('users/update', {
+        res.render('users/show.ejs', {
             user: user
         });
     });

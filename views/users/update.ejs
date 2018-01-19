@@ -5,14 +5,14 @@
     <form action="/users/<%= user._id%>?_method=PATCH" method="post">
         <div class="form-group">
             <label for="status">Status</label>
-            <input type="text" name="status" id="status" placeholder="<%= user.status %>">
+            <input type="text" name="status" id="status" value="<%= user.status %>">
         </div>
         <div class="form-group">
             <label for="picture">Picture link</label>
-            <input type="url" name="picture" id="picture" placeholder="<%= user.picture %>">
+            <input type="url" name="picture" id="picture" value="<%= user.pictureUrl %>">
             <div>
                 <p class="text-center">Preview:</p>
-                <img src="<%= user.picture %>" class="img-thumbnail">
+                <img src="<%= user.pictureUrl %>" class="img-thumbnail">
             </div>
         </div>
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#profileSettings">
@@ -21,27 +21,25 @@
         <div class="collapse" id="profileSettings">
             <div class="form-group">
                 <label for="firstName">First name</label>
-                <input type="text" name="firstName" id="firstName" placeholder="<%= user.firstName %>">
-
+                <input type="text" name="firstName" id="firstName" value="<%= user.firstName %>">
             </div>
             <div class="form-group">
                 <label for="lastName">Last name</label>
-                <input type="text" name="lastName" id="lastName" placeholder="<%= user.lastName %>">
+                <input type="text" name="lastName" id="lastName" value="<%= user.lastName %>">
             </div>
             <div class="form-group">
                 <label for="birthDate">Birth date</label>
-                <input type="date" name="birthDate" id="birthDate" placeholder="<%= user.birthDate %>">
+                <input type="date" name="birthDate" id="birthDate" value="<%= user.birthDate.toISOString().split('T')[0] %>">
             </div>
             <div class="form-group">
                 <label for="email">Email address</label>
-                <input type="text" name="email" id="email" placeholder="<%= user.email %>">
+                <input type="text" name="email" id="email" value="<%= user.email %>">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password">
             </div>
         </div>
-
         <button type="submit" class="btn btn-primary">Save changes</button>
     </form>
     <div>
