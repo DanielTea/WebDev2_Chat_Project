@@ -1,7 +1,7 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
-<main>
-    <div class="card-group">
+<main class="container">
+    <div class="card-columns">
         <% users.forEach(function(profile) { %>
         <div class="card">
             <img class="card-img-top" src="<%= profile.pictureUrl %>">
@@ -17,4 +17,5 @@
         <% }); %>
     </div>
 </main>
+<% include partials/scripts %>
 <% include ../partials/footer %>

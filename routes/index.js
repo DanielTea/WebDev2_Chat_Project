@@ -11,18 +11,4 @@ router.get('/', function(req, res, next) {
     });
 });
 
-/*
- *  Temporary test routes for development
- */
-
-router.get('/purge-collections', (req, res) => {
-    const User = require('../models/user');
-    User.collection.remove((err) => {
-        if (err) {
-            res.send(err);
-        }
-        res.send('all good');
-    });
-});
-
 module.exports = router;
