@@ -1,5 +1,7 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
+<main class="container">
+    <% include ../partials/flashMessages %>
     <form action="/tags/" method="post" id="tagForm">
         <div class="form-group">
             <label for="name">Tag name</label>
@@ -11,5 +13,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Create Tag</button>
     </form>
+</main>
 <% include ../partials/scripts %>
 <% include ../partials/footer %>

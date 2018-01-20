@@ -1,6 +1,7 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
-<main>
+<main class="container">
+    <% include ../partials/flashMessages %>
     <div class="card-group">
         <% tags.forEach(function(tag) { %>
         <div class="card">

@@ -25,22 +25,22 @@ router.post('/seed-database', (req, res) => {
             var user = new User({
                 firstName: faker.name.firstName(),
                 lastName: faker.name.lastName(),
+                password: User.generateHash(process.env.DEV_USER_PASSWORD),
                 email: faker.internet.exampleEmail(),
                 birthDate: faker.date.past(),
                 status: faker.lorem.sentence(),
                 pictureUrl: faker.internet.avatar()
             });
-            user.password = user.generateHash('hdm');
             user.save((err, data) => {
                 if (err) {
                     console.log(err);
-                    res.status(500).send('cannot save new User');
+                    return res.status(500).send('cannot save new User');
                 }
             });
             users.push(user);
         } catch (err) {
-            console.err(err);
-            res.status(500).send('cannot create new User');
+            console.log(err);
+            return res.status(500).send('cannot create new User');
         }
     }
 
@@ -55,13 +55,13 @@ router.post('/seed-database', (req, res) => {
                 message.save((err, data) => {
                     if (err) {
                         console.log(err);
-                        res.status(500).send('cannot save new Message');
+                        return res.status(500).send('cannot save new Message');
                     }
                 });
                 messages.push(message);
             } catch (err) {
                 console.err(err);
-                res.status(500).send('cannot create new Message');
+                return res.status(500).send('cannot create new Message');
             }
         }
         try {
@@ -73,12 +73,12 @@ router.post('/seed-database', (req, res) => {
             tag.save((err, data) => {
                 if (err) {
                     console.log(err);
-                    res.status(500).send('cannot save new Tag');
+                    return res.status(500).send('cannot save new Tag');
                 }
             });
         } catch (err) {
             console.err(err);
-            res.status(500).send('cannot create new Tag');
+            return res.status(500).send('cannot create new Tag');
         }
     }
 
@@ -98,13 +98,13 @@ router.post('/seed-database', (req, res) => {
                     message.save((err, data) => {
                         if (err) {
                             console.log(err);
-                            res.status(500).send('cannot save new Message');
+                            return res.status(500).send('cannot save new Message');
                         }
                     });
                     messages.push(message);
                 } catch (err) {
                     console.err(err);
-                    res.status(500).send('cannot create new Message');
+                    return res.status(500).send('cannot create new Message');
                 }
             }
             try {
@@ -116,12 +116,12 @@ router.post('/seed-database', (req, res) => {
                 chat.save((err, data) => {
                     if (err) {
                         console.log(err);
-                        res.status(500).send('cannot save new Chat');
+                        return res.status(500).send('cannot save new Chat');
                     }
                 });
             } catch (err) {
                 console.err(err);
-                res.status(500).send('cannot create new Chat');
+                return res.status(500).send('cannot create new Chat');
             }
         });
     }
@@ -131,21 +131,21 @@ router.post('/seed-database', (req, res) => {
 router.post('/purge-database', (req, res) => {
     User.collection.remove((err) => {
         if (err) {
-            res.status(500).send('cannot remove collection "users"');
+            return res.status(500).send('cannot remove collection "users"');
         }
         Tag.collection.remove((err) => {
             if (err) {
-                res.status(500).send('cannot remove collection "tags"');
+                return res.status(500).send('cannot remove collection "tags"');
             }
             Chat.collection.remove((err) => {
                 if (err) {
-                    res.status(500).send('cannot remove collection "chats"');
+                    return res.status(500).send('cannot remove collection "chats"');
                 }
                 Message.collection.remove((err) => {
                     if (err) {
-                        res.status(500).send('cannot remove collection "tags"');
+                        return res.status(500).send('cannot remove collection "tags"');
                     }
-                    res.send('successfully removed all collections');
+                    return res.send('successfully removed all collections');
                 });
             });
         });
