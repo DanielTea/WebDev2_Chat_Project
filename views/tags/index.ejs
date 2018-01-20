@@ -1,7 +1,8 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
-<main>
-    <div class="card-columns">
+<main class="container">
+    <% include ../partials/flashMessages %>
+    <div class="card-group">
         <% tags.forEach(function(tag) { %>
         <div class="card">
             <div class="card-body">
@@ -12,4 +13,5 @@
         <% }); %>
     </div>
 </main>
+<% include ../partials/scripts %>
 <% include ../partials/footer %>

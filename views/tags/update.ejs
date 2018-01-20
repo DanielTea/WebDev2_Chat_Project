@@ -1,14 +1,18 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
-<form action="/tags/?method=PATCH" method="post" id="tagForm">
-    <div class="form-group">
-        <label for="name">Tag name</label>
-        <input type="name" name="name" id="name" placeholder="<%= tag.name %>">
-    </div>
-    <div class="form-group">
-        <label for="description">Tag description</label>
-        <textarea name="description" id="description" form="tagForm" placeholder="tag.description"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Save changes</button>
-</form>
+<main class="container">
+    <% include ../partials/flashMessages %>
+    <form action="/tags/?method=PATCH" method="post" id="tagForm">
+        <div class="form-group">
+            <label for="name">Tag name</label>
+            <input type="name" name="name" id="name" placeholder="<%= tag.name %>">
+        </div>
+        <div class="form-group">
+            <label for="description">Tag description</label>
+            <textarea name="description" id="description" form="tagForm" placeholder="tag.description"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+    </form>
+</main>
+<% include ../partials/scripts %>
 <% include ../partials/footer %>

@@ -24,7 +24,7 @@ var userSchema = mongoose.Schema({
     createdAt: Date
 });
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', (next) => {
     var currentDate = new Date();
     this.updatedAt = currentDate;
     if (!this.createdAt) {
@@ -33,11 +33,11 @@ userSchema.pre('save', function(next) {
     next();
 });
 
-userSchema.methods.generateHash = function (password) {
+userSchema.statics.generateHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };
 
-userSchema.methods.validatePassword = function (password) {
+userSchema.methods.validatePassword = (password) => {
     return bcrypt.compareSync(password, this.password);
 };
 

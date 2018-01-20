@@ -1,12 +1,14 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
-<main>
-    <%= locals.user %>
+<main class="container">
+    <% include ../partials/flashMessages %>
     <div class="card">
         <img class="card-img-top" src="<%= user.pictureUrl %>">
         <div class="card-body">
             <h5 class="card-title"><%= user.firstName %> <%= user.lastName %></h5>
-            <h6 class="card-subtitle mb-2 text-muted"><%= user.birthDate.toDateString() %></h6>
+            <% if (user.birthDate) { %>
+                <h6 class="card-subtitle mb-2 text-muted"><%= user.birthDate.toDateString() %></h6>
+            <% } %>
             <h6 class="card-subtitle mb-2 text-muted"><%= user.status %></h6>
             <p>
                 <a href="/users/<%= user._id %>/update" class="card-link">Update profile</a>
@@ -14,4 +16,5 @@
         </div>
     </div>
 </main>
+<% include ../partials/scripts %>
 <% include ../partials/footer %>

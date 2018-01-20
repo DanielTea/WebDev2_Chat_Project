@@ -1,22 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-</head>
-<body>
-    <% if (error) { %>
-        <%= error %>
-    <% } %>
-    <% if (success) { %>
-        <%= success %>
-    <% } %>
+<% include partials/head %>
+<% if (activeUser) { %>
+    <% include partials/nav %>
+<% } %>
+<main class="container">
+    <% include partials/flashMessages %>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
-    <% if (locals.user) { %>
-        <p>You are logged in as <%= locals.user.firstName %>.</p>
+    <% if (activeUser) { %>
+        <p>You are logged in as <%= activeUser.firstName %>.</p>
     <% } else { %>
         <p>You are not logged in.</p>
     <% } %>
-</body>
-</html>
+</main>
+<% include partials/scripts %>
+<% include partials/footer %>

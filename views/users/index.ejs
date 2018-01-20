@@ -1,25 +1,22 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
 <main class="container">
+    <% include ../partials/flashMessages %>
     <div class="card-columns" style="column-count: 5">
         <% users.forEach(function(profile) { %>
-        <a href="/users/<%= profile._id %>">
-            <div class="card">
-                <img class="card-img-top" src="<%= profile.pictureUrl %>">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <%= profile.firstName %> <%= profile.lastName %>
-                        <% var now = new Date();
-                        if(now.getDay() == profile.birthDate.getDay() && now.getMonth() == profile.birthDate.getMonth()){
-                        %>
-                        🎂
-                        <% }; %>
-                    </h5>
-                    <h6 class="card-subtitle mb-2 text-muted"><%= profile.status %></h6>
-                </div>
+        <div class="card">
+            <img class="card-img-top" src="<%= profile.pictureUrl %>">
+            <div class="card-body">
+                <h5 class="card-title"><%= profile.firstName %> <%= profile.lastName %></h5>
+                <h6 class="card-subtitle mb-2 text-muted"><%= profile.status %></h6>
+                <a href="mailto:<%= profile.email %>" class="card-link"><%= profile.email %></a>
+                <p>
+                    <a href="/users/<%= profile._id %>" class="card-link">Show profile</a>
+                </p>
             </div>
-        </a>
+        </div>
         <% }); %>
     </div>
 </main>
+<% include ../partials/scripts %>
 <% include ../partials/footer %>
