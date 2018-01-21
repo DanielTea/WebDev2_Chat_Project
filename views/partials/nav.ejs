@@ -5,9 +5,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+                <% if(activeUser) {%>
                 <li class="nav-item active">
                     <a class="nav-link" href="/chats/">Chats</a>
                 </li>
+                <% } else{ %>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/login/">Login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/users/create/">Register</a>
+                </li>
+                <% } %>
                 <li class="nav-item active">
                     <a class="nav-link" href="/users/">Profiles</a>
                 </li>
@@ -17,6 +26,9 @@
                 <% if(activeUser) { %>
                 <li class="nav-item active">
                     <a class="nav-link"  href="/users/<%= activeUser._id %>/update">My Profile</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link"  href="/logout/">Logout</a>
                 </li>
                 <% }%>
             </ul>
