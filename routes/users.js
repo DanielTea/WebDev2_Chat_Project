@@ -51,6 +51,7 @@ router.post('/', function(req, res) {
         email: req.body.email,
         status: req.body.status
     });
+
     user.save(function(err) {
         if (err) {
             console.log(err);
@@ -116,6 +117,24 @@ router.get('/:id', function(req, res) {
         res.render('users/show.ejs', {
             user: user
         });
+    });
+
+});
+
+router.delete('/:id', function(req, res) {
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
+
+    User.findOneAndRemove({
+        _id:id
+    }, (err) => {
+            if (err) {
+            console.log(err);
+            return res.status(500).render('error', {
+                error: err
+            });
+        }
+        return res.redirect('/login');
     });
 
 });

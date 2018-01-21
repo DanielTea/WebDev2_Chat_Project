@@ -103,6 +103,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index'));
 app.use('/', require('./routes/login'));
 app.use('/users', require('./routes/users'));
+app.use('/tags', require('./routes/tags'));
+
 app.use('/development', require('./routes/development'));
 
 // catch 404 and forward to error handler
