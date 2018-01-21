@@ -73,43 +73,38 @@ router.post('/', function(req, res) {
     });
 });
 
-router.patch('/:id', function(req, res) {
+function setObjectValue(data, data_name, value, do_hash = false) {
+    if (value && value.length > 0) {
+        data[data_name] = do_hash ? User.generateHash(value) : value;
+        return;
+    }
+}
 
+router.patch('/:id', function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
-    var data = req.body;
-
-    if (req.body.password != "") {
-        // data.password = User.generateHash(data.password);
-        console.log(data)
-    } else {
-        delete data.password
-        console.log(data)
-    }
+    var data = {}
+    setObjectValue(data, 'firstName', req.body.firstName);
+    setObjectValue(data, 'lastName', req.body.lastName);
+    setObjectValue(data, 'birthDate', req.body.birthDate);
+    setObjectValue(data, 'email', req.body.email);
+    setObjectValue(data, 'status', req.body.status);
+    setObjectValue(data, 'pictureUrl', req.body.pictureUrl);
+    setObjectValue(data, 'password', req.body.password, true);
 
     User.update({
-            _id: req.params.id
-        }, {
-            $set: data
-        }, function(err) {
-            if (err) {
-                throw err;
-            } else {
-                console.log("update successful")
-            }
+        _id: id
+    }, {
+        $set: data
+    }, (err) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).render('error', {
+                error: err
+            });
         }
-
-    );
-
-
-
-    User.findById(id, function(err, user) {
-        res.render('users/show.ejs', {
-            user: user
-        });
+        return res.redirect('/users/' + id);
     });
-
-
 });
 
 

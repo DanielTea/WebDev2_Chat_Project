@@ -3,22 +3,21 @@
 <main class="container">
     <div class="card-columns" style="column-count: 5" >
         <% include ../partials/flashMessages %>
-        <% users.forEach(function(profile) { %>
+        <% users.forEach(profile => { %>
         <a href="/users/<%= profile._id %>">
             <div class="card">
-                <img class="card-img-top" src="<%= profile.pictureUrl %>">
+                <% if (profile.pictureUrl) { %><img class="card-img-top" src="<%= profile.pictureUrl %>"><% } %>
                 <div class="card-body">
-
                     <h5 class="card-title">
-                        <%= profile.firstName %> <%= profile.lastName %>
+                        <%= profile.firstName %><%= profile.lastName ? ' ' + profile.lastName : '' %>
                         <% var now = new Date();
-                        if(now.getDay() == profile.birthDate.getDay() && now.getMonth() == profile.birthDate.getMonth()){
+                        if(profile.birthDate && now.getDay() == profile.birthDate.getDay() && now.getMonth() == profile.birthDate.getMonth()){
                         %>
                         🎂
                         <% }; %>
                     </h5>
 
-                    <h6 class="card-subtitle mb-2 text-muted"><%= profile.status %></h6>
+                    <% if(profile.status) { %><h6 class="card-subtitle mb-2 text-muted"><%= profile.status %></h6><% } %>
                 </div>
             </div>
         </a>
@@ -27,4 +26,3 @@
 </main>
 <% include ../partials/scripts %>
 <% include ../partials/footer %>
-
