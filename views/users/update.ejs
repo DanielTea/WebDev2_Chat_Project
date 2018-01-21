@@ -1,52 +1,83 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
-<main class="container">
+<main class="container text-center">
     <% include ../partials/flashMessages %>
-    <form action="/users/<%= user._id%>?_method=PATCH" method="post">
-        <div class="form-group">
-            <label for="status">Status</label>
-            <input type="text" name="status" id="status" value="<%= user.status %>">
-        </div>
-        <div class="form-group">
-            <label for="picture">Picture link</label>
-            <input type="url" name="picture" id="picture" value="<%= user.pictureUrl %>">
-            <div>
-                <p class="text-center">Preview:</p>
-                <img src="<%= user.pictureUrl %>" class="img-thumbnail">
-            </div>
-        </div>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#profileSettings">
-            Show / Hide Profile Settings
-        </button>
-        <div class="collapse" id="profileSettings">
-            <div class="form-group">
-                <label for="firstName">First name</label>
-                <input type="text" name="firstName" id="firstName" value="<%= user.firstName %>">
-            </div>
-            <div class="form-group">
-                <label for="lastName">Last name</label>
-                <input type="text" name="lastName" id="lastName" value="<%= user.lastName %>">
-            </div>
-            <div class="form-group">
-                <label for="birthDate">Birth date</label>
-                <input type="date" name="birthDate" id="birthDate" value="<%= user.birthDate ? user.birthDate.toISOString().split('T')[0] : '' %>">
-            </div>
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <input type="text" name="email" id="email" value="<%= user.email %>">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password">
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Save changes</button>
-    </form>
-    <div>
-        <form action="/users/?_method=DELETE"  method="post">
-            <button type="submit" class="btn btn-danger">Delete profile</button>
-        </form>
+    <div class="nav" style="display: inline-block; float: none; margin-bottom:3%">
+        <a class="btn btn-outline-secondary" data-toggle="tab" href="#statusPanel">Status</a>
+        <a class="btn btn-outline-secondary" data-toggle="tab" href="#picturePanel">Picture</a>
+        <a class="btn btn-outline-secondary" data-toggle="tab" href="#settingsPanel">Settings</a>
+        <a class="btn btn-outline-secondary" data-toggle="tab" href="#deletePanel">Delete Account</a>
     </div>
+
+    <div class="tab-content">
+        <div class="tab-pane" id="statusPanel">
+            <form action="/users/<%= user._id%>?_method=PATCH" method="post">
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <input type="text" id="status" name="status"
+                           placeholder="<%= user.status %>" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-outline-primary">Update Status</button>
+            </form>
+        </div>
+        <div class="tab-pane" id="picturePanel">
+            <form action="/users/<%= user._id%>?_method=PATCH" method="post">
+                <div class="form-group">
+                    <label for="picture">Picture</label>
+                    <input oninput="updatePreview()" type="text" id="picture"
+                           placeholder="<%= user.pictureUrl %>" name="pictureUrl" class="form-control">
+                    <img height=120 width="120"
+                         src="<%= user.pictureUrl %>" id="picturePreview" class="rounded-circle">
+                </div>
+                <button type="submit" class="btn btn-outline-primary">Save new profile picture</button>
+            </form>
+        </div>
+        <div class="tab-pane" id="settingsPanel">
+            <form action="/users/<%= user._id%>?_method=PATCH" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="firstNameInput">First name</label>
+                        <input type="text" name="firstName" class="form-control"
+                               id="firstNameInput" placeholder="<%= user.firstName%>">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="lastNameInput">Last name</label>
+                        <input type="text" name="lastName" class="form-control"
+                               id="lastNameInput" placeholder="<%= user.lastName %>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="birthDate">Birth date</label>
+                    <input type="text" name="birthDate" id="birthDate"
+                           onfocus="(this.type='date')" onblur="(this.type='text')"
+                           class="form-control" placeholder="<%= user.birthDate.toDateString() %>">
+                </div>
+                <div class="form-group">
+                    <label for="emailInput">Email address</label>
+                    <input type="email" name="email" class="form-control"
+                           id="emailInput" placeholder="<%= user.email %>">
+                </div>
+                <div class="form-group">
+                    <label for="passwordInput">Password</label>
+                    <input type="password" name="password" class="form-control" id="passwordInput" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-outline-primary">Save changes</button>
+            </form>
+        </div>
+
+        <div class="tab-pane" id="deletePanel">
+            <form action="/users/?_method=DELETE"  method="post">
+                <button type="submit" class="btn btn-outline-danger">Delete Account</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function updatePreview(){
+            var newUrl = document.getElementById("picture").value;
+            document.getElementById("picturePreview").src = newUrl;
+        }
+
+    </script>
 </main>
 <% include ../partials/scripts %>
 <% include ../partials/footer %>
