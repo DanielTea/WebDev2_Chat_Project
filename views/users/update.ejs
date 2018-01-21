@@ -33,7 +33,7 @@
             </form>
         </div>
         <div class="tab-pane" id="settingsPanel">
-            <form action="/users/<%= user._id %>?_method=PATCH" method="POST">
+            <form action="/users/<%= user._id%>?_method=PATCH" method="POST" onsubmit="disableEmptyInputs(this)">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="firstNameInput">First name</label>
@@ -76,7 +76,12 @@
             var newUrl = document.getElementById("picture").value;
             document.getElementById("picturePreview").src = newUrl;
         }
-
+        function disableEmptyInputs(form){
+            var controls = form.elements;
+            for(var i = 0, total=controls.length; i < total; i++){
+                controls[i].disabled = controls[i].value == "";
+            }
+        }
     </script>
 </main>
 <% include ../partials/scripts %>
