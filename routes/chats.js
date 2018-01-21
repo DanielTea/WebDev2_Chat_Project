@@ -2,6 +2,18 @@ var express = require('express');
 var router = express.Router();
 var Chat = require('../models/chat')
 
+router.get('/', function(req, res) {
+    try {
+        Chat.find({}, (err, chats) => {
+            if (err) console.log(err);
+            res.render('chats/index', {
+                chats: chats
+            });
+        });
+    } catch (err) {
+        throw err;
+    }
+});
 
 /* GET home page. */
 router.get('/create', function(req, res) {
@@ -26,9 +38,6 @@ router.post('/', function (req) {
 });
 
 router.patch('/:id', function(req, res){
-
-
-
 
     console.log(req.body);
     res.send("hi")

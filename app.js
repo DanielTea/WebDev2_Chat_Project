@@ -104,6 +104,7 @@ app.use('/', require('./routes/index'));
 app.use('/', require('./routes/login'));
 app.use('/users', require('./routes/users'));
 app.use('/tags', require('./routes/tags'));
+app.use('/chats', require('./routes/chats'));
 
 app.use('/development', require('./routes/development'));
 
