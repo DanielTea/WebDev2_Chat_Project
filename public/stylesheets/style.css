@@ -1,8 +1,35 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; }
+nav.navbar {
+  background: #007bff;
+  color: #fff; }
+  nav.navbar .navbar-wrapper {
+    margin: 0 auto;
+    padding: 0 15px;
+    display: block;
+    width: 100%; }
+    @media (min-width: 576px) {
+      nav.navbar .navbar-wrapper {
+        max-width: 540px; } }
+    @media (min-width: 768px) {
+      nav.navbar .navbar-wrapper {
+        max-width: 720px; } }
+    @media (min-width: 992px) {
+      nav.navbar .navbar-wrapper {
+        max-width: 960px; } }
+    @media (min-width: 1200px) {
+      nav.navbar .navbar-wrapper {
+        max-width: 1140px; } }
+  nav.navbar a, nav.navbar a.nav-link {
+    color: #fff; }
 
-a {
-  color: #00B7FF; }
+main {
+  margin-top: 5rem; }
+
+.button-list {
+  display: flex;
+  text-align: center;
+  margin: 0 auto;
+  justify-content: center; }
+  .button-list > a, .button-list > button {
+    margin: 0 .5em; }
 
 /*# sourceMappingURL=style.css.map */

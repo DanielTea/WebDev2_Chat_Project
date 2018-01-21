@@ -2,14 +2,16 @@
 <% include ../partials/nav %>
 <main class="container text-center">
     <% include ../partials/flashMessages %>
-    <div>
-        <h5 class="font-italic"><%= user.status %></h5>
+    <div class="user-profile">
         <% if (user.pictureUrl) { %><img height="120" width="120" src="<%= user.pictureUrl %>" class="rounded-circle"><% } %>
         <h3><%= user.firstName %><%= user.lastName ? ' ' + user.lastName : '' %></h3>
-        <% if (user.birthDate) { %><h4>🎂 <%= user.birthDate.toDateString() %></h4><% } %>
-        <a class="btn btn-outline-primary btn-lg" href="#">Chat with <%= user.firstName %></a>
+        <% if (user.birthDate) { %><p>🎂 <%= user.birthDate.toDateString() %></p><% } %>
+        <p class="lead"><%= user.status %></p>
     </div>
-    </br><a href="/users/<%= user._id %>/update" class="btn btn-outline-secondary">Update profile</a>
+    <div class="button-list">
+        <a class="btn btn-outline-primary" href="#">Chat with <%= user.firstName %></a>
+        <a href="/users/<%= user._id %>/update" class="btn btn-outline-secondary">Update profile</a>
+    </div>
 </main>
 <% include ../partials/scripts %>
 <% include ../partials/footer %>
