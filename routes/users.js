@@ -4,7 +4,6 @@ var router = express.Router();
 var User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
-
 router.get('/', function(req, res) {
     try {
         User.find({}, (err, users) => {
@@ -84,7 +83,7 @@ function setObjectValue(data, data_name, value, do_hash = false) {
 router.patch('/:id', function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
-    var data = {}
+    var data = {};
     setObjectValue(data, 'firstName', req.body.firstName);
     setObjectValue(data, 'lastName', req.body.lastName);
     setObjectValue(data, 'birthDate', req.body.birthDate);
@@ -107,7 +106,6 @@ router.patch('/:id', function(req, res) {
         return res.redirect('/users/' + id);
     });
 });
-
 
 router.get('/:id', function(req, res) {
     var objectId = require('mongodb').ObjectId;

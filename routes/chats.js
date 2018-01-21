@@ -27,23 +27,19 @@ router.post('/', function (req) {
 
 router.patch('/:id', function(req, res){
 
-    // var objectId = require('mongodb').ObjectId;
-    // var id = new objectId(req.params.id);
+
 
 
     console.log(req.body);
     res.send("hi")
-    // User.update(id, req.body)
-
 
 });
-
 
 router.get('/:id', function (req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
-    Chat.findById(id, function (err, profile){
-        res.send(profile)
+    Chat.findById(id, function (err, chat){
+        res.send(chat)
     });
 
 });

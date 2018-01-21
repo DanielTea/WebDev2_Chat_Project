@@ -35,6 +35,24 @@ router.get('/:id/update', function(req, res) {
     }
 });
 
+router.get('/:id/messages', function(req, res) {
+    try {
+        var objectId = require('mongodb').ObjectId;
+        var id = new objectId(req.params.id);
+
+        Tag.findById(id, function(err, tag) {
+
+            console.log(tag.messages)
+            res.send({
+                messages: tag.messages
+            });
+        });
+
+    } catch (err) {
+        throw err;
+    }
+});
+
 router.get('/create', function(req, res) {
     res.render('tags/create');
 });
@@ -81,24 +99,15 @@ router.delete('/:id', function(req, res) {
                 error: err
             });
         }
-        return res.redirect('/tags');
+        return res.redirect('/tags/');
     });
 
 });
 
-function setObjectValue(data, data_name, value, do_hash = false) {
-    if (value && value.length > 0) {
-        data[data_name] = do_hash ? User.generateHash(value) : value;
-        return;
-    }
-}
-
 router.patch('/:id', function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
-    var data = {};
-    setObjectValue(data, 'name', req.body.name);
-    setObjectValue(data, 'description', req.body.description);
+    var data = req.body;
 
     Tag.update({
         _id: id
@@ -111,7 +120,7 @@ router.patch('/:id', function(req, res) {
                 error: err
             });
         }
-        return res.redirect('/tags');
+        return res.redirect('/tags/');
     });
 });
 
