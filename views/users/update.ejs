@@ -11,62 +11,62 @@
 
     <div class="tab-content">
         <div class="tab-pane" id="statusPanel">
-            <form action="/users/<%= user._id%>?_method=PATCH" method="post">
+            <form action="/users/<%= user._id %>?_method=PATCH" method="POST">
                 <div class="form-group">
                     <label for="status">Status</label>
                     <input type="text" id="status" name="status"
-                           placeholder="<%= user.status %>" class="form-control">
+                           value="<%= user.status || '' %>" class="form-control">
                 </div>
                 <button type="submit" class="btn btn-outline-primary">Update Status</button>
             </form>
         </div>
         <div class="tab-pane" id="picturePanel">
-            <form action="/users/<%= user._id%>?_method=PATCH" method="post">
+            <form action="/users/<%= user._id %>?_method=PATCH" method="POST">
                 <div class="form-group">
                     <label for="picture">Picture</label>
                     <input oninput="updatePreview()" type="text" id="picture"
-                           placeholder="<%= user.pictureUrl %>" name="pictureUrl" class="form-control">
+                           value="<%= user.pictureUrl || '' %>" name="pictureUrl" class="form-control">
                     <img height=120 width="120"
-                         src="<%= user.pictureUrl %>" id="picturePreview" class="rounded-circle">
+                         src="<%= user.pictureUrl || '' %>" id="picturePreview" class="rounded-circle">
                 </div>
                 <button type="submit" class="btn btn-outline-primary">Save new profile picture</button>
             </form>
         </div>
         <div class="tab-pane" id="settingsPanel">
-            <form action="/users/<%= user._id%>?_method=PATCH" method="post">
+            <form action="/users/<%= user._id %>?_method=PATCH" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="firstNameInput">First name</label>
                         <input type="text" name="firstName" class="form-control"
-                               id="firstNameInput" placeholder="<%= user.firstName%>">
+                               id="firstNameInput" value="<%= user.firstName || '' %>">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="lastNameInput">Last name</label>
                         <input type="text" name="lastName" class="form-control"
-                               id="lastNameInput" placeholder="<%= user.lastName %>">
+                               id="lastNameInput" value="<%= user.lastName || '' %>">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="birthDate">Birth date</label>
                     <input type="text" name="birthDate" id="birthDate"
                            onfocus="(this.type='date')" onblur="(this.type='text')"
-                           class="form-control" placeholder="<%= user.birthDate.toDateString() %>">
+                           class="form-control" value="<%= user.birthDate ? user.birthDate.toDateString() : '' %>">
                 </div>
                 <div class="form-group">
                     <label for="emailInput">Email address</label>
                     <input type="email" name="email" class="form-control"
-                           id="emailInput" placeholder="<%= user.email %>">
+                           id="emailInput" value="<%= user.email || '' %>">
                 </div>
                 <div class="form-group">
                     <label for="passwordInput">Password</label>
-                    <input type="password" name="password" class="form-control" id="passwordInput" placeholder="Password">
+                    <input type="password" name="password" class="form-control" id="passwordInput">
                 </div>
                 <button type="submit" class="btn btn-outline-primary">Save changes</button>
             </form>
         </div>
 
         <div class="tab-pane" id="deletePanel">
-            <form action="/users/?_method=DELETE"  method="post">
+            <form action="/users/<%= user._id %>?_method=DELETE"  method="POST">
                 <button type="submit" class="btn btn-outline-danger">Delete Account</button>
             </form>
         </div>

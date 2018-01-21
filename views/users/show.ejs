@@ -4,9 +4,9 @@
     <% include ../partials/flashMessages %>
     <div>
         <h5 class="font-italic"><%= user.status %></h5>
-        <img height="120" width="120" src="<%= user.pictureUrl %>" class="rounded-circle">
-        <h3><%= user.firstName %> <%= user.lastName %></h3>
-        <h4>🎂 <%= user.birthDate.toDateString() %></h4>
+        <% if (user.pictureUrl) { %><img height="120" width="120" src="<%= user.pictureUrl %>" class="rounded-circle"><% } %>
+        <h3><%= user.firstName %><%= user.lastName ? ' ' + user.lastName : '' %></h3>
+        <% if (user.birthDate) { %><h4>🎂 <%= user.birthDate.toDateString() %></h4><% } %>
         <a class="btn btn-outline-primary btn-lg" href="#">Chat with <%= user.firstName %></a>
     </div>
     </br><a href="/users/<%= user._id %>/update" class="btn btn-outline-secondary">Update profile</a>

@@ -33,11 +33,11 @@ userSchema.pre('save', (next) => {
     next();
 });
 
-userSchema.statics.generateHash = (password) => {
+userSchema.statics.generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };
 
-userSchema.methods.validatePassword = (password) => {
+userSchema.methods.validatePassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 };
 
