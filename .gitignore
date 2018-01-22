@@ -36,3 +36,7 @@ npm-debug.log
 package-lock.json
 
 .idea/
+
+#style bs
+public/stylesheets/style.css
+public/stylesheets/style.css.map
