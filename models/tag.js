@@ -7,6 +7,10 @@ var tagSchema = mongoose.Schema({
         ref: 'Message'
     }],
     description: String,
+    patternClass: {
+        type: String,
+        enum: ['food', 'tech', 'jigsaw', 'anchors', 'diamonds', 'cogs', 'math', 'game', 'music'],
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
