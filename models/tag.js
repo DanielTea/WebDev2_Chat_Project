@@ -10,6 +10,7 @@ var tagSchema = mongoose.Schema({
     patternClass: {
         type: String,
         enum: ['food', 'tech', 'jigsaw', 'anchors', 'diamonds', 'cogs', 'math', 'game', 'music'],
+        required: true
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

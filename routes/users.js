@@ -109,34 +109,6 @@ router.patch('/:id', userAuth.isActiveUser, function(req, res) {
     });
 });
 
-router.post('/:id/tags/create', userAuth.isActiveUser, function(req, res) {
-    var objectId = require('mongodb').ObjectId;
-    var id = new objectId(req.params.id);
-    var tagID = req.body.tag;
-
-
-    User.findById(id, function(err, user) {
-        var data = user.tags.push(tagID);
-
-        User.update({
-            _id: id
-        }, {
-            $set: { tags: data}
-        }, (err) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).render('error', {
-                    error: err
-                });
-            }
-            return res.redirect('/users/' + id);
-        });
-
-    });
-
-});
-
-
 router.get('/:id', userAuth.isAuthenticated, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
@@ -166,6 +138,10 @@ router.delete('/:id', userAuth.isAuthenticated, function(req, res) {
     });
 
 });
+
+/*
+ * User's Tags
+ */
 
 router.get('/:id/tags', userAuth.isAuthenticated,  function(req, res) {
     var objectId = require('mongodb').ObjectId;
@@ -218,6 +194,48 @@ router.get('/:id/tags', userAuth.isAuthenticated,  function(req, res) {
         throw err;
     }
 
+});
+
+router.post('/:id/tags', userAuth.isActiveUser, function(req, res) {
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
+    var tagId = new objectId(req.body.tag);
+
+    User.findById(id, function(err, user) {
+        user.tags.push(tagId);
+        User.update({
+            _id: id
+        }, {
+            $set: { tags: user.tags }
+        }, (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
+            }
+            return res.send();
+        });
+    });
+});
+
+router.delete('/:id/tags/:tagId', userAuth.isActiveUser, function(req, res) {
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
+    var tagId = new objectId(req.params.tagId);
+
+    User.findById(id, function(err, user) {
+        var newTags = user.tags.filter(item => !item.equals(tagId));
+        User.update({
+            _id: id
+        }, {
+            $set: { tags: newTags }
+        }, (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
+            }
+            return res.send();
+        });
+    });
 });
 
 

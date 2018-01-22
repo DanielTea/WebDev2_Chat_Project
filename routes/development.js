@@ -70,7 +70,8 @@ router.post('/seed-database', (req, res) => {
                 name: faker.lorem.words(),
                 description: faker.lorem.sentence(),
                 messages: messages,
-                createdBy: faker.random.arrayElement(users)
+                createdBy: faker.random.arrayElement(users),
+                patternClass: faker.random.arrayElement(['food', 'tech', 'jigsaw', 'anchors', 'diamonds', 'cogs', 'math', 'game', 'music'])
             });
             tags.push(tag);
             console.log(tags);
