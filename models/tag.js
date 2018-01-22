@@ -11,6 +11,11 @@ var tagSchema = mongoose.Schema({
         type: String,
         enum: ['food', 'tech', 'jigsaw', 'anchors', 'diamonds', 'cogs', 'math', 'game', 'music'],
     },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     updatedAt: Date,
     createdAt: Date
 });

@@ -1,8 +1,8 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
 <main class="container">
+    <% include ../partials/flashMessages %>
     <div class="card-columns card-columns-users">
-        <% include ../partials/flashMessages %>
         <% users.forEach(profile => { %>
         <a href="/users/<%= profile._id %>">
             <div class="card">
