@@ -60,4 +60,7 @@ main {
   .button-list > a, .button-list > button {
     margin: 0 .5em; }
 
+.card-columns-tags, .card-columns-users {
+  column-count: 5; }
+
 /*# sourceMappingURL=style.css.map */
