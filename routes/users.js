@@ -109,15 +109,6 @@ router.patch('/:id', userAuth.isActiveUser, function(req, res) {
     });
 });
 
-router.get('/:id/tags', userAuth.isActiveUser, function(req, res) {
-    var objectId = require('mongodb').ObjectId;
-    var id = new objectId(req.params.id);
-
-    User.findById(id, function(err, user) {
-        res.send(user.tags);
-    });
-});
-
 router.post('/:id/tags/create', userAuth.isActiveUser, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
@@ -190,6 +181,8 @@ router.get('/:id/tags', userAuth.isAuthenticated,  function(req, res) {
             var mongodTagIds = [];
 
             if(userTags.length <1){
+
+                console.log("render emopty")
 
                 res.render('users/tags/index', {
                     tags: []
