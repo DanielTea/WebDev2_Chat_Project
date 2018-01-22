@@ -3,9 +3,14 @@ var router = express.Router();
 var Chat = require('../models/chat');
 const userAuth = require('../userAuth');
 
-router.get('/', function(req, res) {
+router.get('/:id', userAuth.isAuthenticated, function(req, res) {
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
+
     try {
-        Chat.find({}, (err, chats) => {
+        Chat.find({ users: {$in: [id]}},
+
+        (err, chats) => {
             if (err) console.log(err);
             res.render('chats/index', {
                 chats: chats
@@ -51,6 +56,15 @@ router.get('/:id', userAuth.isAuthenticated, function (req, res) {
     var id = new objectId(req.params.id);
     Chat.findById(id, function (err, chat){
         res.send(chat)
+    });
+
+});
+
+router.get('/:id/messages', userAuth.isAuthenticated, function (req, res) {
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
+    Chat.findById(id, function (err, chat) {
+        res.send(chat.messages)
     });
 
 });
