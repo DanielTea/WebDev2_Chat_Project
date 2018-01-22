@@ -109,6 +109,42 @@ router.patch('/:id', userAuth.isActiveUser, function(req, res) {
     });
 });
 
+router.get('/:id/tags', userAuth.isActiveUser, function(req, res) {
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
+
+    User.findById(id, function(err, user) {
+        res.send(user.tags);
+    });
+});
+
+router.post('/:id/tags/create', userAuth.isActiveUser, function(req, res) {
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
+    var tagID = req.body.tag;
+
+
+    User.findById(id, function(err, user) {
+        var data = user.tags.push(tagID);
+
+        User.update({
+            _id: id
+        }, {
+            $set: { tags: data}
+        }, (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).render('error', {
+                    error: err
+                });
+            }
+            return res.redirect('/users/' + id);
+        });
+
+    });
+
+});
+
 
 router.get('/:id', userAuth.isAuthenticated, function(req, res) {
     var objectId = require('mongodb').ObjectId;
