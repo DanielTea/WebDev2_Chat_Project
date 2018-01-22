@@ -1,7 +1,7 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
 <main class="container">
-    <div class="card-columns" style="column-count: 5" >
+    <div class="card-columns card-columns-users">
         <% include ../partials/flashMessages %>
         <% users.forEach(profile => { %>
         <a href="/users/<%= profile._id %>">

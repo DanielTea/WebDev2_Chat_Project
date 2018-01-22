@@ -81,3 +81,7 @@ main {
         margin: 0 .5em;
     }
 }
+
+.card-columns-tags, .card-columns-users {
+    column-count: 5;
+}
