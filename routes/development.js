@@ -19,6 +19,7 @@ router.post('/seed-database', (req, res) => {
     const faker = require('faker');
 
     var users = [];
+    var tags = [];
 
     for (i = 0; i < 20; i++) {
         try {
@@ -68,8 +69,11 @@ router.post('/seed-database', (req, res) => {
             var tag = new Tag({
                 name: faker.lorem.words(),
                 description: faker.lorem.sentence(),
-                messages: messages
+                messages: messages,
+                createdBy: faker.random.arrayElement(users)
             });
+            tags.push(tag);
+            console.log(tags);
             tag.save((err, data) => {
                 if (err) {
                     console.log(err);
@@ -89,7 +93,7 @@ router.post('/seed-database', (req, res) => {
             for (j = 0; j < faker.random.number({ min: 2, max: 5 }); j++) {
                 chatPartners.push(faker.random.arrayElement(users));
             }
-            for (j = 0; j < 5; j++) {
+            for (j = 0; j < faker.random.number({ min: 4, max: 10 }); j++) {
                 try {
                     var message = new Message({
                         content: faker.lorem.sentence(),
@@ -125,6 +129,17 @@ router.post('/seed-database', (req, res) => {
             }
         });
     }
+    users.forEach((user) => {
+        for (j = 0; j < faker.random.number({ min: 3, max: 10 }); j++) {
+            user.tags.push(faker.random.arrayElement(tags));
+        }
+        user.save((err, data) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('cannot save user');
+            }
+        });
+    });
     res.send('successfully seeded the database');
 });
 
