@@ -7,6 +7,11 @@ var tagSchema = mongoose.Schema({
         ref: 'Message'
     }],
     description: String,
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     updatedAt: Date,
     createdAt: Date
 });
