@@ -52,6 +52,7 @@ router.post('/', userAuth.isGuest, function(req, res) {
         email: req.body.email,
         status: req.body.status
     });
+
     user.save(function(err) {
         if (err) {
             console.log(err);
@@ -84,7 +85,7 @@ function setObjectValue(data, data_name, value, do_hash = false) {
 router.patch('/:id', userAuth.isActiveUser, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
-    var data = {}
+    var data = {};
     setObjectValue(data, 'firstName', req.body.firstName);
     setObjectValue(data, 'lastName', req.body.lastName);
     setObjectValue(data, 'birthDate', req.body.birthDate);
@@ -117,6 +118,24 @@ router.get('/:id', userAuth.isAuthenticated, function(req, res) {
         res.render('users/show.ejs', {
             user: user
         });
+    });
+
+});
+
+router.delete('/:id', userAuth.isAuthenticated, function(req, res) {
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
+
+    User.findOneAndRemove({
+        _id:id
+    }, (err) => {
+            if (err) {
+            console.log(err);
+            return res.status(500).render('error', {
+                error: err
+            });
+        }
+        return res.redirect('/login');
     });
 
 });

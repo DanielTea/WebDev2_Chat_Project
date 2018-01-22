@@ -18,7 +18,7 @@ router.post('/', userAuth.isAuthenticated, function (req) {
         content :req.body.content
     });
 
-    newMultimedia.save(function (err, data) {
+    newMessage.save(function (err, data) {
         if (err) console.log(err);
         else console.log('Saved : ', data );
     });
@@ -27,13 +27,8 @@ router.post('/', userAuth.isAuthenticated, function (req) {
 
 router.patch('/:id', userAuth.isAuthenticated, function(req, res){
 
-    // var objectId = require('mongodb').ObjectId;
-    // var id = new objectId(req.params.id);
-
-
     console.log(req.body);
     res.send("hi")
-    // User.update(id, req.body)
 
 
 });
@@ -42,8 +37,8 @@ router.patch('/:id', userAuth.isAuthenticated, function(req, res){
 router.get('/:id', userAuth.isAuthenticated, function (req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
-    Message.findById(id, function (err, profile){
-        res.send(profile)
+    Message.findById(id, function (err, message){
+        res.send(message)
     });
 
 });
