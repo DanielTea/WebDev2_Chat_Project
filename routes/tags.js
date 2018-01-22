@@ -5,6 +5,8 @@ var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
 var Tag = require('../models/tag');
+const userAuth = require('../userAuth');
+var User = require('../models/user');
 
 router.get('/', function(req, res) {
     try {
@@ -58,12 +60,7 @@ router.get('/create', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-    console.log("irgendeinen scheiß halt");
-    if (req.tag) {
-        req.flash('error', 'This tag already exists.');
-        return res.status(400).redirect('/tags/create');
-    }
-
+    var userId = req.user._id;
     var tag = new Tag({
         name: req.body.name,
         description: req.body.description
