@@ -1,16 +1,17 @@
 var express = require('express');
 var router = express.Router();
-var Chat = require('../models/chat')
+var Chat = require('../models/chat');
+const userAuth = require('../userAuth');
 
 
 /* GET home page. */
-router.get('/create', function(req, res) {
+router.get('/create', userAuth.isAuthenticated, function(req, res) {
     res.render('createChat', {
         title: 'Create a Chat!'
     });
 });
 
-router.post('/', function (req) {
+router.post('/', userAuth.isAuthenticated, function (req) {
 
     var newChat = new Chat({
         name : req.body.name,
@@ -25,7 +26,7 @@ router.post('/', function (req) {
 
 });
 
-router.patch('/:id', function(req, res){
+router.patch('/:id', userAuth.isAuthenticated, function(req, res){
 
     // var objectId = require('mongodb').ObjectId;
     // var id = new objectId(req.params.id);
@@ -39,7 +40,7 @@ router.patch('/:id', function(req, res){
 });
 
 
-router.get('/:id', function (req, res) {
+router.get('/:id', userAuth.isAuthenticated, function (req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
     Chat.findById(id, function (err, profile){

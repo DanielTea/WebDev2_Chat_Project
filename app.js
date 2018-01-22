@@ -25,6 +25,13 @@ mongoose.connect(process.env.DB_MONGO_URI, {
     useMongoClient: true
 });
 
+app.use(function(req, res, next) {
+    if (req.url.substr(-1) == '/' && req.url.length > 1) {
+        return res.redirect(301, req.url.slice(0, -1));
+    }
+    return next();
+});
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -82,10 +89,11 @@ passport.deserializeUser((id, done) => {
 });
 
 app.use((req, res, next) => {
-  app.locals.activeUser = req.user;
-  app.locals.flashError = req.flash('error');
-  app.locals.flashSuccess = req.flash('success');
-  next();
+    app.locals.activeUser = req.user;
+    app.locals.flashError = req.flash('error');
+    app.locals.flashSuccess = req.flash('success');
+    app.locals.currentUri = req.originalUrl;
+    next();
 });
 
 // view engine setup

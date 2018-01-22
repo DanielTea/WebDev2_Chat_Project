@@ -3,9 +3,10 @@ var mongoose = require('mongoose');
 var router = express.Router();
 var User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const userAuth = require('../userAuth');
 
 
-router.get('/', function(req, res) {
+router.get('/', userAuth.isAuthenticated, function(req, res) {
     try {
         User.find({}, (err, users) => {
             if (err) console.log(err);
@@ -18,7 +19,7 @@ router.get('/', function(req, res) {
     }
 });
 
-router.get('/:id/update', function(req, res) {
+router.get('/:id/update', userAuth.isActiveUser, function(req, res) {
     try {
         var objectId = require('mongodb').ObjectId;
         var id = new objectId(req.params.id);
@@ -34,11 +35,11 @@ router.get('/:id/update', function(req, res) {
     }
 });
 
-router.get('/create', function(req, res) {
+router.get('/create', userAuth.isGuest, function(req, res) {
     res.render('users/create');
 });
 
-router.post('/', function(req, res) {
+router.post('/', userAuth.isGuest, function(req, res) {
     if (req.user) {
         req.flash('error', 'You are already signed up, you cannot register again.');
         return res.status(400).redirect('/users/create');
@@ -80,7 +81,7 @@ function setObjectValue(data, data_name, value, do_hash = false) {
     }
 }
 
-router.patch('/:id', function(req, res) {
+router.patch('/:id', userAuth.isActiveUser, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
     var data = {}
@@ -108,7 +109,7 @@ router.patch('/:id', function(req, res) {
 });
 
 
-router.get('/:id', function(req, res) {
+router.get('/:id', userAuth.isAuthenticated, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
 

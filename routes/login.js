@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var User = require('../models/user.js');
+const userAuth = require('../userAuth');
 
 router.get('/login', (req, res) => {
     User.findOne({}, (err, user) => {

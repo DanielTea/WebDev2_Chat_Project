@@ -9,8 +9,11 @@
         <p class="lead"><%= user.status %></p>
     </div>
     <div class="button-list">
-        <a class="btn btn-outline-primary" href="#">Chat with <%= user.firstName %></a>
-        <a href="/users/<%= user._id %>/update" class="btn btn-outline-secondary">Update profile</a>
+        <% if (activeUser._id == user.id) { %>
+            <a href="/users/<%= user._id %>/update" class="btn btn-outline-secondary">Update profile</a>
+        <% } else { %>
+            <a class="btn btn-outline-primary" href="#">Chat with <%= user.firstName %></a>
+        <% } %>
     </div>
 </main>
 <% include ../partials/scripts %>

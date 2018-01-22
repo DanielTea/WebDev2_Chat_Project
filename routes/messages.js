@@ -1,16 +1,17 @@
 var express = require('express');
 var router = express.Router();
-var Message = require('../models/message')
+var Message = require('../models/message');
+const userAuth = require('../userAuth');
 
 
 /* GET home page. */
-router.get('/create', function(req, res) {
+router.get('/create', userAuth.isAuthenticated, function(req, res) {
     res.render('createMessage', {
         title: 'Create a Message!'
     });
 });
 
-router.post('/', function (req) {
+router.post('/', userAuth.isAuthenticated, function (req) {
 
     var newMessage = new Message({
         multimedia : req.body.multimedia,
@@ -24,7 +25,7 @@ router.post('/', function (req) {
 
 });
 
-router.patch('/:id', function(req, res){
+router.patch('/:id', userAuth.isAuthenticated, function(req, res){
 
     // var objectId = require('mongodb').ObjectId;
     // var id = new objectId(req.params.id);
@@ -38,7 +39,7 @@ router.patch('/:id', function(req, res){
 });
 
 
-router.get('/:id', function (req, res) {
+router.get('/:id', userAuth.isAuthenticated, function (req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
     Message.findById(id, function (err, profile){

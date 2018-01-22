@@ -20,6 +20,34 @@ nav.navbar {
         max-width: 1140px; } }
   nav.navbar a, nav.navbar a.nav-link {
     color: #fff; }
+  nav.navbar .dropdown-menu {
+    margin-top: 0; }
+    nav.navbar .dropdown-menu a, nav.navbar .dropdown-menu a.nav-link {
+      color: #333; }
+  nav.navbar .dropdown:hover > .dropdown-menu {
+    display: block; }
+  nav.navbar .search-wrapper {
+    margin: 0 auto;
+    opacity: 0.5;
+    width: 55%;
+    max-width: 55%;
+    transition: 0.2s opacity ease-in-out; }
+    nav.navbar .search-wrapper:active, nav.navbar .search-wrapper:focus-within {
+      opacity: 1; }
+    nav.navbar .search-wrapper .search {
+      background: #fff;
+      padding: .3em .5em; }
+      nav.navbar .search-wrapper .search input.search-input {
+        background: transparent;
+        border: none;
+        width: auto; }
+        nav.navbar .search-wrapper .search input.search-input:active, nav.navbar .search-wrapper .search input.search-input:focus {
+          box-shadow: none;
+          outline: none; }
+      nav.navbar .search-wrapper .search button.search-button {
+        background: transparent;
+        border: none;
+        cursor: pointer; }
 
 main {
   margin-top: 5rem; }
