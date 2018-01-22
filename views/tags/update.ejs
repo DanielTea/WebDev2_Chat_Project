@@ -1,25 +1,56 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
-<main class="container">
+<main class="container ">
     <% include ../partials/flashMessages %>
     <form action="/tags/<%= tag._id%>?_method=PATCH" method="POST" id="tagForm">
-        <div class="form-group">
-            <label for="name">Tag name</label>
-            <input type="name" name="name" id="name" value="<%= tag.name %>">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-row" for="name">Tag name</label>
+            <div class="col-sm-10">
+                <input CLASS="form-control" type="name" name="name" id="name" value="<%= tag.name %>">
+            </div>
         </div>
-        <div class="form-group">
-            <label for="description">Tag description</label>
-            <textarea name="description" id="description" form="tagForm" placeholder="<%= tag.description %>"></textarea>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-row"for="description">Tag description</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" name="description" id="description" form="tagForm" ><%= tag.description %>
+                </textarea>
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-outline-primary">Save changes</button>
+        <a class="btn btn-outline-danger" href="" data-toggle="modal" data-target="#deleteDialog">Delete Tag</a>
     </form>
-    <div class="tab-pane" id="deletePanel">
-        <form action="/tags/<%= tag._id %>?_method=DELETE"  method="POST">
-            <button type="submit" class="btn btn-outline-danger">Delete Tag</button>
-        </form>
-    </div>
-
 </main>
+
+<div class="modal" tabindex="-1" role="dialog" id="deleteDialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Tag</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Please enter the name of the Tag to enable deletion.
+                <input class="form-control" type="text" oninput="validate(this, '<%= tag.name %>')">
+            </div>
+            <div class="modal-footer">
+                <form action="/tags/<%= tag._id %>?_method=DELETE"  method="POST">
+                    <button id="deleteButton" type="submit" class="btn btn-outline-danger" disabled>Yes really delete my Tag forever</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function validate(input, required){
+        if (input.value === required){
+            document.getElementById("deleteButton").disabled = false;
+        } else{
+            document.getElementById("deleteButton").disabled = true;
+        }
+    }
+</script>
 <% include ../partials/scripts %>
 <% include ../partials/footer %>

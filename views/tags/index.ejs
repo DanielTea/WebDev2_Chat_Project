@@ -4,12 +4,13 @@
     <% include ../partials/flashMessages %>
     <div class="card-columns card-columns-tags">
         <% tags.forEach(function(tag) { %>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title"><%= tag.name %></h5>
-                <a href="/tags/<%= tag._id %>" class="card-link">Show Info</a>
+            <div class="card">
+                <div class="<%= tag.patternClass %> tag-pattern"></div>
+                <div class="card-body">
+                    <h5 class="card-title"><%= tag.name %></h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><%= tag.description %></h6>
+                </div>
             </div>
-        </div>
         <% }); %>
     </div>
 </main>

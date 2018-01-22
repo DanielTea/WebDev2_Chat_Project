@@ -58,7 +58,7 @@ router.get('/create', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-
+    console.log("irgendeinen scheiß halt");
     if (req.tag) {
         req.flash('error', 'This tag already exists.');
         return res.status(400).redirect('/tags/create');
