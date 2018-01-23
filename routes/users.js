@@ -2,6 +2,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
 var User = require('../models/user');
+var Tag = require('../models/tag');
 const bcrypt = require('bcryptjs');
 const userAuth = require('../userAuth');
 
@@ -167,20 +168,29 @@ router.get('/:id/tags', userAuth.isAuthenticated,  function(req, res) {
             }
             else{
 
-                for (var tag in userTags){
-                    mongodTagIds.push(new objectId(tag))
+                console.log("tags found")
+
+                for (var i = 0; i < userTags.length; i++){
+
+                    var tagID = new objectId(userTags[i]);
+                    mongodTagIds.push(tagID)
 
                 }
 
+                console.log("tagsidlist " + mongodTagIds);
+
                 try {
+
                     Tag.find({ _id : { $in : mongodTagIds} } , (err, tags) => {
 
-                        console.log(tags);
+                        console.log("tags"+ tags);
 
                         if (err) console.log(err);
+
                         res.render('users/tags/index', {
                             tags: tags
                         });
+
                     });
                 } catch (err) {
                     throw err;
@@ -196,26 +206,26 @@ router.get('/:id/tags', userAuth.isAuthenticated,  function(req, res) {
 
 });
 
-router.post('/:id/tags', userAuth.isActiveUser, function(req, res) {
-    var objectId = require('mongodb').ObjectId;
-    var id = new objectId(req.params.id);
-    var tagId = new objectId(req.body.tag);
-
-    User.findById(id, function(err, user) {
-        user.tags.push(tagId);
-        User.update({
-            _id: id
-        }, {
-            $set: { tags: user.tags }
-        }, (err) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).send(err);
-            }
-            return res.send();
-        });
-    });
-});
+// router.post('/:id/tags', userAuth.isActiveUser, function(req, res) {
+//     var objectId = require('mongodb').ObjectId;
+//     var id = new objectId(req.params.id);
+//     var tagId = new objectId(req.body.tag);
+//
+//     User.findById(id, function(err, user) {
+//         user.tags.push(tagId);
+//         User.update({
+//             _id: id
+//         }, {
+//             $set: { tags: user.tags }
+//         }, (err) => {
+//             if (err) {
+//                 console.log(err);
+//                 return res.status(500).send(err);
+//             }
+//             return res.send();
+//         });
+//     });
+// });
 
 router.delete('/:id/tags/:tagId', userAuth.isActiveUser, function(req, res) {
     var objectId = require('mongodb').ObjectId;
