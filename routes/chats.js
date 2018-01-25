@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Chat = require('../models/chat');
+var Message = require('../models/message');
 const userAuth = require('../userAuth');
 
 router.get('/:id', userAuth.isAuthenticated, function(req, res) {
@@ -17,7 +18,7 @@ router.get('/:id', userAuth.isAuthenticated, function(req, res) {
             });
         });
     } catch (err) {
-        throw err;
+        throw console.log(err);
     }
 });
 
@@ -63,9 +64,20 @@ router.get('/:id', userAuth.isAuthenticated, function (req, res) {
 router.get('/:id/messages', userAuth.isAuthenticated, function (req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
+
+    var nMessages = [];
+
     Chat.findById(id, function (err, chat) {
-        res.send(chat.messages)
+        Message.findById(chat.messages, function (err, message){
+            nMessages.push(message);
+            res.render('chats/show', {
+                chat: chat,
+                messages: nMessages
+            });
+        });
     });
+
+
 
 });
 

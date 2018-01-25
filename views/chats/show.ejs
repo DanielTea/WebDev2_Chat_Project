@@ -1,0 +1,50 @@
+<% include ../partials/head %>
+<% include ../partials/nav %>
+<% include ../partials/scripts %>
+<main>
+<h2><%= chat.name %></h2>
+    <div class="row">
+        <nav class="col-md-2 sidebar">
+            <ul class="nav">
+                <% messages.forEach(function(message) { %>
+                <li class="nav-item">
+                    <%= message.content %>
+                    <%= message.createdAt %>
+                </li>
+                <% }); %>
+            </ul>
+        </nav>
+    </div>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script>
+        $( document ).ready(function() {
+            var socket = io.connect(':3000');
+
+            $('form').submit(function () {
+                console.log(socket);
+                socket.emit('message', $('#m').val());
+                $('#m').val('');
+
+                return false;
+            });
+
+            socket.on('server-message', function (msg) {
+                $('#messages').append($('<li>').text(msg));
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+
+            // When the server receives a “message” type signal from the client
+            socket.on('chat message', function (message) {
+                var dt = new Date();
+                var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+                console.log('A client is speaking to me! They’re saying: ' + message);
+                $('#messages').append($('<li>').text(time + " " + message));
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+        });
+    </script>
+</main>
+<% include ../partials/footer %>
