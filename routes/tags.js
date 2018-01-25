@@ -5,8 +5,10 @@ var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
 var Tag = require('../models/tag');
+const userAuth = require('../userAuth');
+var User = require('../models/user');
 
-router.get('/', function(req, res) {
+router.get('/', userAuth.isAuthenticated, function(req, res) {
     try {
         Tag.find({}, (err, tags) => {
             if (err) console.log(err);
@@ -19,7 +21,8 @@ router.get('/', function(req, res) {
     }
 });
 
-router.get('/:id/update', function(req, res) {
+// TODO: Only the creator may update the tag
+router.get('/:id/update', userAuth.isAuthenticated, function(req, res) {
     try {
         var objectId = require('mongodb').ObjectId;
         var id = new objectId(req.params.id);
@@ -35,7 +38,7 @@ router.get('/:id/update', function(req, res) {
     }
 });
 
-router.get('/:id/messages', function(req, res) {
+router.get('/:id/messages', userAuth.isAuthenticated, function(req, res) {
     try {
         var objectId = require('mongodb').ObjectId;
         var id = new objectId(req.params.id);
@@ -53,17 +56,12 @@ router.get('/:id/messages', function(req, res) {
     }
 });
 
-router.get('/create', function(req, res) {
+router.get('/create', userAuth.isAuthenticated, function(req, res) {
     res.render('tags/create');
 });
 
-router.post('/', function(req, res) {
-
-    if (req.tag) {
-        req.flash('error', 'This tag already exists.');
-        return res.status(400).redirect('/tags/create');
-    }
-
+router.post('/', userAuth.isAuthenticated, function(req, res) {
+    var userId = req.user._id;
     var tag = new Tag({
         name: req.body.name,
         description: req.body.description
@@ -86,7 +84,8 @@ router.post('/', function(req, res) {
         });
 });
 
-router.delete('/:id', function(req, res) {
+// TODO: Only the creator may delete the tag
+router.delete('/:id', userAuth.isAuthenticated, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
 
@@ -104,7 +103,8 @@ router.delete('/:id', function(req, res) {
 
 });
 
-router.patch('/:id', function(req, res) {
+// TODO: Only the creator may delete the tag
+router.patch('/:id', userAuth.isAuthenticated, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
     var data = req.body;
