@@ -36,14 +36,23 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="v-pills-tags" role="tabpanel" aria-labelledby="v-pills-tags-tab">
-                <div class="card-columns">
-                    <% tags.forEach((tag) => { %>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title"><%= tag.name %></h5>
-                                <a href="/tags/<%= tag._id %>" class="card-link">Show Info</a>
-                            </div>
+                <div class="card-columns card-columns-tags" id="selectable-cards">
+                    <% tags.forEach(function(tag) { %>
+                    <%
+                        var dataTagSelected = false;
+                        activeUser.tags.forEach((t) => {
+                            if (t.equals(tag._id)) {
+                                dataTagSelected = true;
+                            }
+                        });
+                    %>
+                    <div class="card selectable-card<%= dataTagSelected ? ' card-selected' : ' card-unselected' %>" data-tag-id="<%= tag._id %>" data-tag-selected="<%= dataTagSelected %>">
+                        <div class="card-pattern card-pattern-<%= tag.patternClass %>"></div>
+                        <div class="card-body">
+                            <h5><%= tag.name %></h5>
+                            <small class="text-muted"><%= tag.description %></small>
                         </div>
+                    </div>
                     <% }); %>
                 </div>
             </div>
@@ -60,5 +69,96 @@
 
 
 </main>
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="modal-message" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div style="margin: 30px 0 10px 0">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="icon-error" height="64" width="64" viewBox="0 0 90.27 90.27">
+                        <defs>
+                            <style>
+                                .circle-2 {
+                                    fill: #dc3545;
+                                }
+                                .x-single {
+                                    fill: #fff;
+                                }
+                            </style>
+                        </defs>
+                        <circle class="circle-2" cx="45.14" cy="45.14" r="45.14"/>
+                        <g class="x">
+                            <rect class="x-single" x="21.77" y="43.49" width="46.74" height="3.36" transform="translate(-18.72 45.15) rotate(-45)"/>
+                            <rect class="x-single" x="43.47" y="21.81" width="3.36" height="46.74" transform="translate(-18.72 45.16) rotate(-45)"/>
+                        </g>
+                    </svg>
+                </div>
+                <h5 id="modal-title">Error:</h5>
+                <p id="modal-message" style="margin: 20px 0"></p>
+            </div>
+        </div>
+    </div>
+</div>
 <% include partials/scripts %>
+<script>
+    function requestCreateTag(card, onSuccess, onError) {
+        $.ajax({
+            url: '/users/<%= activeUser._id %>/tags',
+            data: {
+                tag: card.attr('data-tag-id')
+            },
+            method: 'POST',
+            success: (data) => onSuccess(data)
+        }).fail((data) => onError(data));
+    }
+
+    function requestDeleteTag(card, onSuccess, onError) {
+        $.ajax({
+            url: '/users/<%= activeUser._id %>/tags/' + card.attr('data-tag-id'),
+            method: 'DELETE',
+            success: (data) => onSuccess(data)
+        }).fail((data) => onError(data));
+    }
+
+    function toggleSelection(card, onSelect, onUnselect) {
+        if (card.attr('data-tag-selected') == 'false') {
+            card.attr('data-tag-selected', 'true');
+            card.removeClass('card-unselected');
+            card.addClass('card-selected');
+            return onSelect();
+        }
+        card.attr('data-tag-selected', 'false');
+        card.removeClass('card-selected');
+        card.addClass('card-unselected');
+        return onUnselect();
+    }
+
+    function showRequestSuccess(data) {
+        return;
+    }
+
+    function showRequestError(card, data) {
+        toggleSelection(card, () => {}, () => {});
+        var errorModal = $('#errorModal');
+        errorModal.modal('show');
+        $('#modal-title').text('Error ' + data.status);
+        $('#modal-message').text(data.statusText);
+    }
+
+    $('#selectable-cards').on('click', '.card', function (e) {
+        var card = $(this);
+        toggleSelection(
+            card,
+            () => requestCreateTag(
+                card,
+                (data) => showRequestSuccess(data),
+                (data) => showRequestError(card, data)
+            ),
+            () => requestDeleteTag(
+                card,
+                (data) => showRequestSuccess(data),
+                (data) => showRequestError(card, data)
+            )
+        );
+    });
+</script>
 <% include partials/footer %>
