@@ -67,6 +67,7 @@ router.get('/:id/messages', userAuth.isAuthenticated, function (req, res) {
 
     var nMessages = [];
 
+
     Chat.findById(id, function (err, chat) {
         Message.findById(chat.messages, function (err, message){
             nMessages.push(message);

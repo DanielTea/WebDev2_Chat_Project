@@ -25,9 +25,10 @@
 
             $('form').submit(function () {
                 console.log(socket);
-                socket.emit('message', $('#m').val());
+                var data = {"message":$('#m').val(), "chatId": '<%= chat._id %>', 'user': '<%= activeUser.firstName %> <%= activeUser.lastName %>'};
+                console.log(data);
+                socket.emit('message', data);
                 $('#m').val('');
-
                 return false;
             });
 
@@ -37,11 +38,12 @@
             });
 
             // When the server receives a “message” type signal from the client
-            socket.on('chat message', function (message) {
+            socket.on('chat message', function (data) {
+                console.log(data);
                 var dt = new Date();
                 var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-                console.log('A client is speaking to me! They’re saying: ' + message);
-                $('#messages').append($('<li>').text(time + " " + message));
+                console.log('A client is speaking to me! They’re saying: ' + data);
+                $('#messages').append($('<li>').text(time + " " + data.user + ": " +  data.message));
                 window.scrollTo(0, document.body.scrollHeight);
             });
         });
