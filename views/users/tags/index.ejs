@@ -2,6 +2,15 @@
 <% include ../../partials/nav %>
 <main class="container">
     <% include ../../partials/flashMessages %>
+    <h1>Your Tags</h1>
+    <p class="lead">
+        Here is an overview of the Tags you subscribed to. Remove or readd them with just a click!
+        <br />Your changes are saved automatically.
+    </p>
+    <p class="lead" style="padding-bottom: 3rem">
+        Want more Tags? If you have a certain one in mind search for it!
+    <br /> Or just <a href="/tags">browse them all</a>.
+    </p>
     <div class="card-columns card-columns-tags" id="selectable-cards">
         <% tags.forEach(function(tag) { %>
         <%
