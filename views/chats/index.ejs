@@ -2,15 +2,27 @@
 <% include ../partials/nav %>
 <main>
     <div class="row">
-        <nav class="col-md-2 sidebar">
-            <ul class="nav">
+        <nav class="col-3" style="height: 80vh; overflow:auto">
+            <div class="list-group">
                 <% chats.forEach(function(chat) { %>
-                <li class="nav-item">
-                    <a href="/chats/<%= chat._id %>/messages" class="nav-link"></a><%= chat.name %>
-                </li>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#chat/<%= chat._id %>"><%= chat.name %></a>
                 <% }); %>
-            </ul>
+            </div>
         </nav>
+        <div class="col-9 tab-content">
+                <% chats.forEach(function(chat){ %>
+                    <div class="tab-pane" id="chat/<%= chat._id %>">
+                            <h2 class="text-center"><%= chat.name %></h2>
+                            <div>Hier kommen später die Nachrichten rein</div>
+                            <form>
+                                <div class="d-flex justify-content-between">
+                                    <input class="form-control" type="text" placeholder="Type here..." required>
+                                    <button class="btn btn-primary" type="submit">Send</button>
+                                </div>
+                            </form>
+                    </div>
+                <% }); %>
+        </div>
     </div>
 </main>
 <% include ../partials/scripts %>
