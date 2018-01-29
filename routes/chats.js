@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var User = require('../models/user');
 var Chat = require('../models/chat');
 var Message = require('../models/message');
 const userAuth = require('../userAuth');
@@ -61,23 +62,44 @@ router.get('/:id', userAuth.isAuthenticated, function (req, res) {
 
 });
 
-router.get('/:id/messages', userAuth.isAuthenticated, function (req, res) {
+router.get('/single/:id/messages', userAuth.isAuthenticated, function (req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
 
+    var cChat = [];
+    var cUser = [];
     var nMessages = [];
 
-
-    Chat.findById(id, function (err, chat) {
-        Message.findById(chat.messages, function (err, message){
-            nMessages.push(message);
-            res.render('chats/show', {
-                chat: chat,
-                messages: nMessages
+    Chat.find({}, function (err, chats) {
+        for(var i in chats) {
+            Chat.findById(chats[i]._id, function (err, chat) {
+                User.findById(chat.users, function (err, user) {
+                    if((user._id).equals(id)) {
+                        cChat = chat;
+                        cUser = user;
+                        Message.findById(chat.messages, function (err, message) {
+                            nMessages.push(message);
+                            res.send(message);
+                        });
+                    }
+                });
             });
-        });
+        }
     });
 
+    console.log(cChat);
+
+    res.render('chats/show', {
+        chat: cChat,
+        user: cUser,
+        messages: nMessages
+    })
+
+});
+
+router.get('/group/:id/messages', userAuth.isAuthenticated, function (req, res) {
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
 
 
 });
