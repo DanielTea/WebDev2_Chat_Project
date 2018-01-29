@@ -2,6 +2,7 @@
 <% include ../partials/nav %>
 <main class="container">
     <% include ../partials/flashMessages %>
+    <h2>Create a Tag</h2><br />
     <form action="/tags" method="post" id="tagForm">
         <div class="form-group row">
             <label class="col-sm-2 col-form-row" for="name">Tag name</label>
@@ -10,10 +11,27 @@
             </div>
         </div>
         <div class="form-group row">
+            <label class="col-sm-2 col-form-row" for="patternClass">Pattern</label>
+            <div class="col-sm-10">
+                <select class="custom-select" id="patternClass" name="patternClass">
+                    <option selected disabled>Choose...</option>
+                    <option value="food">Food</option>
+                    <option value="tech">Tech</option>
+                    <option value="jigsaw">Jigsaw</option>
+                    <option value="anchors">Anchors</option>
+                    <option value="diamonds">Diamonds</option>
+                    <option value="cogs">Cogs</option>
+                    <option value="math">Math</option>
+                    <option value="game">Game</option>
+                    <option value="music">Music</option>
+                </select>
+                <small class="text-muted">This decorative pattern will show up on all tag cards.</small>
+            </div>
+        </div>
+        <div class="form-group row">
             <label class="col-sm-2 col-form-row"for="description" >Tag description</label>
             <div class="col-sm-10">
-                <textarea class="form-control" name="description" id="description" form="tagForm" required>
-                </textarea>
+                <textarea class="form-control" name="description" id="description" form="tagForm" required></textarea>
             </div>
         </div>
         <button type="submit" class="btn btn-outline-primary offset-sm-2">Create Tag</button>

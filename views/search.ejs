@@ -13,55 +13,67 @@
         </div>
         <div class="col-sm-9 tab-content" id="v-pills-tabContent">
             <div class="tab-pane fade show active" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab">
-                <div class="card-columns">
-                    <% users.forEach(user => { %>
-                    <a href="/users/<%= user._id %>">
-                        <div class="card">
-                            <% if (user.pictureUrl) { %><img class="card-img-top" src="<%= user.pictureUrl %>"><% } %>
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <%= user.firstName %><%= user.lastName ? ' ' + user.lastName : '' %>
-                                    <% var now = new Date();
-                                    if(user.birthDate && now.getDay() == user.birthDate.getDay() && now.getMonth() == user.birthDate.getMonth()){
-                                    %>
-                                    🎂
-                                    <% }; %>
-                                </h5>
+                <% if (users.length == 0) { %>
+                    <div class="text-center text-muted"><i class="fa fa-meh-o" style="font-size:5em;margin:0.2em 0;" aria-hidden="true"></i><br />There are no users matching "<%= searchQuery %>"</div>
+                <% } else { %>
+                    <div class="card-columns">
+                        <% users.forEach(user => { %>
+                        <a href="/users/<%= user._id %>">
+                            <div class="card">
+                                <% if (user.pictureUrl) { %><img class="card-img-top" src="<%= user.pictureUrl %>"><% } %>
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= user.firstName %><%= user.lastName ? ' ' + user.lastName : '' %>
+                                        <% var now = new Date();
+                                        if(user.birthDate && now.getDay() == user.birthDate.getDay() && now.getMonth() == user.birthDate.getMonth()){
+                                        %>
+                                        🎂
+                                        <% }; %>
+                                    </h5>
 
-                                <% if(user.status) { %><h6 class="card-subtitle mb-2 text-muted"><%= user.status %></h6><% } %>
+                                    <% if(user.status) { %><h6 class="card-subtitle mb-2 text-muted"><%= user.status %></h6><% } %>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                    <% }); %>
-                </div>
+                        </a>
+                        <% }); %>
+                    </div>
+                <% } %>
             </div>
             <div class="tab-pane fade" id="v-pills-tags" role="tabpanel" aria-labelledby="v-pills-tags-tab">
-                <div class="card-columns card-columns-tags" id="selectable-cards">
-                    <% tags.forEach(function(tag) { %>
-                    <%
-                        var dataTagSelected = false;
-                        activeUser.tags.forEach((t) => {
-                            if (t.equals(tag._id)) {
-                                dataTagSelected = true;
-                            }
-                        });
-                    %>
-                    <div class="card selectable-card<%= dataTagSelected ? ' card-selected' : ' card-unselected' %>" data-tag-id="<%= tag._id %>" data-tag-selected="<%= dataTagSelected %>">
-                        <div class="card-pattern card-pattern-<%= tag.patternClass %>"></div>
-                        <div class="card-body">
-                            <h5><%= tag.name %></h5>
-                            <small class="text-muted"><%= tag.description %></small>
+                <% if (tags.length == 0) { %>
+                    <div class="text-center text-muted"><i class="fa fa-meh-o" style="font-size:5em;margin:0.2em 0;" aria-hidden="true"></i><br />There are no tags matching "<%= searchQuery %>"</div>
+                <% } else { %>
+                    <div class="card-columns card-columns-tags" id="selectable-cards">
+                        <% tags.forEach(function(tag) { %>
+                        <%
+                            var dataTagSelected = false;
+                            activeUser.tags.forEach((t) => {
+                                if (t.equals(tag._id)) {
+                                    dataTagSelected = true;
+                                }
+                            });
+                        %>
+                        <div class="card selectable-card<%= dataTagSelected ? ' card-selected' : ' card-unselected' %>" data-tag-id="<%= tag._id %>" data-tag-selected="<%= dataTagSelected %>">
+                            <div class="card-pattern card-pattern-<%= tag.patternClass %>"></div>
+                            <div class="card-body">
+                                <h5><%= tag.name %></h5>
+                                <small class="text-muted"><%= tag.description %></small>
+                            </div>
                         </div>
+                        <% }); %>
                     </div>
-                    <% }); %>
-                </div>
+                <% } %>
             </div>
             <div class="tab-pane fade" id="v-pills-chats" role="tabpanel" aria-labelledby="v-pills-chats-tab">
-                <ul>
-                    <% chats.forEach((chat) => { %>
-                        <li><%= chat.name %></li>
-                    <% }); %>
-                </ul>
+                <% if (chats.length == 0) { %>
+                    <div class="text-center text-muted"><i class="fa fa-meh-o" style="font-size:5em;margin:0.2em 0;" aria-hidden="true"></i><br />There are no chats matching "<%= searchQuery %>"</div>
+                <% } else { %>
+                    <ul>
+                        <% chats.forEach((chat) => { %>
+                            <li><%= chat.name %></li>
+                        <% }); %>
+                    </ul>
+                <% } %>
             </div>
         </div>
     </div>
