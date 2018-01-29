@@ -21,12 +21,27 @@
                 }
             });
         %>
-        <div class="card selectable-card<%= dataTagSelected ? ' card-selected' : ' card-unselected' %>" data-tag-id="<%= tag._id %>" data-tag-selected="<%= dataTagSelected %>">
-            <div class="card-pattern card-pattern-<%= tag.patternClass %>"></div>
-            <div class="card-body">
-                <h5><%= tag.name %></h5>
-                <small class="text-muted"><%= tag.description %></small>
+        <div class="card selectable-card" data-tag-id="<%= tag._id %>">
+            <div class="card-pattern card-pattern-<%= tag.patternClass %>">
+                <div class="card-edit-menu">
+                    <a href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-cog" aria-label="Settings"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <% if(tag.createdBy.equals(activeUser._id)) { %>
+                            <a class="dropdown-item" href="/tags/<%= tag._id %>/update">Edit</a>
+                        <% } else { %>
+                            <a class="dropdown-item" href="#" onClick="removeTagFromCollection(event, '<%= tag._id %>')">Remove from your tags</a>
+                        <% } %>
+                    </div>
+                </div>
             </div>
+            <a class="card-link" href="/tags/<%= tag._id %>">
+                <div class="card-body">
+                    <h5><%= tag.name %></h5>
+                    <small class="text-muted"><%= tag.description %></small>
+                </div>
+            </a>
         </div>
         <% }); %>
     </div>
@@ -62,65 +77,32 @@
 </div>
 <% include ../../partials/scripts %>
 <script>
-    function requestCreateTag(card, onSuccess, onError) {
+    function requestDeleteTag(tagId, onSuccess, onError) {
         $.ajax({
-            url: '/users/<%= activeUser._id %>/tags',
-            data: {
-                tag: card.attr('data-tag-id')
-            },
-            method: 'POST',
-            success: (data) => onSuccess(data)
-        }).fail((data) => onError(data));
-    }
-
-    function requestDeleteTag(card, onSuccess, onError) {
-        $.ajax({
-            url: '/users/<%= activeUser._id %>/tags/' + card.attr('data-tag-id'),
+            url: '/users/<%= activeUser._id %>/tags/' + tagId,
             method: 'DELETE',
             success: (data) => onSuccess(data)
         }).fail((data) => onError(data));
     }
 
-    function toggleSelection(card, onSelect, onUnselect) {
-        if (card.attr('data-tag-selected') == 'false') {
-            card.attr('data-tag-selected', 'true');
-            card.removeClass('card-unselected');
-            card.addClass('card-selected');
-            return onSelect();
-        }
-        card.attr('data-tag-selected', 'false');
-        card.removeClass('card-selected');
-        card.addClass('card-unselected');
-        return onUnselect();
+    function showRequestSuccess(e, data) {
+        $(e.target).parents('.card').remove();
     }
 
-    function showRequestSuccess(data) {
-        return;
-    }
-
-    function showRequestError(card, data) {
-        toggleSelection(card, () => {}, () => {});
+    function showRequestError(data) {
         var errorModal = $('#errorModal');
         errorModal.modal('show');
         $('#modal-title').text('Error ' + data.status);
         $('#modal-message').text(data.statusText);
     }
 
-    $('#selectable-cards').on('click', '.card', function (e) {
-        var card = $(this);
-        toggleSelection(
-            card,
-            () => requestCreateTag(
-                card,
-                (data) => showRequestSuccess(data),
-                (data) => showRequestError(card, data)
-            ),
-            () => requestDeleteTag(
-                card,
-                (data) => showRequestSuccess(data),
-                (data) => showRequestError(card, data)
-            )
+    function removeTagFromCollection(e, tagId) {
+        e.preventDefault();
+        requestDeleteTag(
+            tagId,
+            (data) => showRequestSuccess(e, data),
+            (data) => showRequestError(data)
         );
-    });
+    }
 </script>
 <% include ../../partials/footer %>
