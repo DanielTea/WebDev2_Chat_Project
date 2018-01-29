@@ -64,7 +64,9 @@ router.post('/', userAuth.isAuthenticated, function(req, res) {
     var userId = req.user._id;
     var tag = new Tag({
         name: req.body.name,
-        description: req.body.description
+        description: req.body.description,
+        patternClass: req.body.patternClass,
+        createdBy: req.user
     });
 
     tag.save(function(err) {

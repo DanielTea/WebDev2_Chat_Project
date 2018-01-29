@@ -206,26 +206,26 @@ router.get('/:id/tags', userAuth.isAuthenticated,  function(req, res) {
 
 });
 
-// router.post('/:id/tags', userAuth.isActiveUser, function(req, res) {
-//     var objectId = require('mongodb').ObjectId;
-//     var id = new objectId(req.params.id);
-//     var tagId = new objectId(req.body.tag);
-//
-//     User.findById(id, function(err, user) {
-//         user.tags.push(tagId);
-//         User.update({
-//             _id: id
-//         }, {
-//             $set: { tags: user.tags }
-//         }, (err) => {
-//             if (err) {
-//                 console.log(err);
-//                 return res.status(500).send(err);
-//             }
-//             return res.send();
-//         });
-//     });
-// });
+router.post('/:id/tags', userAuth.isActiveUser, function(req, res) {
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
+    var tagId = new objectId(req.body.tag);
+
+    User.findById(id, function(err, user) {
+        user.tags.push(tagId);
+        User.update({
+            _id: id
+        }, {
+            $set: { tags: user.tags }
+        }, (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
+            }
+            return res.send();
+        });
+    });
+});
 
 router.delete('/:id/tags/:tagId', userAuth.isActiveUser, function(req, res) {
     var objectId = require('mongodb').ObjectId;

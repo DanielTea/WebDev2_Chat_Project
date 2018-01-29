@@ -2,10 +2,14 @@
 <% include ../partials/nav %>
 <main class="container">
     <% include ../partials/flashMessages %>
-    <h1>Browse all tags</h1>
+    <h1>Browse all Tags</h1>
     <p class="lead">
-        Select the tags you want to subscribe to. You can also unselect to remove them from your collection.
+        Here is an overview of all the Tags our Users have created.
+        <br />Add or remove them from your <a href="/users/<%=activeUser._id%>/tags">personal collection</a> with just a click!
         <br />Your changes are saved automatically.
+    </p>
+    <p class="lead">
+        The Tag you were looking for doesn't exist yet? No worries, just <a href="tags/create">create it yourself</a>.
     </p>
     <div class="card-columns card-columns-tags" id="selectable-cards">
         <% tags.forEach(function(tag) { %>
