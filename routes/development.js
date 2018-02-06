@@ -30,8 +30,7 @@ router.post('/seed-database', (req, res) => {
                 email: faker.internet.exampleEmail(),
                 birthDate: faker.date.past(),
                 status: faker.lorem.sentence(),
-                pictureUrl: faker.internet.avatar(),
-                chat: faker.random.arrayElement(chats)
+                pictureUrl: faker.internet.avatar()
             });
             user.save((err, data) => {
                 if (err) {
@@ -51,7 +50,8 @@ router.post('/seed-database', (req, res) => {
         for (j = 0; j < 20; j++) {
             try {
                 var message = new Message({
-                    content: faker.lorem.sentence()
+                    content: faker.lorem.sentence(),
+                    user: faker.random.arrayElement(users)
                 });
                 message.save((err, data) => {
                     if (err) {

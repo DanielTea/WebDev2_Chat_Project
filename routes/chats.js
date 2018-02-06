@@ -9,19 +9,32 @@ const userAuth = require('../userAuth');
 router.get('/:id', userAuth.isAuthenticated, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
-
-    try {
-        Chat.find({ users: {$in: [id]}},
-
-        (err, chats) => {
-            if (err) console.log(err);
-            res.render('chats/index', {
-                chats: chats
-            });
+    var messages;
+    getMessages = function (_callback) {
+        Message.find({}, function (err, nMessage) {
+            messages = nMessage;
+            _callback();
         });
-    } catch (err) {
-        throw console.log(err);
+    };
+
+    function renderChat() {
+        getMessages(function () {
+            try {
+                Chat.find({ users: {$in: [id]}},
+                    (err, chats) => {
+                    if (err) console.log(err);
+                res.render('chats/index', {
+                    chats: chats,
+                    messages: messages
+                });
+            });
+            } catch (err) {
+                throw console.log(err);
+            }
+        });
     }
+
+    renderChat();
 });
 
 /* GET home page. */
@@ -67,54 +80,11 @@ router.get('/single/:id/messages', userAuth.isAuthenticated, function (req, res)
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
 
-    var nChat = null;
-    var nUser = null;
-    var nMessages = [];
-    var nChatMsgCount = 0;
-
-    getMessage = function(next) {
-        return Message.findById(nChat.messages).exec().then(function (err, msg) {
-            if(msg) {
-                return msg;
-            }
-        });
-    };
-
-    getChat = function (next) {
-        return Chat.find({}, function (err, chats) {
-            for(var i = 0; i < chats.length; i++) {
-                Chat.findById(chats[i]._id, function (err, chat) {
-                    User.findById(chat.users, function (err, user) {
-                        if((user._id).equals(id)) {
-                            nChat = chat;
-                            nUser = user;
-                            return chat;
-                        }
-                    });
-                });
-            }
-        });
-    };
-
-    getChat().then(function (chat) {
-        console.log("Chat: " + chat);
-    });
-
-    function renderChat() {
-        findChat(function () {
-            getMessage().then(function () {
-                console.log("Chat: " + nChat._id);
-                console.log("User: " + nUser._id);
-                res.render('chats/show', {
-                    chat: nChat,
-                    user: nUser,
-                    messages: nMessages
-                })
-            });
-
-        });
-    }
-
+    res.render('chats/show', {
+        chat: nChat,
+        user: nUser,
+        messages: nMessages
+    })
 
 });
 

@@ -112,6 +112,7 @@ setInterval(sendTime, 10000);
 
 io.on('connection', function (socket) {
     const Chat = require('../models/chat');
+    const User = require('../models/user');
     const Message = require('../models/message');
     console.log('a user connected');
     socket.emit('server-message', 'You are connected!');
@@ -119,25 +120,65 @@ io.on('connection', function (socket) {
         console.log('user disconnected');
     });
     socket.on('message', function (data) {
-        console.log(data);
 
-        var message = new Message({
-            content: data.message,
-            user: data.userId
-        });
-        message.save();
+        // Define variables from parameters
+        var content = data.message;
+        var chatId = data.chatId;
+        var userId = data.userId;
 
-        var nChat = null;
+        // Init global variables for later
+        var chat = null;
+        var user = null;
 
-        Chat.findById(data.chatId, function (err, chat) {
+        // Get all data
+        getChat = function(_callback) {
+            Chat.findById(chatId, function (err, nChat) {
+                chat = nChat; // Set chat data as a variable for the chat
+                _callback(); // Callback - To be sure that all data's got loaded, because of an Async task
+            });
+        };
+
+        getUser = function(_callback) {
+            User.findById(userId, function (err, nUser) {
+                user = nUser; // Set chat data as a variable for the chat
+                _callback(); // Callback - To be sure that all data's got loaded, because of an Async task
+            });
+        };
+
+        saveMessage = function (_callback) {
+            var message = new Message({
+                content: content,
+                user: user
+            });
+            message.save();
             var messages = chat.messages;
             messages.push(message);
             chat.messages = messages;
             chat.save();
-        });
+            _callback();
+        };
 
+        function sendMsg() {
+            getChat(function () {
+                getUser(function () {
+                    saveMessage(function () {
+                    });
+                    // Feed chat with new data
+                    var newData = {"message": content, "chat": chat, "user": user};
 
-        socket.emit('chat message', data);
-        socket.broadcast.emit('chat message', data);
+                    // Send to "chat message" listener
+                    socket.emit('chat message', newData);
+
+                    // Send to all users
+                    socket.broadcast.emit('chat message', newData);
+
+                    // DEBUG
+                    console.log("Following message got send: ");
+                    console.log(newData);
+                });
+            });
+        }
+
+        sendMsg(); // Initialize function for getting chat and user data and send it to all sockets
     });
 });
