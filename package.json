@@ -26,7 +26,8 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "serve-favicon": "^2.4.5",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "q": "^1.5.1"
   },
   "devDependencies": {
     "faker": "^4.1.0",

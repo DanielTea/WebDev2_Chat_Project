@@ -2,11 +2,6 @@ var mongoose = require('mongoose');
 
 var messageSchema = mongoose.Schema({
     content: String,
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
     multimedia: {
         data: Buffer,
         contentType: String

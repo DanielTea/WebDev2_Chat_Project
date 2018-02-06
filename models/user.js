@@ -21,7 +21,11 @@ var userSchema = mongoose.Schema({
     }],
     pictureUrl: String,
     updatedAt: Date,
-    createdAt: Date
+    createdAt: Date,
+    chats: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Chat'
+    }]
 });
 
 userSchema.pre('save', (next) => {

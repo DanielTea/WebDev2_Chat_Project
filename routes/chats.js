@@ -1,4 +1,5 @@
 var express = require('express');
+var Q = require('q');
 var router = express.Router();
 var User = require('../models/user');
 var Chat = require('../models/chat');
@@ -66,34 +67,54 @@ router.get('/single/:id/messages', userAuth.isAuthenticated, function (req, res)
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
 
-    var cChat = [];
-    var cUser = [];
+    var nChat = null;
+    var nUser = null;
     var nMessages = [];
+    var nChatMsgCount = 0;
 
-    Chat.find({}, function (err, chats) {
-        for(var i in chats) {
-            Chat.findById(chats[i]._id, function (err, chat) {
-                User.findById(chat.users, function (err, user) {
-                    if((user._id).equals(id)) {
-                        cChat = chat;
-                        cUser = user;
-                        Message.findById(chat.messages, function (err, message) {
-                            nMessages.push(message);
-                            res.send(message);
-                        });
-                    }
+    getMessage = function(next) {
+        return Message.findById(nChat.messages).exec().then(function (err, msg) {
+            if(msg) {
+                return msg;
+            }
+        });
+    };
+
+    getChat = function (next) {
+        return Chat.find({}, function (err, chats) {
+            for(var i = 0; i < chats.length; i++) {
+                Chat.findById(chats[i]._id, function (err, chat) {
+                    User.findById(chat.users, function (err, user) {
+                        if((user._id).equals(id)) {
+                            nChat = chat;
+                            nUser = user;
+                            return chat;
+                        }
+                    });
                 });
-            });
-        }
+            }
+        });
+    };
+
+    getChat().then(function (chat) {
+        console.log("Chat: " + chat);
     });
 
-    console.log(cChat);
+    function renderChat() {
+        findChat(function () {
+            getMessage().then(function () {
+                console.log("Chat: " + nChat._id);
+                console.log("User: " + nUser._id);
+                res.render('chats/show', {
+                    chat: nChat,
+                    user: nUser,
+                    messages: nMessages
+                })
+            });
 
-    res.render('chats/show', {
-        chat: cChat,
-        user: cUser,
-        messages: nMessages
-    })
+        });
+    }
+
 
 });
 

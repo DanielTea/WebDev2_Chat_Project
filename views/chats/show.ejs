@@ -5,11 +5,11 @@
 <h2><%= chat.name %></h2>
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <% for(var i in messages) { %>
             <ul>
-                <li><%= messages[i].createdAt %>: <br /> <%= messages[i].content %></li>
+                <% messages.forEach(function (message) { %>
+                    <li><%= message.content %></li>
+                <%  }); %>
             </ul>
-            <% }; %>
         </div>
     </div>
     <ul id="messages"></ul>
