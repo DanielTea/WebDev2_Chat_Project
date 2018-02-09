@@ -1,0 +1,29 @@
+<% include ../partials/head %>
+<% include ../partials/nav %>
+<main class="container">
+    <% include ../partials/flashMessages %>
+    <h1>This Tag is followed by:</h1>
+    <div class="card-columns card-columns-users">
+        <% users.forEach(profile => { %>
+        <a href="/users/<%= profile._id %>">
+            <div class="card">
+                <% if (profile.pictureUrl) { %><img class="card-img-top" src="<%= profile.pictureUrl %>"><% } %>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= profile.firstName %><%= profile.lastName ? ' ' + profile.lastName : '' %>
+                        <% var now = new Date();
+                        if(profile.birthDate && now.getDay() == profile.birthDate.getDay() && now.getMonth() == profile.birthDate.getMonth()){
+                        %>
+                        🎂
+                        <% }; %>
+                    </h5>
+
+                    <% if(profile.status) { %><h6 class="card-subtitle mb-2 text-muted"><%= profile.status %></h6><% } %>
+                </div>
+            </div>
+        </a>
+        <% }); %>
+    </div>
+</main>
+<% include ../partials/scripts %>
+<% include ../partials/footer %>

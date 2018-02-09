@@ -22,6 +22,28 @@ router.get('/', userAuth.isAuthenticated, function(req, res) {
     }
 });
 
+router.get('/:id/show', userAuth.isAuthenticated, function(req, res) {
+    try {
+
+        var objectId = require('mongodb').ObjectId;
+        var id = new objectId(req.params.id);
+
+        User.find({tags: id },  function(err, users) {
+
+            console.log(users)
+            res.render('tags/show', {
+                users: users
+            });
+
+        });
+
+
+    } catch (err) {
+        throw err;
+    }
+});
+
+
 router.get('/:id/messages', userAuth.isAuthenticated, function(req, res) {
 
 
