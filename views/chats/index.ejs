@@ -2,8 +2,10 @@
 <% include ../partials/nav %>
 <% include ../partials/scripts %>
 <main>
-    <div class="row">
-        <nav class="col-3" style="height: 80vh; overflow:auto">
+    <!-- no gutters is needed to avoid the page being larger than the screen, containers leave some whitespace-->
+    <div class="row no-gutters">
+        <!-- max-height and overflow for a nice scroller, margin to counteract no-gutters -->
+        <nav class="col" style="max-height: 85vh; overflow:auto; margin-right:1vh;">
             <div class="list-group">
                 <% chats.forEach(function(chat) { %>
                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#chat/<%= chat._id %>"><%= chat.name %></a>
@@ -16,15 +18,17 @@
                 <% chats.forEach(function(chat){ %>
                     <div class="tab-pane" id="chat/<%= chat._id %>">
                             <h2 class="text-center"><%= chat.name %></h2>
-                            <ul class="msg" id="msg_<%= chat._id %>">
-                                <% chat.messages.forEach(function (messageId) { %>
+                            <div style="height: 70vh; overflow:auto">
+                                <ul class="msg" id="msg_<%= chat._id %>">
+                                    <% chat.messages.forEach(function (messageId) { %>
                                     <% for(var i=0; i < messages.length; i++) { %>
-                                        <%if (messages[i]._id.toString() == messageId.toString()) { %>
-                                            <li><p><%= messages[i].createdAt.toDateString() %> - <%= messages[i].content %></p></li>
-                                        <% } %>
+                                    <%if (messages[i]._id.toString() == messageId.toString()) { %>
+                                    <li><p><%= messages[i].createdAt.toDateString() %> - <%= messages[i].content %></p></li>
+                                    <% } %>
                                     <% }; %>
-                                <% }); %>
-                            </ul>
+                                    <% }); %>
+                                </ul>
+                            </div>
 
                             <form class="messageForm" data-target="msg_<%= chat._id %>">
                                 <div class="d-flex justify-content-between">
