@@ -1,5 +1,6 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
+<% include ../partials/scripts %>
 <main>
     <div class="row">
         <nav class="col-3" style="height: 80vh; overflow:auto">
@@ -9,21 +10,89 @@
                 <% }); %>
             </div>
         </nav>
+
         <div class="col-9 tab-content">
+
                 <% chats.forEach(function(chat){ %>
                     <div class="tab-pane" id="chat/<%= chat._id %>">
                             <h2 class="text-center"><%= chat.name %></h2>
-                            <div>Hier kommen später die Nachrichten rein</div>
-                            <form>
+                            <ul class="msg" id="msg_<%= chat._id %>">
+                                <% chat.messages.forEach(function (messageId) { %>
+                                    <% for(var i=0; i < messages.length; i++) { %>
+                                        <%if (messages[i]._id.toString() == messageId.toString()) { %>
+                                            <li><p><%= messages[i].createdAt.toDateString() %> - <%= messages[i].content %></p></li>
+                                        <% } %>
+                                    <% }; %>
+                                <% }); %>
+                            </ul>
+
+                            <form class="messageForm" data-target="msg_<%= chat._id %>">
                                 <div class="d-flex justify-content-between">
-                                    <input class="form-control" type="text" placeholder="Type here..." required>
+                                    <input type="hidden" class="chatId" value="<%= chat._id %>"/>
+                                    <input class="message form-control" type="text" placeholder="Type here..." required autocomplete="off">
                                     <button class="btn btn-primary" type="submit">Send</button>
                                 </div>
                             </form>
                     </div>
                 <% }); %>
+
         </div>
     </div>
 </main>
-<% include ../partials/scripts %>
+
+
+<script>
+
+    $(document).ready(function () {
+        // Build socket io connection
+       var socket = io.connect(":3000");
+
+       // Send message on submit
+       $(".messageForm").submit(function() {
+           // Define data for message with message content and chat id
+           var data = {"message": $(this).find("input.message").val(), "chatId": $(this).find(".chatId").val(), userId: "<%= activeUser._id %>"};
+
+           // Send message data over socket
+           socket.emit("message", data);
+
+           // Clear message field
+           $(this).find("input.message").val(" ");
+
+           // DEBUG - TODO Remove before live
+           console.log(data);
+
+           // Prevent submit form from default (Reloading the page)
+           return false;
+       });
+
+       // Catch single message
+       socket.on('chat message', function (data) {
+
+           // DEBUG - TODO Remove before live
+           console.log(data);
+
+           // Create date time object
+           var dateTime = new Date();
+
+           // Create user readable datetime object
+           var time = dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+
+           // Append message from user to list
+           $("#msg_"+data.chat._id).append(
+               $("<li class='messageContent'>" +
+                   "<img class='img-thumbnail' src='" + data.user.pictureUrl + "' title='"+ data.user.firstName + " " + data.user.lastName +"'/>" +
+                   "<p>"+ time + " - " + data.user.firstName + " " + data.user.lastName + ": " + data.message + "</p>" +
+                   "</li>")
+           );
+       })
+
+       // Catch message from server
+       socket.on("server-message", function (msg) {
+           // Append message from server to list
+           $(".msg").append($('<li>').text(msg));
+       });
+    });
+
+</script>
+
 <% include ../partials/footer %>

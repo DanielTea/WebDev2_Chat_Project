@@ -4,16 +4,13 @@
 <main>
 <h2><%= chat.name %></h2>
     <div class="row">
-        <nav class="col-md-2 sidebar">
-            <ul class="nav">
-                <% messages.forEach(function(message) { %>
-                <li class="nav-item">
-                    <%= message.content %>
-                    <%= message.createdAt %>
-                </li>
-                <% }); %>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <ul>
+                <% messages.forEach(function (message) { %>
+                    <li><%= message.content %></li>
+                <%  }); %>
             </ul>
-        </nav>
+        </div>
     </div>
     <ul id="messages"></ul>
     <form action="">
@@ -25,7 +22,7 @@
 
             $('form').submit(function () {
                 console.log(socket);
-                var data = {"message":$('#m').val(), "chatId": '<%= chat._id %>', 'user': '<%= activeUser.firstName %> <%= activeUser.lastName %>'};
+                var data = {'message':$('#m').val(), 'chatId': '<%= chat._id %>', 'userId': '<%= user._id %>','user': '<%= activeUser.firstName %> <%= activeUser.lastName %>'};
                 console.log(data);
                 socket.emit('message', data);
                 $('#m').val('');
