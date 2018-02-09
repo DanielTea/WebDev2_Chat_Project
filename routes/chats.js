@@ -10,6 +10,7 @@ router.get('/:id', userAuth.isAuthenticated, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
     var messages;
+
     getMessages = function (_callback) {
         Message.find({}, function (err, nMessage) {
             messages = nMessage;
@@ -23,6 +24,7 @@ router.get('/:id', userAuth.isAuthenticated, function(req, res) {
                 Chat.find({ users: {$in: [id]}},
                     (err, chats) => {
                     if (err) console.log(err);
+
                 res.render('chats/index', {
                     chats: chats,
                     messages: messages

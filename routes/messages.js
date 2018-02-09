@@ -37,6 +37,7 @@ router.patch('/:id', userAuth.isAuthenticated, function(req, res){
 router.get('/:id', userAuth.isAuthenticated, function (req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
+
     Message.findById(id, function (err, message){
         res.send(message)
     });

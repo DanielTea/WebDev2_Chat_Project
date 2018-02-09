@@ -10,7 +10,9 @@
                 <% }); %>
             </div>
         </nav>
+
         <div class="col-9 tab-content">
+
                 <% chats.forEach(function(chat){ %>
                     <div class="tab-pane" id="chat/<%= chat._id %>">
                             <h2 class="text-center"><%= chat.name %></h2>
@@ -23,6 +25,7 @@
                                     <% }; %>
                                 <% }); %>
                             </ul>
+
                             <form class="messageForm" data-target="msg_<%= chat._id %>">
                                 <div class="d-flex justify-content-between">
                                     <input type="hidden" class="chatId" value="<%= chat._id %>"/>
@@ -32,6 +35,7 @@
                             </form>
                     </div>
                 <% }); %>
+
         </div>
     </div>
 </main>

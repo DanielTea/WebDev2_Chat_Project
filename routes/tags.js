@@ -7,6 +7,7 @@ var router = express.Router();
 var Tag = require('../models/tag');
 const userAuth = require('../userAuth');
 var User = require('../models/user');
+var Message = require('../models/message');
 
 router.get('/', userAuth.isAuthenticated, function(req, res) {
     try {
@@ -19,6 +20,29 @@ router.get('/', userAuth.isAuthenticated, function(req, res) {
     } catch (err) {
         throw err;
     }
+});
+
+router.get('/:id/messages', userAuth.isAuthenticated, function(req, res) {
+
+
+    Message.find({}, function (err, nMessage) {
+
+        try {
+
+            Tag.find({}, (err, tags) => {
+                if (err) console.log(err);
+                res.render('tags/messages', {
+                    tags: tags,
+                    messages : nMessage,
+                    currentID : req.params.id
+                });
+            });
+
+        } catch (err) {
+            throw err;
+        }
+    });
+
 });
 
 // TODO: Only the creator may update the tag
