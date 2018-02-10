@@ -22,84 +22,36 @@ router.get('/', userAuth.isAuthenticated, function(req, res) {
     }
 });
 
-router.get('/:id/show', userAuth.isAuthenticated, function(req, res) {
-    try {
-
-        var objectId = require('mongodb').ObjectId;
-        var id = new objectId(req.params.id);
-
-        User.find({tags: id },  function(err, users) {
-
-            console.log(users)
+router.get('/:id', userAuth.isAuthenticated, function(req, res) {
+    Tag.findById(req.params.id)
+        .populate({
+            path: 'messages',
+            populate: {
+                path: 'user'
+            }
+        })
+        .exec((err, tag) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send();
+            }
             res.render('tags/show', {
-                users: users
+                tag: tag
             });
-
         });
-
-
-    } catch (err) {
-        throw err;
-    }
-});
-
-
-router.get('/:id/messages', userAuth.isAuthenticated, function(req, res) {
-
-
-    Message.find({}, function (err, nMessage) {
-
-        try {
-
-            Tag.find({}, (err, tags) => {
-                if (err) console.log(err);
-                res.render('tags/messages', {
-                    tags: tags,
-                    messages : nMessage,
-                    currentID : req.params.id
-                });
-            });
-
-        } catch (err) {
-            throw err;
-        }
-    });
-
 });
 
 // TODO: Only the creator may update the tag
 router.get('/:id/update', userAuth.isAuthenticated, function(req, res) {
-    try {
-        var objectId = require('mongodb').ObjectId;
-        var id = new objectId(req.params.id);
+    var objectId = require('mongodb').ObjectId;
+    var id = new objectId(req.params.id);
 
-        Tag.findById(id, function(err, tag) {
-            res.render('tags/update', {
-                tag: tag
-            });
+    Tag.findById(id, function(err, tag) {
+        res.render('tags/update', {
+            tag: tag
         });
+    });
 
-    } catch (err) {
-        throw err;
-    }
-});
-
-router.get('/:id/messages', userAuth.isAuthenticated, function(req, res) {
-    try {
-        var objectId = require('mongodb').ObjectId;
-        var id = new objectId(req.params.id);
-
-        Tag.findById(id, function(err, tag) {
-
-            console.log(tag.messages)
-            res.send({
-                messages: tag.messages
-            });
-        });
-
-    } catch (err) {
-        throw err;
-    }
 });
 
 router.get('/create', userAuth.isAuthenticated, function(req, res) {
@@ -127,9 +79,9 @@ router.post('/', userAuth.isAuthenticated, function(req, res) {
             return res.status(400).redirect('/tags/create');
 
         }
-            req.flash('success', 'Yeah! New created tag now.');
-            return res.redirect('/tags');
-        });
+        req.flash('success', 'Yeah! New created tag now.');
+        return res.redirect('/tags');
+    });
 });
 
 // TODO: Only the creator may delete the tag
@@ -138,7 +90,7 @@ router.delete('/:id', userAuth.isAuthenticated, function(req, res) {
     var id = new objectId(req.params.id);
 
     Tag.findOneAndRemove({
-        _id:id
+        _id: id
     }, (err) => {
         if (err) {
             console.log(err);

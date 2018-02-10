@@ -12,9 +12,6 @@
                     <a class="nav-link" href="/users">Users</a>
                 </li>
                 <li class="nav-item<% if(currentUri == '/tags') { %> active<% } %>">
-                    <a class="nav-link" href="/tags/<%= activeUser._id %>/messages">TChat</a>
-                </li>
-                <li class="nav-item<% if(currentUri == '/tags') { %> active<% } %>">
                     <a class="nav-link" href="/users/<%= activeUser._id %>/tags">Tags</a>
                 </li>
             </ul>
