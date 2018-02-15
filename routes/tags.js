@@ -24,21 +24,21 @@ router.get('/create', userAuth.isAuthenticated, function(req, res) {
 
 router.get('/:id', userAuth.isAuthenticated, function(req, res) {
     Tag.findById(req.params.id)
-        .populate({
-            path: 'messages',
-            populate: {
-                path: 'user'
-            }
-        })
-        .exec((err, tag) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).send();
-            }
-            res.render('tags/show', {
-                tag: tag
-            });
+    .populate({
+        path: 'messages',
+        populate: {
+            path: 'user'
+        }
+    })
+    .exec((err, tag) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        }
+        res.render('tags/show', {
+            tag: tag
         });
+    });
 });
 
 // TODO: Only the creator may update the tag

@@ -164,19 +164,19 @@ io.on('connection', function (socket) {
             getChat(function () {
                 getUser(function () {
                     saveMessage(function () {
+                        // Feed chat with new data
+                        var newData = {"content": content, "user": user, "createdAt": new Date()};
+
+                        // Send to "chat message" listener
+                        socket.emit('chat message', newData);
+
+                        // Send to all users
+                        socket.broadcast.emit('chat message', newData);
+
+                        // DEBUG
+                        console.log("Following message got send: ");
+                        console.log(newData);
                     });
-                    // Feed chat with new data
-                    var newData = {"message": content, "chat": chat, "user": user};
-
-                    // Send to "chat message" listener
-                    socket.emit('chat message', newData);
-
-                    // Send to all users
-                    socket.broadcast.emit('chat message', newData);
-
-                    // DEBUG
-                    console.log("Following message got send: ");
-                    console.log(newData);
                 });
             });
         }

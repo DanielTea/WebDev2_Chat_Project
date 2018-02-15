@@ -6,95 +6,93 @@ var Chat = require('../models/chat');
 var Message = require('../models/message');
 const userAuth = require('../userAuth');
 
+router.get('/', userAuth.isAuthenticated, function(req, res) {
+    Chat.find({
+        users: {
+            $in: [req.user._id]
+        }
+    }, (err, chats) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        }
+        res.render('chats/index', {
+            chats: chats
+        });
+    });
+});
+
+router.post('/', userAuth.isAuthenticated, function(req, res) {
+
+    var newChat = new Chat({
+        name: req.body.name,
+        users: req.body.users
+    });
+
+    newChat.save(function(err, data) {
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        }
+        res.send();
+    });
+
+});
+
+// TODO write code or remove
+// router.patch('/:id', userAuth.isAuthenticated, function(req, res) {
+//     console.log(req.body);
+//     res.send("hi");
+// });
+
 router.get('/:id', userAuth.isAuthenticated, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
-    var messages;
-
-    getMessages = function (_callback) {
-        Message.find({}, function (err, nMessage) {
-            messages = nMessage;
-            _callback();
-        });
-    };
-
-    function renderChat() {
-        getMessages(function () {
-            try {
-                Chat.find({ users: {$in: [id]}},
-                    (err, chats) => {
-                    if (err) console.log(err);
-
-                res.render('chats/index', {
-                    chats: chats,
-                    messages: messages
-                });
-            });
-            } catch (err) {
-                throw console.log(err);
+    Chat.findById(id)
+        .populate({
+            path: 'messages',
+            populate: {
+                path: 'user'
             }
+        })
+        .exec((err, chat) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send();
+            }
+            res.send(chat);
         });
-    }
-
-    renderChat();
-});
-
-/* GET home page. */
-router.get('/create', userAuth.isAuthenticated, function(req, res) {
-    res.render('createChat', {
-        title: 'Create a Chat!'
-    });
-});
-
-router.post('/', userAuth.isAuthenticated, function (req) {
-
-    var newChat = new Chat({
-        name : req.body.name,
-        users :req.body.users,
-        messages : req.body.messages
-    });
-
-    newChat.save(function (err, data) {
-        if (err) console.log(err);
-        else console.log('Saved : ', data );
-    });
 
 });
 
-router.patch('/:id', userAuth.isAuthenticated, function(req, res){
-
-    console.log(req.body);
-    res.send("hi")
-
-});
-
-
-router.get('/:id', userAuth.isAuthenticated, function (req, res) {
+router.delete('/:id', userAuth.isAuthenticated, function(req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
-    Chat.findById(id, function (err, chat){
-        res.send(chat)
+    Chat.findById(id, function(err, chat) {
+        if (chat.users.indexOf(id) == -1) {
+            // user is not part of this chat
+            return res.status(400).send();
+        }
+        if (chat.users.length <= 1) {
+            Chat.remove({
+                _id: id
+            }, function(err) {
+                if (err) {
+                    console.log(err);
+                    return res.send();
+                }
+            });
+        }
+        var index = chat.users.indexOf(id);
+        chat.users.splice(index, 1);
+        chat.save(function(err, data) {
+            if (err) {
+                console.log(err);
+                return res.status(500).send();
+            }
+            return res.send();
+        });
     });
-
-});
-
-router.get('/single/:id/messages', userAuth.isAuthenticated, function (req, res) {
-    var objectId = require('mongodb').ObjectId;
-    var id = new objectId(req.params.id);
-
-    res.render('chats/show', {
-        chat: nChat,
-        user: nUser,
-        messages: nMessages
-    })
-
-});
-
-router.get('/group/:id/messages', userAuth.isAuthenticated, function (req, res) {
-    var objectId = require('mongodb').ObjectId;
-    var id = new objectId(req.params.id);
-
-
 });
 
 module.exports = router;

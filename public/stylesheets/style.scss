@@ -2,6 +2,7 @@ $primary-color: #007bff;
 $color-on-primary: #fff;
 $text-color: #333;
 $pattern-background-color: #6db3ff;
+$chat-background-color: #f3f3f3;
 $card-pattern-height: 7rem;
 
 nav {
@@ -84,8 +85,94 @@ nav {
     }
 }
 
+$aside-width: 18rem;
+
+aside.chat-aside {
+    width: $aside-width;
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+    padding: 0.7em 0;
+    margin: 0;
+    border-right: 1px solid lighten($text-color, 70);
+    background: #fff;
+    & > .chat-heading {
+        font-size: 2em;
+        padding: 0 0.5em;
+    }
+    & > .chat-list {
+        max-height: 100%;
+        width: 100%;
+        overflow-y: auto;
+        & > .chat-item {
+            display: block;
+            padding: 0.3em;
+            &.active {
+                & > a {
+                    // color: $text-color;
+                    color: $text-color;
+                }
+                // border-left: 0.25em solid $primary-color;
+                // padding-left: 0.05em;
+                background: lighten($primary-color, 40);
+            }
+            & > a {
+                display: block;
+                padding: 0.5em 1em;
+                // color: $color-on-primary;
+                color: lighten($text-color, 30);
+            }
+        }
+    }
+}
+
+.chat-footer {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    &.with-aside {
+        left: $aside-width;
+    }
+    right: 0;
+    padding: 0.5em;
+    background: #fff;
+    z-index: 500;
+    & > .chat-form {
+        max-width: 70em;
+        margin: 0 auto;
+        display: flex;
+        flex-flow: row;
+        align-items: stretch;
+        & > input {
+            margin-right: 0.5em;
+        }
+        & > button {
+
+        }
+    }
+}
+
+.chat-container {
+    background: $chat-background-color;
+    padding-bottom: 56px;
+}
+
 main {
-    margin-top: 5rem;
+    padding-top: 5rem;
+    min-height: 100vh;
+    &.with-aside {
+        margin-left: $aside-width;
+    }
+    &.with-chat {
+        background: $chat-background-color;
+        padding-bottom: 56px;
+    }
 }
 
 .button-list {
@@ -117,6 +204,8 @@ main {
     overflow-x: hidden;
     overflow-y: scroll;
     padding: 1em;
+    max-width: 70em;
+    margin: 0 auto;
     .message {
         display: flex;
         position: relative;
@@ -135,7 +224,7 @@ main {
         background: #fff;
         color: $text-color;
         // box-shadow: 0 0 1.5em transparentize($text-color, 0.8);
-        filter: drop-shadow(0 0 0.2em transparentize($text-color, 0.8));
+        //filter: drop-shadow(0 0 0.2em transparentize($text-color, 0.8));
         z-index: 100;
 
         &.message-active-user {

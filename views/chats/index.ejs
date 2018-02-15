@@ -1,101 +1,132 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
 <% include ../partials/scripts %>
-<main>
-    <!-- no gutters is needed to avoid the page being larger than the screen, containers leave some whitespace-->
-    <div class="row no-gutters">
-        <!-- max-height and overflow for a nice scroller, margin to counteract no-gutters -->
-        <nav class="col" style="max-height: 85vh; overflow:auto; margin-right:1vh;">
-            <div class="list-group">
-                <% chats.forEach(function(chat) { %>
-                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#chat/<%= chat._id %>"><%= chat.name %></a>
-                <% }); %>
+<aside class="chat-aside">
+    <div class="chat-heading">Chats</div>
+    <div class="chat-list" id="chat-list">
+        <% chats.forEach(function(chat) { %>
+            <div class="chat-item">
+                <a href="#" data-chat-id="<%= chat._id %>"><%= chat.name %></a>
             </div>
-        </nav>
-
-        <div class="col-9 tab-content">
-
-                <% chats.forEach(function(chat){ %>
-                    <div class="tab-pane" id="chat/<%= chat._id %>">
-                            <h2 class="text-center"><%= chat.name %></h2>
-                            <div style="height: 70vh; overflow:auto">
-                                <ul class="msg" id="msg_<%= chat._id %>">
-                                    <% chat.messages.forEach(function (messageId) { %>
-                                        <% for(var i=0; i < messages.length; i++) { %>
-                                            <%if (messages[i]._id.toString() == messageId.toString()) { %>
-                                            <li><p><%= messages[i].createdAt.toDateString() %> - <%= messages[i].content %></p></li>
-                                            <% } %>
-                                        <% } %>
-                                    <% }) %>
-                                </ul>
-                            </div>
-
-                            <form class="messageForm" data-target="msg_<%= chat._id %>">
-                                <div class="d-flex justify-content-between">
-                                    <input type="hidden" class="chatId" value="<%= chat._id %>"/>
-                                    <input class="message form-control" type="text" placeholder="Type here..." required autocomplete="off">
-                                    <button class="btn btn-primary" type="submit">Send</button>
-                                </div>
-                            </form>
-                    </div>
-                <% }); %>
-
-        </div>
+        <% }); %>
     </div>
+</aside>
+<main class="with-aside with-chat">
+    <div class="chat-history" id="chat-history"></div>
 </main>
+<footer class="chat-footer with-aside">
+    <form class="chat-form" id="chat-form" data-chat-id="">
+        <input type="text" class="form-control" id="message-input" placeholder="Type your message here..."/>
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+</footer>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
 <script>
+// Build socket io connection
+var socket = io.connect(":3000");
 
-    $(document).ready(function () {
-        // Build socket io connection
-       var socket = io.connect(":3000");
+var chatHistory = $('#chat-history');
+var chatList = $('#chat-list');
+var myUserId = '<%= activeUser._id %>';
 
-       // Send message on submit
-       $(".messageForm").submit(function() {
-           // Define data for message with message content and chat id
-           var data = {"message": $(this).find("input.message").val(), "chatId": $(this).find(".chatId").val(), userId: "<%= activeUser._id %>"};
+function requestChat(chatId, onSuccess, onError) {
+    $.ajax({
+        url: '/chats/' + chatId,
+        method: 'GET',
+        success: (data) => onSuccess(data)
+    }).fail((data) => onError(data));
+}
 
-           // Send message data over socket
-           socket.emit("message", data);
+function populateChatHistory(chat) {
+    chatHistory.empty();
+    chat.messages.forEach((message) => buildAndShowMessageDiv(message));
+    window.scroll(0, document.documentElement.offsetHeight);
+}
 
-           // Clear message field
-           $(this).find("input.message").val(" ");
+function buildAndShowMessageDiv(message) {
+    var messageDiv = '<div class="message';
+    if (message.user._id == myUserId) {
+        messageDiv += ' message-active-user';
+    }
+    messageDiv += '">';
+    if (message.user._id != myUserId) {
+        messageDiv += `<div class="message-author"><a href="/users/${message.user._id}">${message.user.firstName} ${message.user.lastName}</a></div>`;
+    }
+    messageDiv += `<div class="message-content">${message.content}</div>`;
+    messageDiv += `<div class="message-timestamp">${moment(message.createdAt).fromNow()}</div>`;
+    messageDiv += '</div>';
+    chatHistory.append(messageDiv);
+}
 
-           // DEBUG - TODO Remove before live
-           console.log(data);
-
-           // Prevent submit form from default (Reloading the page)
-           return false;
-       });
-
-       // Catch single message
-       socket.on('chat message', function (data) {
-
-           // DEBUG - TODO Remove before live
-           console.log(data);
-
-           // Create date time object
-           var dateTime = new Date();
-
-           // Create user readable datetime object
-           var time = dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
-
-           // Append message from user to list
-           $("#msg_"+data.chat._id).append(
-               $("<li class='messageContent'>" +
-                   "<img class='img-thumbnail' src='" + data.user.pictureUrl + "' title='"+ data.user.firstName + " " + data.user.lastName +"'/>" +
-                   "<p>"+ time + " - " + data.user.firstName + " " + data.user.lastName + ": " + data.message + "</p>" +
-                   "</li>")
-           );
-       })
-
-       // Catch message from server
-       socket.on("server-message", function (msg) {
-           // Append message from server to list
-           $(".msg").append($('<li>').text(msg));
-       });
+chatList.on('click', 'a', function (e) {
+    var chatId = $(this).attr('data-chat-id');
+    e.preventDefault();
+    requestChat(
+        chatId,
+        (chat) => populateChatHistory(chat),
+        (err) => alert(err)
+    );
+    chatList.children('.chat-item').each(function () {
+        $(this).removeClass('active');
     });
+    $(this).parent().addClass('active');
+    $('#chat-form').attr('data-chat-id', chatId);
+});
+
+
+$(document).ready(function () {
+
+   // Send message on submit
+   $("#chat-form").submit(function (e) {
+       // Prevent submit form from default (Reloading the page)
+       e.preventDefault();
+
+       var userInput = $("#message-input").val();
+       if (userInput.length <= 0) {
+           return;
+       }
+
+       // Define data for message with message content and chat id
+       var data = {
+           "message": userInput,
+           "chatId": $(this).attr("data-chat-id"),
+           "userId": "<%= activeUser._id %>"
+       };
+
+       // Send message data over socket
+       socket.emit("message", data);
+
+       // Clear message field
+       $("#message-input").val("");
+
+       // DEBUG - TODO Remove before live
+       console.log(data);
+   });
+
+   // Catch single message
+   socket.on('chat message', function (data) {
+
+       // DEBUG - TODO Remove before live
+       console.log(data);
+
+       // Create date time object
+       var dateTime = new Date();
+
+       // Create user readable datetime object
+       var time = dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+
+       // Append message from user to list
+       buildAndShowMessageDiv(data);
+       window.scroll(0, document.documentElement.offsetHeight);
+   })
+
+   // Catch message from server
+   socket.on("server-message", function (msg) {
+       // Append message from server to list
+       chatHistory.append(`<div class="server-message">${msg}</div>`);
+   });
+});
 
 </script>
 

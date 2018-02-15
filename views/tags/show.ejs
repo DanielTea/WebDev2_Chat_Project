@@ -1,24 +1,32 @@
 <% include ../partials/head %>
 <% include ../partials/nav %>
-<main class="container">
-    <% include ../partials/flashMessages %>
-    <h1><%= tag.name %></h1>
-    <div class="lead">
-        <%= tag.description %>
-    </div>
-    <div class="chat-history">
-        <% tag.messages.forEach(function (message) { %>
-            <div class="message<%= activeUser._id.equals(message.user._id) ? ' message-active-user' : '' %>">
-                <% if (!activeUser._id.equals(message.user._id)) { %>
-                    <div class="message-author">
-                        <a href="/users/<%= message.user._id %>"><%= message.user.firstName + ' ' + message.user.lastName %></a>
-                    </div>
-                <% } %>
-                <div class="message-content"><%= message.content %></div>
-                <div class="message-timestamp"><%= timeAgo(message.createdAt) %></div>
-            </div>
-        <% }) %>
-    </div>
-</main>
+<div class="chat-container">
+    <main class="container">
+        <% include ../partials/flashMessages %>
+        <h1><%= tag.name %></h1>
+        <div class="lead">
+            <%= tag.description %>
+        </div>
+        <div class="chat-history">
+            <% tag.messages.forEach(function (message) { %>
+                <div class="message<%= activeUser._id.equals(message.user._id) ? ' message-active-user' : '' %>">
+                    <% if (!activeUser._id.equals(message.user._id)) { %>
+                        <div class="message-author">
+                            <a href="/users/<%= message.user._id %>"><%= message.user.firstName + ' ' + message.user.lastName %></a>
+                        </div>
+                    <% } %>
+                    <div class="message-content"><%= message.content %></div>
+                    <div class="message-timestamp"><%= timeAgo(message.createdAt) %></div>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+</div>
+<footer class="chat-footer">
+    <form class="chat-form" id="chat-form" data-chat-id="">
+        <input type="text" class="form-control" id="message-input" placeholder="Type your message here..."/>
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+</footer>
 <% include ../partials/scripts %>
 <% include ../partials/footer %>
