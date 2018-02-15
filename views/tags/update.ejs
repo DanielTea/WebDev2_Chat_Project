@@ -14,15 +14,15 @@
             <div class="col-sm-10">
                 <select class="custom-select" id="patternClass" name="patternClass">
                     <option selected disabled>Choose...</option>
-                    <option value="food">Food</option>
-                    <option value="tech">Tech</option>
-                    <option value="jigsaw">Jigsaw</option>
-                    <option value="anchors">Anchors</option>
-                    <option value="diamonds">Diamonds</option>
-                    <option value="cogs">Cogs</option>
-                    <option value="math">Math</option>
-                    <option value="game">Game</option>
-                    <option value="music">Music</option>
+                    <option value="food"<%= tag.patternClass == 'food' ? ' selected' : '' %>>Food</option>
+                    <option value="tech"<%= tag.patternClass == 'tech' ? ' selected' : '' %>>Tech</option>
+                    <option value="jigsaw"<%= tag.patternClass == 'jigsaw' ? ' selected' : '' %>>Jigsaw</option>
+                    <option value="anchors"<%= tag.patternClass == 'anchors' ? ' selected' : '' %>>Anchors</option>
+                    <option value="diamonds"<%= tag.patternClass == 'diamonds' ? ' selected' : '' %>>Diamonds</option>
+                    <option value="cogs"<%= tag.patternClass == 'cogs' ? ' selected' : '' %>>Cogs</option>
+                    <option value="math"<%= tag.patternClass == 'math' ? ' selected' : '' %>>Math</option>
+                    <option value="game"<%= tag.patternClass == 'game' ? ' selected' : '' %>>Game</option>
+                    <option value="music"<%= tag.patternClass == 'music' ? ' selected' : '' %>>Music</option>
                 </select>
                 <small class="text-muted">This decorative pattern will show up on all tag cards.</small>
             </div>
