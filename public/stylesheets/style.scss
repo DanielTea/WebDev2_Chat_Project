@@ -105,6 +105,19 @@ aside.chat-aside {
         font-size: 2em;
         padding: 0 0.5em;
     }
+    & > .chat-add {
+        position: absolute;
+        top: 1.15em;
+        right: 1.5em;
+        & > a {
+            color: lighten($text-color, 30);
+            transition: color 0.2s ease-in-out;
+            padding: 0.2em;
+            &:hover, &:focus {
+                color: lighten($text-color, 10);
+            }
+        }
+    }
     & > .chat-list {
         max-height: 100%;
         width: 100%;
@@ -206,6 +219,11 @@ main {
     padding: 1em;
     max-width: 70em;
     margin: 0 auto;
+    .server-message {
+        display: block;
+        text-align: center;
+        color: transparentize($text-color, 0.5);
+    }
     .message {
         display: flex;
         position: relative;
@@ -213,9 +231,7 @@ main {
         flex-flow: column;
         max-width: 60%;
         min-width: 40%;
-        margin-bottom: 1em;
-        margin-right: auto;
-
+        margin: 1em auto 1em 0;
         &:last-child {
             margin-bottom: 0;
         }

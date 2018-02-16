@@ -7,7 +7,7 @@
         <div class="lead">
             <%= tag.description %>
         </div>
-        <div class="chat-history">
+        <div class="chat-history" id="chat-history">
             <% tag.messages.forEach(function (message) { %>
                 <div class="message<%= activeUser._id.equals(message.user._id) ? ' message-active-user' : '' %>">
                     <% if (!activeUser._id.equals(message.user._id)) { %>
@@ -23,10 +23,82 @@
     </main>
 </div>
 <footer class="chat-footer">
-    <form class="chat-form" id="chat-form" data-chat-id="">
-        <input type="text" class="form-control" id="message-input" placeholder="Type your message here..."/>
-        <button type="submit" class="btn btn-primary">Send</button>
+    <form class="chat-form" id="chat-form">
+        <input type="text" class="form-control" id="message-input" placeholder="Type your message here..." disabled/>
+        <button type="submit" id="message-button" class="btn btn-primary" disabled>Send</button>
     </form>
 </footer>
 <% include ../partials/scripts %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
+<script>
+const socket = io.connect(":<%= process.env.PORT %>");
+const chatHistory = $('#chat-history');
+const myUserId = '<%= activeUser._id %>';
+const tagId = '<%= tag._id %>';
+
+function enableInputs() {
+  $('#message-input').removeAttr('disabled');
+  $('#message-button').removeAttr('disabled');
+}
+
+var escapeHTML = function (unsafe) {
+  return unsafe.replace(/[&<"']/g, function(m) {
+    switch (m) {
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '"':
+        return '&quot;';
+      default:
+        return '&#039;';
+    }
+  });
+};
+
+function buildAndShowMessageDiv(message) {
+    var messageDiv = '<div class="message';
+    if (message.user._id == myUserId) {
+        messageDiv += ' message-active-user';
+    }
+    messageDiv += '">';
+    if (message.user._id != myUserId) {
+        messageDiv += `<div class="message-author"><a href="/users/${escapeHTML(message.user._id)}">${escapeHTML(message.user.firstName)} ${escapeHTML(message.user.lastName)}</a></div>`;
+    }
+    messageDiv += `<div class="message-content">${escapeHTML(message.content)}</div>`;
+    messageDiv += `<div class="message-timestamp">${moment(message.createdAt).fromNow()}</div>`;
+    messageDiv += '</div>';
+    chatHistory.append(messageDiv);
+}
+
+$('#chat-form').submit(function (e) {
+    e.preventDefault();
+    var userInput = $('#message-input').val();
+    if (userInput.length <= 0) {
+        return;
+    }
+    socket.emit('tag-message', {
+        content: userInput,
+        userId: myUserId
+    });
+    $('#message-input').val('');
+});
+
+socket.on('tag-message', function (data) {
+    buildAndShowMessageDiv(data);
+    window.scroll(0, document.documentElement.offsetHeight);
+});
+
+socket.on('server-message', function (msg) {
+   chatHistory.append(`<div class="server-message">${escapeHTML(msg)}</div>`);
+   window.scroll(0, document.documentElement.offsetHeight);
+});
+
+$(document).ready(function () {
+    socket.emit('subscribe', {
+        room: tagId
+    });
+    enableInputs();
+});
+</script>
 <% include ../partials/footer %>
