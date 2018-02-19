@@ -145,6 +145,7 @@ app.use('/', require('./routes/login'));
 app.use('/users', require('./routes/users'));
 app.use('/tags', require('./routes/tags'));
 app.use('/chats', require('./routes/chats'));
+app.use('/api', require('./routes/api'));
 // app.use('/messages', require('./routes/messages'));
 
 app.use('/development', require('./routes/development'));
