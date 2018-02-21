@@ -6,11 +6,11 @@
     <h1>Your Tags</h1>
     <p class="lead">
         Here is an overview of the Tags you subscribed to. Remove or readd them with just a click!
-        <br />Your changes are saved automatically.
+        <br/>Your changes are saved automatically.
     </p>
     <p class="lead" style="padding-bottom: 3rem">
         Want more Tags? If you have a certain one in mind search for it!
-    <br /> Or just <a href="/tags">browse them all</a>.
+        <br/> Or just <a href="/tags">browse them all</a>.
     </p>
     <div class="card-columns card-columns-tags" id="selectable-cards">
         <% tags.forEach(function(tag) { %>
@@ -30,9 +30,10 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <% if(tag.createdBy.equals(activeUser._id)) { %>
-                            <a class="dropdown-item" href="/tags/<%= tag._id %>/update">Edit</a>
+                        <a class="dropdown-item" href="/tags/<%= tag._id %>/update">Edit</a>
                         <% } else { %>
-                            <a class="dropdown-item" href="#" onClick="removeTagFromCollection(event, '<%= tag._id %>')">Remove from your tags</a>
+                        <a class="dropdown-item" href="#" onClick="removeTagFromCollection(event, '<%= tag._id %>')">Remove
+                            from your tags</a>
                         <% } %>
                     </div>
                 </div>
@@ -52,12 +53,14 @@
         <div class="modal-content">
             <div class="modal-body text-center">
                 <div style="margin: 30px 0 10px 0">
-                    <svg xmlns="http://www.w3.org/2000/svg" id="icon-error" height="64" width="64" viewBox="0 0 90.27 90.27">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="icon-error" height="64" width="64"
+                         viewBox="0 0 90.27 90.27">
                         <defs>
                             <style>
                                 .circle-2 {
                                     fill: #dc3545;
                                 }
+
                                 .x-single {
                                     fill: #fff;
                                 }
@@ -65,8 +68,10 @@
                         </defs>
                         <circle class="circle-2" cx="45.14" cy="45.14" r="45.14"/>
                         <g class="x">
-                            <rect class="x-single" x="21.77" y="43.49" width="46.74" height="3.36" transform="translate(-18.72 45.15) rotate(-45)"/>
-                            <rect class="x-single" x="43.47" y="21.81" width="3.36" height="46.74" transform="translate(-18.72 45.16) rotate(-45)"/>
+                            <rect class="x-single" x="21.77" y="43.49" width="46.74" height="3.36"
+                                  transform="translate(-18.72 45.15) rotate(-45)"/>
+                            <rect class="x-single" x="43.47" y="21.81" width="3.36" height="46.74"
+                                  transform="translate(-18.72 45.16) rotate(-45)"/>
                         </g>
                     </svg>
                 </div>

@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+/**
+ * Mongoose Schema of a Message
+ */
 const messageSchema = mongoose.Schema({
     content: String,
     user: {

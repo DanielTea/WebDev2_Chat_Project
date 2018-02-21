@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+/**
+ * Mongoose Schema of a User
+ */
 const userSchema = mongoose.Schema({
     firstName: {
         type: String,
@@ -33,10 +36,20 @@ userSchema.pre('save', (next) => {
     next();
 });
 
+/**
+ * Hash passwords with bcrypt
+ * @param password clear-text password
+ * @return {string|string} bcrypt-hashed password
+ */
 userSchema.statics.generateHash = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };
 
+/**
+ * Compare saved bcrypt hash against the hashed password param
+ * @param password clear-text password input
+ * @return {boolean} true if the hashes match
+ */
 userSchema.methods.validatePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };

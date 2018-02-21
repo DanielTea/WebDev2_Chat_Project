@@ -2,34 +2,34 @@
 <main class="container">
     <% include ../partials/flashMessages %>
     <% if (activeUser) { %>
-        You are already signed up.
+    You are already signed up.
     <% } else { %>
-        <form method="POST" action="/users">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="firstNameInput">First name*</label>
-                    <input type="text" name="firstName" class="form-control" id="firstNameInput">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="lastNameInput">Last name</label>
-                    <input type="text" name="lastName" class="form-control" id="lastNameInput">
-                </div>
+    <form method="POST" action="/users">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="firstNameInput">First name*</label>
+                <input type="text" name="firstName" class="form-control" id="firstNameInput">
             </div>
-            <div class="form-group">
-                <label for="birthDate">Birth date</label>
-                <input type="date" name="birthDate" id="birthDate" class="form-control">
+            <div class="form-group col-md-6">
+                <label for="lastNameInput">Last name</label>
+                <input type="text" name="lastName" class="form-control" id="lastNameInput">
             </div>
-            <div class="form-group">
-                <label for="emailInput">Email address*</label>
-                <input type="email" name="email" class="form-control" id="emailInput" aria-describedby="emailHelp">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-            </div>
-            <div class="form-group">
-                <label for="passwordInput">Password*</label>
-                <input type="password" name="password" class="form-control" id="passwordInput" placeholder="Password">
-            </div>
-            <button type="submit" class="btn btn-primary">Sign up</button>
-        </form>
+        </div>
+        <div class="form-group">
+            <label for="birthDate">Birth date</label>
+            <input type="date" name="birthDate" id="birthDate" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="emailInput">Email address*</label>
+            <input type="email" name="email" class="form-control" id="emailInput" aria-describedby="emailHelp">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <label for="passwordInput">Password*</label>
+            <input type="password" name="password" class="form-control" id="passwordInput" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
+    </form>
     <% } %>
 </main>
 <% include ../partials/scripts %>

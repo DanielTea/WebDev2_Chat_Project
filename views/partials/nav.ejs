@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="navbar-wrapper">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -18,15 +19,19 @@
             <div class="search-wrapper mr-auto">
                 <div class="search">
                     <form method="GET" action="/search">
-                        <button type="submit" class="search-button" aria-label="Search"><i class="fa fa-search" aria-hidden="true"></i></button>
-                        <input type="search" class="search-input" name="q" placeholder="Search..." required value="<%= typeof searchQuery != 'undefined' && searchQuery ? searchQuery : '' %>" />
+                        <button type="submit" class="search-button" aria-label="Search"><i class="fa fa-search"
+                                                                                           aria-hidden="true"></i>
+                        </button>
+                        <input type="search" class="search-input" name="q" placeholder="Search..." required
+                               value="<%= typeof searchQuery != 'undefined' && searchQuery ? searchQuery : '' %>"/>
                     </form>
                 </div>
             </div>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown<% if(currentUri == '/users/' + activeUser._id) { %> active<% } %>">
-                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <%= activeUser.firstName %>
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdownLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <%= activeUser.firstName %>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownLink">
                         <a class="dropdown-item" href="/users/<%= activeUser._id %>">My Profile</a>

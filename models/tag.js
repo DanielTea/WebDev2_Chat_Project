@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+/**
+ * Mongoose Schema of a Tag
+ */
 const tagSchema = mongoose.Schema({
     name: String,
     messages: [{

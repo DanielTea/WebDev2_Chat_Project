@@ -7,9 +7,9 @@
     </div>
     <div class="chat-list" id="chat-list">
         <% chats.forEach(function(chat) { %>
-            <div class="chat-item">
-                <a href="#" data-chat-id="<%= chat._id %>"><%= chat.name %></a>
-            </div>
+        <div class="chat-item">
+            <a href="#" data-chat-id="<%= chat._id %>"><%= chat.name %></a>
+        </div>
         <% }); %>
     </div>
 </aside>
@@ -36,7 +36,8 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="chat-modal-title">Title</label>
-                        <input type="text" class="form-control" id="chat-modal-title" required placeholder="Chat title here..."/>
+                        <input type="text" class="form-control" id="chat-modal-title" required
+                               placeholder="Chat title here..."/>
                     </div>
                     <div class="form-group">
                         <label for="chat-modal-select">Select all users that should participate</label>
@@ -66,7 +67,7 @@
 
     //prevent xss and other potential threats
     var escapeHTML = function (unsafe) {
-        return unsafe.replace(/[&<"']/g, function(m) {
+        return unsafe.replace(/[&<"']/g, function (m) {
             switch (m) {
                 case '&':
                     return '&amp;';
@@ -170,7 +171,7 @@
             (err) => alert(err));
     });
 
-    $('#create-chat-form').submit(function(e){
+    $('#create-chat-form').submit(function (e) {
         e.preventDefault();
         var users = [];
         users.push(myUserId);
@@ -207,6 +208,7 @@
             success: (data) => onSuccess(data)
         }).fail((data) => onError(data));
     }
+
     //Socket IO event handling
     socket.on('chat-message', function (data) {
         buildAndShowMessageDiv(data);

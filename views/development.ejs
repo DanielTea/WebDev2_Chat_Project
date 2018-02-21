@@ -3,7 +3,8 @@
 <main class="container">
     <div class="jumbotron">
         <h1 class="display-6">Database seeding</h1>
-        <p class="lead">To seed the database with random values or purge all collections, please use the buttons down below.</p>
+        <p class="lead">To seed the database with random values or purge all collections, please use the buttons down
+            below.</p>
         <hr class="my-4">
         <div class="row justify-content-around">
             <div class="col-xs-6">
@@ -24,68 +25,73 @@
                         <svg viewBox="25 25 50 50" id="icon-load" class="circular-loader d-none" height="64" width="64">
                             <defs>
                                 <style>
-                                .loader-path {
-                                    stroke-dasharray: 150,200;
-                                    stroke-dashoffset: -10;
-                                    -webkit-animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
-                                          animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
-                                    stroke-linecap: round;
-                                    stroke: #28a745;
+                                    .loader-path {
+                                        stroke-dasharray: 150, 200;
+                                        stroke-dashoffset: -10;
+                                        -webkit-animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+                                        animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+                                        stroke-linecap: round;
+                                        stroke: #28a745;
                                     }
 
                                     @-webkit-keyframes rotate {
-                                    100% {
-                                    -webkit-transform: rotate(360deg);
+                                        100% {
+                                            -webkit-transform: rotate(360deg);
                                             transform: rotate(360deg);
-                                    }
+                                        }
                                     }
 
                                     @keyframes rotate {
-                                    100% {
-                                    -webkit-transform: rotate(360deg);
+                                        100% {
+                                            -webkit-transform: rotate(360deg);
                                             transform: rotate(360deg);
+                                        }
                                     }
-                                    }
+
                                     @-webkit-keyframes dash {
-                                    0% {
-                                    stroke-dasharray: 1,200;
-                                    stroke-dashoffset: 0;
+                                        0% {
+                                            stroke-dasharray: 1, 200;
+                                            stroke-dashoffset: 0;
+                                        }
+                                        50% {
+                                            stroke-dasharray: 89, 200;
+                                            stroke-dashoffset: -35;
+                                        }
+                                        100% {
+                                            stroke-dasharray: 89, 200;
+                                            stroke-dashoffset: -124;
+                                        }
                                     }
-                                    50% {
-                                    stroke-dasharray: 89,200;
-                                    stroke-dashoffset: -35;
-                                    }
-                                    100% {
-                                    stroke-dasharray: 89,200;
-                                    stroke-dashoffset: -124;
-                                    }
-                                    }
+
                                     @keyframes dash {
-                                    0% {
-                                    stroke-dasharray: 1,200;
-                                    stroke-dashoffset: 0;
-                                    }
-                                    50% {
-                                    stroke-dasharray: 89,200;
-                                    stroke-dashoffset: -35;
-                                    }
-                                    100% {
-                                    stroke-dasharray: 89,200;
-                                    stroke-dashoffset: -124;
-                                    }
+                                        0% {
+                                            stroke-dasharray: 1, 200;
+                                            stroke-dashoffset: 0;
+                                        }
+                                        50% {
+                                            stroke-dasharray: 89, 200;
+                                            stroke-dashoffset: -35;
+                                        }
+                                        100% {
+                                            stroke-dasharray: 89, 200;
+                                            stroke-dashoffset: -124;
+                                        }
                                     }
                                 </style>
                             </defs>
                             <g>
-                                <circle class="loader-path" cx="50" cy="50" r="20" fill="none" stroke="#70c542" stroke-width="2" />
+                                <circle class="loader-path" cx="50" cy="50" r="20" fill="none" stroke="#70c542"
+                                        stroke-width="2"/>
                             </g>
                         </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" id="icon-success" class="d-none" height="64" width="64" viewBox="0 0 90.27 90.27">
+                        <svg xmlns="http://www.w3.org/2000/svg" id="icon-success" class="d-none" height="64" width="64"
+                             viewBox="0 0 90.27 90.27">
                             <defs>
                                 <style>
                                     .circle {
                                         fill: #28a745;
                                     }
+
                                     .circle-check {
                                         fill: none;
                                         stroke: #fff;
@@ -98,12 +104,14 @@
                             <circle class="circle" cx="45.14" cy="45.14" r="45.14"/>
                             <polyline class="circle-check" points="63.4 28.8 37.93 63.47 24.87 50.52"/>
                         </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" id="icon-error" class="d-none" height="64" width="64" viewBox="0 0 90.27 90.27">
+                        <svg xmlns="http://www.w3.org/2000/svg" id="icon-error" class="d-none" height="64" width="64"
+                             viewBox="0 0 90.27 90.27">
                             <defs>
                                 <style>
                                     .circle-2 {
                                         fill: #dc3545;
                                     }
+
                                     .x-single {
                                         fill: #fff;
                                     }
@@ -111,8 +119,10 @@
                             </defs>
                             <circle class="circle-2" cx="45.14" cy="45.14" r="45.14"/>
                             <g class="x">
-                              <rect class="x-single" x="21.77" y="43.49" width="46.74" height="3.36" transform="translate(-18.72 45.15) rotate(-45)"/>
-                              <rect class="x-single" x="43.47" y="21.81" width="3.36" height="46.74" transform="translate(-18.72 45.16) rotate(-45)"/>
+                                <rect class="x-single" x="21.77" y="43.49" width="46.74" height="3.36"
+                                      transform="translate(-18.72 45.15) rotate(-45)"/>
+                                <rect class="x-single" x="43.47" y="21.81" width="3.36" height="46.74"
+                                      transform="translate(-18.72 45.16) rotate(-45)"/>
                             </g>
                         </svg>
                     </div>
@@ -162,7 +172,7 @@
             modalMessage.removeClass('d-none');
             errorTitle.removeClass('d-none');
             modalMessage.text(data.responseText);
-        } else if(data) {
+        } else if (data) {
             iconError.addClass('d-none');
             iconLoad.addClass('d-none');
             iconSuccess.removeClass('d-none');

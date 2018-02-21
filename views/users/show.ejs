@@ -3,14 +3,18 @@
 <main class="container text-center">
     <% include ../partials/flashMessages %>
     <div class="user-profile">
-        <% if (user.pictureUrl) { %><img height="120" width="120" src="<%= user.pictureUrl %>" class="rounded-circle"><% } %>
+        <% if (user.pictureUrl) { %>
+        <img height="120" width="120" src="<%= user.pictureUrl %>" class="rounded-circle">
+        <% } %>
         <h3><%= user.firstName %><%= user.lastName ? ' ' + user.lastName : '' %></h3>
-        <% if (user.birthDate) { %><p>🎂 <%= user.birthDate.toDateString() %></p><% } %>
+        <% if (user.birthDate) { %>
+        <p>🎂 <%= user.birthDate.toDateString() %></p>
+        <% } %>
         <p class="lead"><%= user.status %></p>
     </div>
     <div class="button-list">
         <% if (activeUser._id == user.id) { %>
-            <a href="/users/<%= user._id %>/update" class="btn btn-outline-secondary">Update profile</a>
+        <a href="/users/<%= user._id %>/update" class="btn btn-outline-secondary">Update profile</a>
         <% } %>
     </div>
 </main>

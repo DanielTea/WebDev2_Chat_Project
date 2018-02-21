@@ -8,16 +8,16 @@
         <a class="btn btn-outline-secondary" data-toggle="tab" href="#settingsPanel">Settings</a>
         <a class="btn btn-outline-secondary" data-toggle="tab" href="#deletePanel">Delete Account</a>
     </div>
-    
+
     <div class="tab-content col-md-8 offset-md-2">
         <div class="tab-pane active" id="statusPanel">
             <form action="/users/<%= user._id %>?_method=PATCH" method="POST">
                 <div class="form-group row">
                     <label for="status" class="col-sm-2 col-form-label">Status</label>
                     <div class="col-sm-10">
-                    <input type="text" id="status" name="status"
-                           value="<%= user.status || '' %>" class="form-control">
-                   </div>
+                        <input type="text" id="status" name="status"
+                               value="<%= user.status || '' %>" class="form-control">
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-outline-primary">Update Status</button>
             </form>
@@ -35,7 +35,7 @@
             </form>
         </div>
         <div class="tab-pane" id="settingsPanel">
-            <form action="/users/<%= user._id%>?_method=PATCH" method="POST">
+            <form action="/users/<%= user._id %>?_method=PATCH" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="firstNameInput">First name</label>
@@ -68,13 +68,13 @@
         </div>
 
         <div class="tab-pane" id="deletePanel">
-            <form action="/users/<%= user._id %>?_method=DELETE"  method="POST">
+            <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
                 <button type="submit" class="btn btn-outline-danger">Delete Account</button>
             </form>
         </div>
     </div>
     <script>
-        function updatePreview(){
+        function updatePreview() {
             var newUrl = document.getElementById("picture").value;
             document.getElementById("picturePreview").src = newUrl;
         }

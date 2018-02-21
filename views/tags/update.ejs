@@ -2,7 +2,7 @@
 <% include ../partials/nav %>
 <main class="container ">
     <% include ../partials/flashMessages %>
-    <form action="/tags/<%= tag._id%>?_method=PATCH" method="POST" id="tagForm">
+    <form action="/tags/<%= tag._id %>?_method=PATCH" method="POST" id="tagForm">
         <div class="form-group row">
             <label class="col-sm-2 col-form-row" for="name">Tag name</label>
             <div class="col-sm-10">
@@ -28,9 +28,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-row"for="description">Tag description</label>
+            <label class="col-sm-2 col-form-row" for="description">Tag description</label>
             <div class="col-sm-10">
-                <textarea class="form-control" name="description" id="description" form="tagForm" ><%= tag.description %>
+                <textarea class="form-control" name="description" id="description" form="tagForm"><%= tag.description %>
                 </textarea>
             </div>
         </div>
@@ -54,18 +54,20 @@
                 <input class="form-control" type="text" oninput="validate(this, '<%= tag.name %>')">
             </div>
             <div class="modal-footer">
-                <form action="/tags/<%= tag._id %>?_method=DELETE"  method="POST">
-                    <button id="deleteButton" type="submit" class="btn btn-outline-danger" disabled>Yes really delete my Tag forever</button>
+                <form action="/tags/<%= tag._id %>?_method=DELETE" method="POST">
+                    <button id="deleteButton" type="submit" class="btn btn-outline-danger" disabled>Yes really delete my
+                        Tag forever
+                    </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 <script>
-    function validate(input, required){
-        if (input.value === required){
+    function validate(input, required) {
+        if (input.value === required) {
             document.getElementById("deleteButton").disabled = false;
-        } else{
+        } else {
             document.getElementById("deleteButton").disabled = true;
         }
     }

@@ -31,8 +31,7 @@
                     <% for(var i = 0; i < messages.length; i++) { %>
                     <% if (messages[i]._id.toString() == messageId.toString()) { %>
 
-
-                    <% console.log(messages[i].content)%>
+                    <% console.log(messages[i].content) %>
 
                     <li><p><%= messages[i].createdAt.toDateString() %> - <%= messages[i].content %></p></li>
                     <% } %>
@@ -58,56 +57,60 @@
 
 <script>
 
-        $(document).ready(function () {
-            // Build socket io connection
-           var socket = io.connect(":3000");
+    $(document).ready(function () {
+        // Build socket io connection
+        var socket = io.connect(":3000");
 
-           // Send message on submit
-           $(".messageForm").submit(function() {
-               // Define data for message with message content and chat id
-               var data = {"message": $(this).find("input.message").val(), "chatId": $(this).find(".chatId").val(), userId: "<%= activeUser._id %>"}
-               console.log(data);
+        // Send message on submit
+        $(".messageForm").submit(function () {
+            // Define data for message with message content and chat id
+            var data = {
+                "message": $(this).find("input.message").val(),
+                "chatId": $(this).find(".chatId").val(),
+                userId: "<%= activeUser._id %>"
+            }
+            console.log(data);
 
-               // Send message data over socket
-               socket.emit("messageTag", data);
+            // Send message data over socket
+            socket.emit("messageTag", data);
 
-               // Clear message field
-               $(this).find("input.message").val(" ");
+            // Clear message field
+            $(this).find("input.message").val(" ");
 
-               // DEBUG - TODO Remove before live
+            // DEBUG - TODO Remove before live
 //               console.log(data);
 
-               // Prevent submit form from default (Reloading the page)
-               return false;
-           });
-
-           // Catch single message
-           socket.on('chat message', function (data) {
-
-               // DEBUG - TODO Remove before live
-               console.log(data);
-
-               // Create date time object
-               var dateTime = new Date();
-
-               // Create user readable datetime object
-               var time = dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
-
-               // Append message from user to list
-               $("#msg_"+data.chat._id).append(
-                   $("<li class='messageContent'>" +
-                       "<img class='img-thumbnail' src='" + data.user.pictureUrl + "' title='"+ data.user.firstName + " " + data.user.lastName +"'/>" +
-                       "<p>"+ time + " - " + data.user.firstName + " " + data.user.lastName + ": " + data.message + "</p>" +
-                       "</li>")
-               );
-           })
-
-           // Catch message from server
-           socket.on("server-message", function (msg) {
-               // Append message from server to list
-               $(".msg").append($('<li>').text(msg));
-           });
+            // Prevent submit form from default (Reloading the page)
+            return false;
         });
+
+        // Catch single message
+        socket.on('chat message', function (data) {
+
+            // DEBUG - TODO Remove before live
+            console.log(data);
+
+            // Create date time object
+            var dateTime = new Date();
+
+            // Create user readable datetime object
+            var time = dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+
+            // Append message from user to list
+            $("#msg_" + data.chat._id).append(
+                $("<li class='messageContent'>" +
+                    "<img class='img-thumbnail' src='" + data.user.pictureUrl + "' title='" + data.user.firstName + " " + data.user.lastName + "'/>" +
+                    "<p>" + time + " - " + data.user.firstName + " " + data.user.lastName + ": " + data.message + "</p>" +
+                    "</li>")
+            );
+        })
+
+        // Catch message from server
+        socket.on("server-message", function (msg) {
+            // Append message from server to list
+            $(".msg").append($('<li>').text(msg));
+        });
+    });
 
 </script>
 

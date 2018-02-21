@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+/**
+ * Mongoose Schema of a Chat
+ */
 const chatSchema = mongoose.Schema({
     name: String,
     users: [{

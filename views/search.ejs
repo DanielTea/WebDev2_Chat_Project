@@ -4,68 +4,81 @@
     <% include partials/flashMessages %>
     <h1>Search results</h1>
     <div class="lead">Here are the results for "<%= searchQuery %>"</div>
-    <hr />
+    <hr/>
     <div class="row">
         <div class="col-sm-3 nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <a class="nav-link active" id="v-pills-users-tab" data-toggle="pill" href="#v-pills-users" role="tab" aria-controls="v-pills-users" aria-selected="true">Users</a>
-            <a class="nav-link" id="v-pills-tags-tab" data-toggle="pill" href="#v-pills-tags" role="tab" aria-controls="v-pills-tags" aria-selected="false">Tags</a>
+            <a class="nav-link active" id="v-pills-users-tab" data-toggle="pill" href="#v-pills-users" role="tab"
+               aria-controls="v-pills-users" aria-selected="true">Users</a>
+            <a class="nav-link" id="v-pills-tags-tab" data-toggle="pill" href="#v-pills-tags" role="tab"
+               aria-controls="v-pills-tags" aria-selected="false">Tags</a>
         </div>
         <div class="col-sm-9 tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade show active" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab">
+            <div class="tab-pane fade show active" id="v-pills-users" role="tabpanel"
+                 aria-labelledby="v-pills-users-tab">
                 <% if (users.length == 0) { %>
-                    <div class="text-center text-muted"><i class="fa fa-meh-o" style="font-size:5em;margin:0.2em 0;" aria-hidden="true"></i><br />There are no users matching "<%= searchQuery %>"</div>
+                <div class="text-center text-muted"><i class="fa fa-meh-o" style="font-size:5em;margin:0.2em 0;"
+                                                       aria-hidden="true"></i><br/>There are no users matching
+                    "<%= searchQuery %>"
+                </div>
                 <% } else { %>
-                    <div class="card-columns">
-                        <% users.forEach(user => { %>
-                        <a href="/users/<%= user._id %>">
-                            <div class="card">
-                                <% if (user.pictureUrl) { %><img class="card-img-top" src="<%= user.pictureUrl %>"><% } %>
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                        <%= user.firstName %><%= user.lastName ? ' ' + user.lastName : '' %>
-                                        <% var now = new Date();
-                                        if(user.birthDate && now.getDay() == user.birthDate.getDay() && now.getMonth() == user.birthDate.getMonth()){
-                                        %>
-                                        🎂
-                                        <% }; %>
-                                    </h5>
+                <div class="card-columns">
+                    <% users.forEach(user => { %>
+                    <a href="/users/<%= user._id %>">
+                        <div class="card">
+                            <% if (user.pictureUrl) { %>
+                            <img class="card-img-top" src="<%= user.pictureUrl %>">
+                            <% } %>
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%= user.firstName %><%= user.lastName ? ' ' + user.lastName : '' %>
+                                    <% var now = new Date();
+                                    if(user.birthDate && now.getDay() == user.birthDate.getDay() && now.getMonth() == user.birthDate.getMonth()){
+                                    %>
+                                    🎂
+                                    <% }; %>
+                                </h5>
 
-                                    <% if(user.status) { %><h6 class="card-subtitle mb-2 text-muted"><%= user.status %></h6><% } %>
-                                </div>
+                                <% if(user.status) { %>
+                                <h6 class="card-subtitle mb-2 text-muted"><%= user.status %></h6>
+                                <% } %>
                             </div>
-                        </a>
-                        <% }); %>
-                    </div>
+                        </div>
+                    </a>
+                    <% }); %>
+                </div>
                 <% } %>
             </div>
             <div class="tab-pane fade" id="v-pills-tags" role="tabpanel" aria-labelledby="v-pills-tags-tab">
                 <% if (tags.length == 0) { %>
-                    <div class="text-center text-muted"><i class="fa fa-meh-o" style="font-size:5em;margin:0.2em 0;" aria-hidden="true"></i><br />There are no tags matching "<%= searchQuery %>"</div>
+                <div class="text-center text-muted"><i class="fa fa-meh-o" style="font-size:5em;margin:0.2em 0;"
+                                                       aria-hidden="true"></i><br/>There are no tags matching
+                    "<%= searchQuery %>"
+                </div>
                 <% } else { %>
-                    <div class="card-columns card-columns-tags" id="selectable-cards">
-                        <% tags.forEach(function(tag) { %>
-                        <%
-                            var dataTagSelected = false;
-                            activeUser.tags.forEach((t) => {
-                                if (t.equals(tag._id)) {
-                                    dataTagSelected = true;
-                                }
-                            });
-                        %>
-                        <div class="card selectable-card<%= dataTagSelected ? ' card-selected' : ' card-unselected' %>" data-tag-id="<%= tag._id %>" data-tag-selected="<%= dataTagSelected %>">
-                            <div class="card-pattern card-pattern-<%= tag.patternClass %>"></div>
-                            <div class="card-body">
-                                <h5><%= tag.name %></h5>
-                                <small class="text-muted"><%= tag.description %></small>
-                            </div>
+                <div class="card-columns card-columns-tags" id="selectable-cards">
+                    <% tags.forEach(function(tag) { %>
+                    <%
+                        var dataTagSelected = false;
+                        activeUser.tags.forEach((t) => {
+                            if (t.equals(tag._id)) {
+                                dataTagSelected = true;
+                            }
+                        });
+                    %>
+                    <div class="card selectable-card<%= dataTagSelected ? ' card-selected' : ' card-unselected' %>"
+                         data-tag-id="<%= tag._id %>" data-tag-selected="<%= dataTagSelected %>">
+                        <div class="card-pattern card-pattern-<%= tag.patternClass %>"></div>
+                        <div class="card-body">
+                            <h5><%= tag.name %></h5>
+                            <small class="text-muted"><%= tag.description %></small>
                         </div>
-                        <% }); %>
                     </div>
+                    <% }); %>
+                </div>
                 <% } %>
             </div>
         </div>
     </div>
-
 
 
 </main>
@@ -74,12 +87,14 @@
         <div class="modal-content">
             <div class="modal-body text-center">
                 <div style="margin: 30px 0 10px 0">
-                    <svg xmlns="http://www.w3.org/2000/svg" id="icon-error" height="64" width="64" viewBox="0 0 90.27 90.27">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="icon-error" height="64" width="64"
+                         viewBox="0 0 90.27 90.27">
                         <defs>
                             <style>
                                 .circle-2 {
                                     fill: #dc3545;
                                 }
+
                                 .x-single {
                                     fill: #fff;
                                 }
@@ -87,8 +102,10 @@
                         </defs>
                         <circle class="circle-2" cx="45.14" cy="45.14" r="45.14"/>
                         <g class="x">
-                            <rect class="x-single" x="21.77" y="43.49" width="46.74" height="3.36" transform="translate(-18.72 45.15) rotate(-45)"/>
-                            <rect class="x-single" x="43.47" y="21.81" width="3.36" height="46.74" transform="translate(-18.72 45.16) rotate(-45)"/>
+                            <rect class="x-single" x="21.77" y="43.49" width="46.74" height="3.36"
+                                  transform="translate(-18.72 45.15) rotate(-45)"/>
+                            <rect class="x-single" x="43.47" y="21.81" width="3.36" height="46.74"
+                                  transform="translate(-18.72 45.16) rotate(-45)"/>
                         </g>
                     </svg>
                 </div>
@@ -138,7 +155,9 @@
     }
 
     function showRequestError(card, data) {
-        toggleSelection(card, () => {}, () => {});
+        toggleSelection(card, () => {
+        }, () => {
+        });
         var errorModal = $('#errorModal');
         errorModal.modal('show');
         $('#modal-title').text('Error ' + data.status);
