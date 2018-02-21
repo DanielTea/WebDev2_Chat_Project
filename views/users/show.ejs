@@ -11,8 +11,6 @@
     <div class="button-list">
         <% if (activeUser._id == user.id) { %>
             <a href="/users/<%= user._id %>/update" class="btn btn-outline-secondary">Update profile</a>
-        <% } else { %>
-            <a class="btn btn-outline-primary" href="/chats/single/<%= user._id %>/messages">Chat with <%= user.firstName %></a>
         <% } %>
     </div>
 </main>

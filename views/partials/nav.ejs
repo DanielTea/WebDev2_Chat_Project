@@ -19,7 +19,7 @@
                 <div class="search">
                     <form method="GET" action="/search">
                         <button type="submit" class="search-button" aria-label="Search"><i class="fa fa-search" aria-hidden="true"></i></button>
-                        <input type="search" class="search-input" name="q" placeholder="Search..." value="<%= typeof searchQuery != 'undefined' && searchQuery ? searchQuery : '' %>" />
+                        <input type="search" class="search-input" name="q" placeholder="Search..." required value="<%= typeof searchQuery != 'undefined' && searchQuery ? searchQuery : '' %>" />
                     </form>
                 </div>
             </div>

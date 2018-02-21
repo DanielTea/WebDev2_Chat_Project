@@ -1,5 +1,4 @@
 var express = require('express');
-var Q = require('q');
 var router = express.Router();
 var User = require('../models/user');
 var Chat = require('../models/chat');
@@ -23,27 +22,25 @@ router.get('/', userAuth.isAuthenticated, function(req, res) {
 });
 
 router.post('/', userAuth.isAuthenticated, function(req, res) {
+    console.log('new chat...');
+    console.log(req.body);
 
     var newChat = new Chat({
         name: req.body.name,
         users: req.body.users
     });
 
+    console.log(newChat);
     newChat.save(function(err, data) {
         if (err) {
             console.log(err);
             return res.status(500).send();
         }
+        console.log(data);
         res.send();
     });
 
 });
-
-// TODO write code or remove
-// router.patch('/:id', userAuth.isAuthenticated, function(req, res) {
-//     console.log(req.body);
-//     res.send("hi");
-// });
 
 router.get('/:id', userAuth.isAuthenticated, function(req, res) {
     var objectId = require('mongodb').ObjectId;

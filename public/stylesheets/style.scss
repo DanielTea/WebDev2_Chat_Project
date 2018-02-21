@@ -93,7 +93,6 @@ aside.chat-aside {
     top: 56px;
     bottom: 0;
     left: 0;
-    height: 100vh;
     display: flex;
     flex-flow: column;
     align-items: flex-start;
@@ -119,7 +118,6 @@ aside.chat-aside {
         }
     }
     & > .chat-list {
-        max-height: 100%;
         width: 100%;
         overflow-y: auto;
         & > .chat-item {
