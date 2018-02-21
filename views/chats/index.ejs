@@ -55,165 +55,167 @@
 <% include ../partials/scripts %>
 <script src="/javascript/moment.min.js"></script>
 <script>
-const socket = io.connect(":<%= process.env.PORT %>");
+    const socket = io.connect(":<%= process.env.PORT %>");
+    const myUserId = '<%= activeUser._id %>';
 
-const chatHistory = $('#chat-history');
-const chatList = $('#chat-list');
+    //often used jquery selectors
+    const chatHistory = $('#chat-history');
+    const chatList = $('#chat-list');
+    const chatAdd = $('#chat-add')
+    const chatModalSelect = $('#chat-modal-select');
 
-
-const chatAdd = $('#chat-add')
-const chatModalSelect = $('#chat-modal-select');
-const myUserId = '<%= activeUser._id %>';
-
-function requestChat(chatId, onSuccess, onError) {
-    $.ajax({
-        url: '/chats/' + chatId,
-        method: 'GET',
-        success: (data) => onSuccess(data)
-    }).fail((data) => onError(data));
-}
-
-function populateChatHistory(chat) {
-    chatHistory.empty();
-    chat.messages.forEach((message) => buildAndShowMessageDiv(message));
-    window.scroll(0, document.documentElement.offsetHeight);
-}
-
-function enableInputs() {
-  $('#message-input').removeAttr('disabled');
-  $('#message-button').removeAttr('disabled');
-
-}
-
-var escapeHTML = function (unsafe) {
-  return unsafe.replace(/[&<"']/g, function(m) {
-    switch (m) {
-      case '&':
-        return '&amp;';
-      case '<':
-        return '&lt;';
-      case '"':
-        return '&quot;';
-      default:
-        return '&#039;';
-    }
-  });
-};
-
-function buildAndShowMessageDiv(message) {
-    var messageDiv = '<div class="message';
-    if (message.user != null && message.user._id == myUserId) {
-        messageDiv += ' message-active-user';
-    }
-    messageDiv += '">';
-    if (message.user != null && message.user._id != myUserId) {
-        messageDiv += `<div class="message-author"><a href="/users/${escapeHTML(message.user._id)}">${escapeHTML(message.user.firstName)} ${escapeHTML(message.user.lastName)}</a></div>`;
-    } else if (message.user == null) {
-        messageDiv += '<div class="message-author"><i class="text-muted">User deleted</i></div>'
-    }
-    messageDiv += `<div class="message-content">${escapeHTML(message.content)}</div>`;
-    messageDiv += `<div class="message-timestamp">${moment(message.createdAt).fromNow()}</div>`;
-    messageDiv += '</div>';
-    chatHistory.append(messageDiv);
-}
-
-chatList.on('click', 'a', function (e) {
-    var chatId = $(this).attr('data-chat-id');
-    e.preventDefault();
-    requestChat(
-        chatId,
-        (chat) => {
-            socket.emit('unsubscribe-all');
-            populateChatHistory(chat);
-            chatList.children('.chat-item').each(function () {
-                $(this).removeClass('active');
-            });
-            $(this).parent().addClass('active');
-            socket.emit('subscribe', {
-                room: chatId
-            });
-            enableInputs();
-        },
-        (err) => alert(err)
-    );
-});
-
-$('#chat-form').submit(function (e) {
-    e.preventDefault();
-    var userInput = $('#message-input').val();
-    if (userInput.length <= 0) {
-        return;
-    }
-    socket.emit('chat-message', {
-        content: userInput,
-        userId: myUserId
-    });
-    $('#message-input').val('');
-});
-
-// Adding a new chat
-chatAdd.click(function (e) {
-    getChatPartners((users) => {
-        users.forEach(function (user) {
-            var first = escapeHTML(user.firstName);
-            var last = escapeHTML(user.lastName);
-            var id = user._id;
-            if (id != myUserId) {
-                var userOption = `<option value="${id}">${first} ${last}</option>`
-                chatModalSelect.append(userOption);
+    //prevent xss and other potential threats
+    var escapeHTML = function (unsafe) {
+        return unsafe.replace(/[&<"']/g, function(m) {
+            switch (m) {
+                case '&':
+                    return '&amp;';
+                case '<':
+                    return '&lt;';
+                case '"':
+                    return '&quot;';
+                default:
+                    return '&#039;';
             }
         });
-        chatModalSelect.append('');
-        },
-    (err) => alert(err));
-});
-
-function getChatPartners(onSuccess, onError) {
-    $.ajax({
-        url: '/api/users',
-        method: 'GET',
-        success: (data) => onSuccess(data)
-    }).fail((data) => onError(data));
-}
-
-function createNewChat(name, users, onSuccess, onError) {
-    var data = {
-        name: name,
-        users: users
     };
-    $.ajax({
-        url: '/chats',
-        method: 'POST',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        success: (data) => onSuccess(data)
-    }).fail((data) => onError(data));
-}
 
-$('#create-chat-form').submit(function(e){
-    e.preventDefault();
-    var users = [];
-    users.push(myUserId);
-    $('#chat-modal-select option:selected').each(function () {
-        users.push($(this).val());
+    function requestChat(chatId, onSuccess, onError) {
+        $.ajax({
+            url: '/chats/' + chatId,
+            method: 'GET',
+            success: (data) => onSuccess(data)
+        }).fail((data) => onError(data));
+    }
+
+    function populateChatHistory(chat) {
+        chatHistory.empty();
+        chat.messages.forEach((message) => buildAndShowMessageDiv(message));
+        window.scroll(0, document.documentElement.offsetHeight);
+    }
+
+    //enable upon selection of a chat; see chatList event listener
+    function enableInputs() {
+        $('#message-input').removeAttr('disabled');
+        $('#message-button').removeAttr('disabled');
+
+    }
+
+    //chat message "render" function; see socketio event listener
+    function buildAndShowMessageDiv(message) {
+        var messageDiv = '<div class="message';
+        if (message.user != null && message.user._id == myUserId) {
+            messageDiv += ' message-active-user';
+        }
+        messageDiv += '">';
+        if (message.user != null && message.user._id != myUserId) {
+            messageDiv += `<div class="message-author"><a href="/users/${escapeHTML(message.user._id)}">${escapeHTML(message.user.firstName)} ${escapeHTML(message.user.lastName)}</a></div>`;
+        } else if (message.user == null) {
+            messageDiv += '<div class="message-author"><i class="text-muted">User deleted</i></div>'
+        }
+        messageDiv += `<div class="message-content">${escapeHTML(message.content)}</div>`;
+        messageDiv += `<div class="message-timestamp">${moment(message.createdAt).fromNow()}</div>`;
+        messageDiv += '</div>';
+        chatHistory.append(messageDiv);
+    }
+
+    //event listeners
+    chatList.on('click', 'a', function (e) {
+        var chatId = $(this).attr('data-chat-id');
+        e.preventDefault();
+        requestChat(
+            chatId,
+            (chat) => {
+                socket.emit('unsubscribe-all');
+                populateChatHistory(chat);
+                chatList.children('.chat-item').each(function () {
+                    $(this).removeClass('active');
+                });
+                $(this).parent().addClass('active');
+                socket.emit('subscribe', {
+                    room: chatId
+                });
+                enableInputs();
+            },
+            (err) => alert(err)
+        );
     });
-    createNewChat(
-        $('#chat-modal-title').val(),
-        users,
-        (data) => location.reload(),
-        (data) => alert(data)
-    );
-});
 
-//Socket IO
-socket.on('chat-message', function (data) {
-    buildAndShowMessageDiv(data);
-    window.scroll(0, document.documentElement.offsetHeight);
-});
+    $('#chat-form').submit(function (e) {
+        e.preventDefault();
+        var userInput = $('#message-input').val();
+        if (userInput.length <= 0) {
+            return;
+        }
+        socket.emit('chat-message', {
+            content: userInput,
+            userId: myUserId
+        });
+        $('#message-input').val('');
+    });
 
-socket.on('server-message', function (msg) {
-   chatHistory.append(`<div class="server-message">${escapeHTML(msg)}</div>`);
-   window.scroll(0, document.documentElement.offsetHeight);
-});
+    chatAdd.click(function (e) {
+        getChatPartners((users) => {
+                users.forEach(function (user) {
+                    var first = escapeHTML(user.firstName);
+                    var last = escapeHTML(user.lastName);
+                    var id = user._id;
+                    if (id != myUserId) {
+                        var userOption = `<option value="${id}">${first} ${last}</option>`
+                        chatModalSelect.append(userOption);
+                    }
+                });
+                chatModalSelect.append('');
+            },
+            (err) => alert(err));
+    });
+
+    $('#create-chat-form').submit(function(e){
+        e.preventDefault();
+        var users = [];
+        users.push(myUserId);
+        $('#chat-modal-select option:selected').each(function () {
+            users.push($(this).val());
+        });
+        createNewChat(
+            $('#chat-modal-title').val(),
+            users,
+            (data) => location.reload(),
+            (data) => alert(data)
+        );
+    });
+
+    //server communication
+    function getChatPartners(onSuccess, onError) {
+        $.ajax({
+            url: '/api/users',
+            method: 'GET',
+            success: (data) => onSuccess(data)
+        }).fail((data) => onError(data));
+    }
+
+    function createNewChat(name, users, onSuccess, onError) {
+        var data = {
+            name: name,
+            users: users
+        };
+        $.ajax({
+            url: '/chats',
+            method: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: (data) => onSuccess(data)
+        }).fail((data) => onError(data));
+    }
+    //Socket IO event handling
+    socket.on('chat-message', function (data) {
+        buildAndShowMessageDiv(data);
+        window.scroll(0, document.documentElement.offsetHeight);
+    });
+
+    socket.on('server-message', function (msg) {
+        chatHistory.append(`<div class="server-message">${escapeHTML(msg)}</div>`);
+        window.scroll(0, document.documentElement.offsetHeight);
+    });
 </script>
 <% include ../partials/footer %>
