@@ -8,32 +8,29 @@ const userAuth = require('../userAuth');
 
 
 router.get('/', userAuth.isAuthenticated, function(req, res) {
-    try {
-        User.find({}, (err, users) => {
-            if (err) console.log(err);
-            res.render('users/index', {
-                users: users
-            });
+    User.find({}, (err, users) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        }
+        res.render('users/index', {
+            users: users
         });
-    } catch (err) {
-        throw err;
-    }
+    });
 });
 
 router.get('/:id/update', userAuth.isActiveUser, function(req, res) {
-    try {
         var objectId = require('mongodb').ObjectId;
         var id = new objectId(req.params.id);
-
         User.findById(id, function(err, user) {
+            if (err) {
+                console.log(err);
+                return res.status(500).send();
+            }
             res.render('users/update', {
                 user: user
             });
         });
-
-    } catch (err) {
-        throw err;
-    }
 });
 
 router.get('/create', userAuth.isGuest, function(req, res) {
@@ -115,6 +112,10 @@ router.get('/:id', userAuth.isAuthenticated, function(req, res) {
     var id = new objectId(req.params.id);
 
     User.findById(id, function(err, user) {
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        }
         res.render('users/show.ejs', {
             user: user
         });
@@ -186,6 +187,10 @@ router.post('/:id/tags', userAuth.isActiveUser, function(req, res) {
     var tagId = new objectId(req.body.tag);
 
     User.findById(id, function(err, user) {
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        }
         user.tags.push(tagId);
         User.update({
             _id: id
@@ -209,6 +214,10 @@ router.delete('/:id/tags/:tagId', userAuth.isActiveUser, function(req, res) {
     var tagId = new objectId(req.params.tagId);
 
     User.findById(id, function(err, user) {
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        }
         var newTags = user.tags.filter(item => !item.equals(tagId));
         User.update({
             _id: id
@@ -225,6 +234,5 @@ router.delete('/:id/tags/:tagId', userAuth.isActiveUser, function(req, res) {
         });
     });
 });
-
 
 module.exports = router;
