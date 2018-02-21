@@ -5,16 +5,20 @@ const Tag = require('../models/tag');
 const Chat = require('../models/chat');
 const Message = require('../models/message');
 
+/**
+ * EJS route - SHOW
+ *
+ */
 router.get('/', (req, res) => {
     res.render('development');
 });
 
-router.get('/chats', (req, res) => {
-    Chat.find({}, (err, chats) => {
-        res.json(chats);
-    });
-});
-
+/**
+ * AJAX route
+ * Seeds the database with generated fake data, this will take some time
+ * To generate fake data, we use [Faker.JS](https://github.com/marak/Faker.js/)
+ * Every user will have the same password configured in your local .env file
+ */
 router.post('/seed-database', (req, res) => {
     const faker = require('faker');
 
@@ -92,15 +96,15 @@ router.post('/seed-database', (req, res) => {
             var messages = [];
             var chatPartners = [user];
             for (j = 0; j < faker.random.number({
-                    min: 2,
-                    max: 5
-                }); j++) {
+                min: 2,
+                max: 5
+            }); j++) {
                 chatPartners.push(faker.random.arrayElement(users));
             }
             for (j = 0; j < faker.random.number({
-                    min: 4,
-                    max: 10
-                }); j++) {
+                min: 4,
+                max: 10
+            }); j++) {
                 try {
                     var message = new Message({
                         content: faker.lorem.sentence(),
@@ -138,9 +142,9 @@ router.post('/seed-database', (req, res) => {
     }
     users.forEach((user) => {
         for (j = 0; j < faker.random.number({
-                min: 3,
-                max: 10
-            }); j++) {
+            min: 3,
+            max: 10
+        }); j++) {
             user.tags.push(faker.random.arrayElement(tags));
         }
         user.save((err, data) => {

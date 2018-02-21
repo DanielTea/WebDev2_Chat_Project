@@ -101,14 +101,18 @@ function onListening() {
  */
 var io = require("socket.io")(server);
 
-// Send current time to all connected clients
+/**
+ * Send current time to all connected clients
+ */
 function sendTime() {
     io.emit('time', {
         time: new Date().toJSON()
     });
 }
 
-// Send current time every 10 secs
+/**
+ * Send current time every 10 secs
+ */
 setInterval(sendTime, 10000);
 
 const Chat = require('../models/chat');
@@ -116,38 +120,38 @@ const Tag = require('../models/tag');
 const User = require('../models/user');
 const Message = require('../models/message');
 
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
     console.log('socket: user connected');
 
     var rooms = [];
 
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function () {
         console.log('socket: user disconnected');
     });
 
-    socket.on('subscribe', function(data) {
+    socket.on('subscribe', function (data) {
         socket.join(data.room);
         socket.broadcast.to(data.room).emit('server-message', 'A new client connected');
         socket.emit('server-message', 'You are now connected');
         rooms.push(data.room);
     });
 
-    socket.on('unsubscribe', function(data) {
+    socket.on('unsubscribe', function (data) {
         socket.leave(data.room);
     });
 
-    socket.on('unsubscribe-all', function(data) {
+    socket.on('unsubscribe-all', function (data) {
         rooms.forEach((room) => socket.leave(room));
     });
 
-    socket.on('chat-message', function(data) {
+    socket.on('chat-message', function (data) {
         rooms.forEach((room) => {
             Chat.findById(room, (err, chat) => {
                 if (err) {
                     console.log(err);
                     return socket.emit('server-message', 'Unknown chat, not sending your message');
                 }
-                User.findById(data.userId, function(err, user) {
+                User.findById(data.userId, function (err, user) {
                     if (err) {
                         console.log(err);
                         return socket.emit('server-message', 'Unknown user, not sending your message');
@@ -175,14 +179,14 @@ io.on('connection', function(socket) {
         });
     });
 
-    socket.on('tag-message', function(data) {
+    socket.on('tag-message', function (data) {
         rooms.forEach((room) => {
             Tag.findById(room, (err, tag) => {
                 if (err) {
                     console.log(err);
                     return socket.emit('server-message', 'Unknown tag, not sending your message');
                 }
-                User.findById(data.userId, function(err, user) {
+                User.findById(data.userId, function (err, user) {
                     if (err) {
                         console.log(err);
                         return socket.emit('server-message', 'Unknown user, not sending your message');

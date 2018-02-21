@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var chatSchema = mongoose.Schema({
+const chatSchema = mongoose.Schema({
     name: String,
     users: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -14,8 +14,8 @@ var chatSchema = mongoose.Schema({
     createdAt: Date
 });
 
-chatSchema.pre('save', function(next) {
-    var currentDate = new Date();
+chatSchema.pre('save', function (next) {
+    const currentDate = new Date();
     this.updatedAt = currentDate;
     if (!this.createdAt) {
         this.createdAt = currentDate;
@@ -23,5 +23,5 @@ chatSchema.pre('save', function(next) {
     next();
 });
 
-var Chat = mongoose.model('Chat', chatSchema);
+const Chat = mongoose.model('Chat', chatSchema);
 module.exports = Chat;

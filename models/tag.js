@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var tagSchema = mongoose.Schema({
+const tagSchema = mongoose.Schema({
     name: String,
     messages: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -21,7 +21,7 @@ var tagSchema = mongoose.Schema({
     createdAt: Date
 });
 
-tagSchema.pre('save', function(next) {
+tagSchema.pre('save', function (next) {
     var currentDate = new Date();
     this.updatedAt = currentDate;
     if (!this.createdAt) {
@@ -30,5 +30,5 @@ tagSchema.pre('save', function(next) {
     next();
 });
 
-var Tag = mongoose.model('Tag', tagSchema);
+const Tag = mongoose.model('Tag', tagSchema);
 module.exports = Tag;

@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
 const Chat = require('../models/chat');
-const Message = require('../models/message');
 const userAuth = require('../userAuth');
 
-router.get('/', userAuth.isAuthenticated, function(req, res) {
+/**
+ * EJS route - INDEX
+ * Render an index page of all chats,
+ * this page uses AJAX Requests (via jQuery) to load all messages of the currently open chat.
+ */
+router.get('/', userAuth.isAuthenticated, function (req, res) {
     Chat.find({
         users: {
             $in: [req.user._id]
@@ -21,13 +24,17 @@ router.get('/', userAuth.isAuthenticated, function(req, res) {
     });
 });
 
-router.post('/', userAuth.isAuthenticated, function(req, res) {
-    var newChat = new Chat({
+/**
+ * AJAX route - STORE
+ * Inserts a new chat into the database, called via AJAX
+ */
+router.post('/', userAuth.isAuthenticated, function (req, res) {
+    const newChat = new Chat({
         name: req.body.name,
         users: req.body.users
     });
 
-    newChat.save(function(err, data) {
+    newChat.save(function (err, data) {
         if (err) {
             console.log(err);
             return res.status(500).send('Database error');
@@ -36,7 +43,11 @@ router.post('/', userAuth.isAuthenticated, function(req, res) {
     });
 });
 
-router.get('/:id', userAuth.isAuthenticated, function(req, res) {
+/**
+ * AJAX route - SHOW
+ * Gets the corresponding chat object including all populated messages
+ */
+router.get('/:id', userAuth.isAuthenticated, function (req, res) {
     Chat.findById(req.params.id)
         .populate({
             path: 'messages',
@@ -51,33 +62,6 @@ router.get('/:id', userAuth.isAuthenticated, function(req, res) {
             }
             res.send(chat);
         });
-});
-
-router.delete('/:id', userAuth.isAuthenticated, function(req, res) {
-    Chat.findById(req.params.id, function(err, chat) {
-        if (chat.users.indexOf(id) == -1) {
-            return res.status(400).send('user is not part of this chat');
-        }
-        if (chat.users.length <= 1) {
-            Chat.remove({
-                _id: req.params.id
-            }, function(err) {
-                if (err) {
-                    console.log(err);
-                    return res.send('Database error');
-                }
-            });
-        }
-        var index = chat.users.indexOf(req.params.id);
-        chat.users.splice(index, 1);
-        chat.save(function(err, data) {
-            if (err) {
-                console.log(err);
-                return res.status(500).send('Database error');
-            }
-            return res.send();
-        });
-    });
 });
 
 module.exports = router;

@@ -3,9 +3,12 @@ const router = express.Router();
 const Tag = require('../models/tag');
 const userAuth = require('../userAuth');
 const User = require('../models/user');
-const Message = require('../models/message');
 
-router.get('/', userAuth.isAuthenticated, function(req, res) {
+/**
+ * EJS route - INDEX
+ * Renders an index page for all tags saved in the database
+ */
+router.get('/', userAuth.isAuthenticated, function (req, res) {
     Tag.find({}, (err, tags) => {
         if (err) {
             console.log(err);
@@ -17,11 +20,19 @@ router.get('/', userAuth.isAuthenticated, function(req, res) {
     });
 });
 
-router.get('/create', userAuth.isAuthenticated, function(req, res) {
+/**
+ * EJS route - CREATE
+ * Shows the form to create a new tag
+ */
+router.get('/create', userAuth.isAuthenticated, function (req, res) {
     res.render('tags/create');
 });
 
-router.get('/:id', userAuth.isAuthenticated, function(req, res) {
+/**
+ * EJS route - SHOW
+ * Shows the detail page of a tag, which contains of a chat-like exchange of messages about the tag
+ */
+router.get('/:id', userAuth.isAuthenticated, function (req, res) {
     Tag.findById(req.params.id)
         .populate({
             path: 'messages',
@@ -40,12 +51,15 @@ router.get('/:id', userAuth.isAuthenticated, function(req, res) {
         });
 });
 
-// TODO: Only the creator may update the tag
-router.get('/:id/update', userAuth.isAuthenticated, function(req, res) {
+/**
+ * EJS route - EDIT
+ * Shows the form to update the tag
+ */
+router.get('/:id/update', userAuth.isAuthenticated, function (req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
 
-    Tag.findById(id, function(err, tag) {
+    Tag.findById(id, function (err, tag) {
         if (err) {
             console.log(err);
             return res.status(500).send('Database error');
@@ -57,7 +71,11 @@ router.get('/:id/update', userAuth.isAuthenticated, function(req, res) {
 
 });
 
-router.post('/', userAuth.isAuthenticated, function(req, res) {
+/**
+ * EJS route - STORE
+ * Insert a new tag into the database
+ */
+router.post('/', userAuth.isAuthenticated, function (req, res) {
     var userId = req.user._id;
     var tag = new Tag({
         name: req.body.name,
@@ -66,7 +84,7 @@ router.post('/', userAuth.isAuthenticated, function(req, res) {
         createdBy: req.user
     });
 
-    tag.save(function(err) {
+    tag.save(function (err) {
         if (err) {
             console.log(err);
             if (err.name === 'MongoError' && err.code === 11000) {
@@ -79,7 +97,7 @@ router.post('/', userAuth.isAuthenticated, function(req, res) {
 
         req.user.tags.push(tag._id);
         User.update({
-            _id: req.user._id
+            _id: userId
         }, {
             $set: {
                 tags: req.user.tags
@@ -90,13 +108,16 @@ router.post('/', userAuth.isAuthenticated, function(req, res) {
                 return res.status(500).send('Database error');
             }
             req.flash('success', 'Yeah! Your new tag was created.');
-            return res.redirect('/users/' + req.user._id + '/tags');
+            return res.redirect('/users/' + userId + '/tags');
         });
     });
 });
 
-// TODO: Only the creator may delete the tag
-router.delete('/:id', userAuth.isAuthenticated, function(req, res) {
+/**
+ * EJS route - DESTROY
+ * Deletes the tag out of the database
+ */
+router.delete('/:id', userAuth.isAuthenticated, function (req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
 
@@ -112,8 +133,11 @@ router.delete('/:id', userAuth.isAuthenticated, function(req, res) {
     });
 });
 
-// TODO: Only the creator may delete the tag
-router.patch('/:id', userAuth.isAuthenticated, function(req, res) {
+/**
+ * EJS route - UPDATE
+ * Updates the tag's data with the one's provided in the request body
+ */
+router.patch('/:id', userAuth.isAuthenticated, function (req, res) {
     var objectId = require('mongodb').ObjectId;
     var id = new objectId(req.params.id);
     var data = req.body;

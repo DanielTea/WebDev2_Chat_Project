@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var messageSchema = mongoose.Schema({
+const messageSchema = mongoose.Schema({
     content: String,
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -11,8 +11,8 @@ var messageSchema = mongoose.Schema({
     createdAt: Date
 });
 
-messageSchema.pre('save', function(next) {
-    var currentDate = new Date();
+messageSchema.pre('save', function (next) {
+    const currentDate = new Date();
     this.updatedAt = currentDate;
     if (!this.createdAt) {
         this.createdAt = currentDate;
@@ -20,5 +20,5 @@ messageSchema.pre('save', function(next) {
     next();
 });
 
-var Message = mongoose.model('Message', messageSchema);
+const Message = mongoose.model('Message', messageSchema);
 module.exports = Message;

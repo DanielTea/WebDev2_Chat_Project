@@ -1,46 +1,52 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var sassMiddleware = require('node-sass-middleware');
-var mongoose = require('mongoose');
-var session = require('express-session');
-var flash = require('connect-flash');
-var methodOverride = require('method-override')
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const sassMiddleware = require('node-sass-middleware');
+const mongoose = require('mongoose');
+const session = require('express-session');
+const flash = require('connect-flash');
+const methodOverride = require('method-override')
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('./models/user');
 
-var passport = require('passport');
-var LocalStrategy = LocalStrategy = require('passport-local').Strategy;
+const app = express();
 
-var app = express();
-
+/**
+ * Method override for the different standards (URL parameter or HTTP header field)
+ */
 app.use(methodOverride('_method'));
 app.use(methodOverride('X-HTTP-Method')); // Microsoft
 app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
 app.use(methodOverride('X-Method-Override')); // IBM
 
+/**
+ * Mongoose setup
+ */
 mongoose.Promise = require('bluebird');
 mongoose.connect(process.env.DB_MONGO_URI, {
     useMongoClient: true
 });
 
-app.use(function(req, res, next) {
+/**
+ * Remove trailing slash from urls
+ */
+app.use(function (req, res, next) {
     if (req.url.substr(-1) == '/' && req.url.length > 1) {
         return res.redirect(301, req.url.slice(0, -1));
     }
     return next();
 });
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(cookieParser());
-var secure_cookie = process.env.HTTPS_SECURED == 'true';
+const secure_cookie = process.env.HTTPS_SECURED == 'true';
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -53,7 +59,9 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-const User = require('./models/user');
+/**
+ * User authentification using [Passport.JS](http://www.passportjs.org/)
+ */
 passport.use(new LocalStrategy({
         passReqToCallback: true
     },
@@ -88,6 +96,9 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+/**
+ * Populate local variables that may be used in any EJS template
+ */
 app.use((req, res, next) => {
     app.locals.siteTitle = process.env.SITE_TITLE;
     app.locals.activeUser = req.user;
@@ -129,40 +140,49 @@ app.use((req, res, next) => {
     next();
 });
 
-// view engine setup
+/**
+ * View engine setup
+ */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+/**
+ * Sass middleware for live compiling of scss to css
+ */
 app.use(sassMiddleware({
     src: path.join(__dirname, 'public'),
     dest: path.join(__dirname, 'public'),
     indentedSyntax: false, // true = .sass and false = .scss
     sourceMap: true
 }));
+
+/**
+ * Serving static files like css and client-side javascript
+ */
 app.use(express.static(path.join(__dirname, 'public')));
 
+/**
+ * Bind all routes to their entry point urls
+ */
 app.use('/', require('./routes/index'));
 app.use('/', require('./routes/login'));
 app.use('/users', require('./routes/users'));
 app.use('/tags', require('./routes/tags'));
 app.use('/chats', require('./routes/chats'));
 app.use('/api', require('./routes/api'));
-
 app.use('/development', require('./routes/development'));
 
-app.get('*', function(req, res) {
+/**
+ * Catch 404 and forward to error handler
+ */
+app.use((req, res) => {
     res.render('404');
 });
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-// error handler
-app.use((err, req, res, next) => {
+/**
+ * Error handler
+ */
+app.use((err, req, res) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};

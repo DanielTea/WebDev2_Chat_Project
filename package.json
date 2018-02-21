@@ -1,36 +1,54 @@
 {
-  "name": "web-development-2-project",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
-  },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "bluebird": "^3.5.1",
-    "body-parser": "^1.18.2",
-    "bundle": "^2.1.0",
-    "connect-flash": "^0.1.1",
-    "cookie-parser": "^1.4.3",
-    "debug": "^2.6.9",
-    "dotenv": "^4.0.0",
-    "ejs": "~2.5.7",
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
-    "http": "0.0.0",
-    "method-override": "^2.3.10",
-    "mongoose": "^4.13.11",
-    "morgan": "^1.9.0",
-    "node-sass-middleware": "^0.11.0",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "q": "^1.5.1",
-    "serve-favicon": "^2.4.5",
-    "socket.io": "^2.0.4"
-  },
-  "devDependencies": {
-    "faker": "^4.1.0",
-    "nodemon": "^1.15.0"
-  }
+    "name": "web-development-2-project",
+    "version": "1.0.0",
+    "private": true,
+    "contributors": [
+        {
+            "name": "Martin Bock",
+            "email": "mb284@hdm-stuttgart.de"
+        },
+        {
+            "name": "Laura Greiner",
+            "email": "lg032@hdm-stuttgart.de"
+        },
+        {
+            "name": "Daniel Tremer",
+            "email": "dt024@hdm-stuttgart.de"
+        },
+        {
+            "name": "Simon Robl",
+            "email": "sr141@hdm-stuttgart.de"
+        }
+    ],
+    "scripts": {
+        "start": "node ./bin/www",
+        "dev": "nodemon ./bin/www"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "bluebird": "^3.5.1",
+        "body-parser": "^1.18.2",
+        "bundle": "^2.1.0",
+        "connect-flash": "^0.1.1",
+        "cookie-parser": "^1.4.3",
+        "debug": "^2.6.9",
+        "dotenv": "^4.0.0",
+        "ejs": "~2.5.7",
+        "express": "^4.16.2",
+        "express-session": "^1.15.6",
+        "http": "0.0.0",
+        "method-override": "^2.3.10",
+        "mongoose": "^4.13.11",
+        "morgan": "^1.9.0",
+        "node-sass-middleware": "^0.11.0",
+        "passport": "^0.4.0",
+        "passport-local": "^1.0.0",
+        "q": "^1.5.1",
+        "serve-favicon": "^2.4.5",
+        "socket.io": "^2.0.4"
+    },
+    "devDependencies": {
+        "faker": "^4.1.0",
+        "nodemon": "^1.15.0"
+    }
 }

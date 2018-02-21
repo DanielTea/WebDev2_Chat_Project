@@ -1,5 +1,4 @@
-var User = require('./models/user');
-var functions = {};
+const functions = {};
 
 functions.isAuthenticated = (req, res, next) => {
     if (req.user) {
@@ -11,7 +10,7 @@ functions.isAuthenticated = (req, res, next) => {
 
 functions.isActiveUser = (req, res, next) => {
     functions.isAuthenticated(req, res, () => {
-        if (req.user._id == req.params.id) {
+        if (req.user._id === req.params.id) {
             return next();
         }
         req.flash('error', 'You don\'t have permission to access this page.');

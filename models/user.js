@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-var userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
     firstName: {
         type: String,
         required: true
@@ -33,13 +33,13 @@ userSchema.pre('save', (next) => {
     next();
 });
 
-userSchema.statics.generateHash = function(password) {
+userSchema.statics.generateHash = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };
 
-userSchema.methods.validatePassword = function(password) {
+userSchema.methods.validatePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 
-var User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 module.exports = User;
