@@ -1,12 +1,12 @@
-var express = require('express');
-var router = express.Router();
-var passport = require('passport');
+const express = require('express');
+const router = express.Router();
+const passport = require('passport');
 const userAuth = require('../userAuth');
 const User = require('../models/user');
 const Tag = require('../models/tag');
 const Chat = require('../models/chat');
 
-/* GET home page. */
+// TODO
 router.get('/', userAuth.isAuthenticated, function(req, res, next) {
     res.render('index', {
         title: 'Express'
@@ -24,7 +24,7 @@ router.get('/search', userAuth.isAuthenticated, (req, res) => {
     }, (err, users) => {
         if (err) {
             console.log(err);
-            return res.status(500);
+            return res.status(500).send('Database error');
         }
         Tag.find({
             $or: [{
@@ -35,7 +35,7 @@ router.get('/search', userAuth.isAuthenticated, (req, res) => {
         }, (err, tags) => {
             if (err) {
                 console.log(err);
-                return res.status(500);
+                return res.status(500).send('Database error');
             }
             Chat.find({
                 name: new RegExp(searchQuery, 'i'),
@@ -45,7 +45,7 @@ router.get('/search', userAuth.isAuthenticated, (req, res) => {
             }, (err, chats) => {
                 if (err) {
                     console.log(err);
-                    return res.status(500);
+                    return res.status(500).send('Database error');
                 }
                 res.render('search', {
                     searchQuery: searchQuery,

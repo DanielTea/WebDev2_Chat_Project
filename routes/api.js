@@ -7,7 +7,7 @@ router.get('/users', userAuth.isAuthenticated, function(req, res) {
     User.find({}, (err, users) => {
         if (err) {
             console.log(err);
-            return res.status(500).send();
+            return res.status(500).send('Database error');
         }
         res.json(users);
     });

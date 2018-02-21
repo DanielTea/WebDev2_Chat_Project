@@ -7,10 +7,6 @@ var messageSchema = mongoose.Schema({
         ref: 'User',
         required: true
     },
-    multimedia: {
-        data: Buffer,
-        contentType: String
-    },
     updatedAt: Date,
     createdAt: Date
 });

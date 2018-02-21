@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const User = require('../models/user');
 const Tag = require('../models/tag');
 const Chat = require('../models/chat');
@@ -91,10 +91,16 @@ router.post('/seed-database', (req, res) => {
         users.forEach((user) => {
             var messages = [];
             var chatPartners = [user];
-            for (j = 0; j < faker.random.number({ min: 2, max: 5 }); j++) {
+            for (j = 0; j < faker.random.number({
+                    min: 2,
+                    max: 5
+                }); j++) {
                 chatPartners.push(faker.random.arrayElement(users));
             }
-            for (j = 0; j < faker.random.number({ min: 4, max: 10 }); j++) {
+            for (j = 0; j < faker.random.number({
+                    min: 4,
+                    max: 10
+                }); j++) {
                 try {
                     var message = new Message({
                         content: faker.lorem.sentence(),
@@ -131,7 +137,10 @@ router.post('/seed-database', (req, res) => {
         });
     }
     users.forEach((user) => {
-        for (j = 0; j < faker.random.number({ min: 3, max: 10 }); j++) {
+        for (j = 0; j < faker.random.number({
+                min: 3,
+                max: 10
+            }); j++) {
             user.tags.push(faker.random.arrayElement(tags));
         }
         user.save((err, data) => {

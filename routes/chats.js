@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/user');
-var Chat = require('../models/chat');
-var Message = require('../models/message');
+const express = require('express');
+const router = express.Router();
+const User = require('../models/user');
+const Chat = require('../models/chat');
+const Message = require('../models/message');
 const userAuth = require('../userAuth');
 
 router.get('/', userAuth.isAuthenticated, function(req, res) {
@@ -13,7 +13,7 @@ router.get('/', userAuth.isAuthenticated, function(req, res) {
     }, (err, chats) => {
         if (err) {
             console.log(err);
-            return res.status(500).send();
+            return res.status(500).send('Database error');
         }
         res.render('chats/index', {
             chats: chats
@@ -22,30 +22,22 @@ router.get('/', userAuth.isAuthenticated, function(req, res) {
 });
 
 router.post('/', userAuth.isAuthenticated, function(req, res) {
-    console.log('new chat...');
-    console.log(req.body);
-
     var newChat = new Chat({
         name: req.body.name,
         users: req.body.users
     });
 
-    console.log(newChat);
     newChat.save(function(err, data) {
         if (err) {
             console.log(err);
-            return res.status(500).send();
+            return res.status(500).send('Database error');
         }
-        console.log(data);
         res.send();
     });
-
 });
 
 router.get('/:id', userAuth.isAuthenticated, function(req, res) {
-    var objectId = require('mongodb').ObjectId;
-    var id = new objectId(req.params.id);
-    Chat.findById(id)
+    Chat.findById(req.params.id)
         .populate({
             path: 'messages',
             populate: {
@@ -55,37 +47,33 @@ router.get('/:id', userAuth.isAuthenticated, function(req, res) {
         .exec((err, chat) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send();
+                return res.status(500).send('Database error');
             }
             res.send(chat);
         });
-
 });
 
 router.delete('/:id', userAuth.isAuthenticated, function(req, res) {
-    var objectId = require('mongodb').ObjectId;
-    var id = new objectId(req.params.id);
-    Chat.findById(id, function(err, chat) {
+    Chat.findById(req.params.id, function(err, chat) {
         if (chat.users.indexOf(id) == -1) {
-            // user is not part of this chat
-            return res.status(400).send();
+            return res.status(400).send('user is not part of this chat');
         }
         if (chat.users.length <= 1) {
             Chat.remove({
-                _id: id
+                _id: req.params.id
             }, function(err) {
                 if (err) {
                     console.log(err);
-                    return res.send();
+                    return res.send('Database error');
                 }
             });
         }
-        var index = chat.users.indexOf(id);
+        var index = chat.users.indexOf(req.params.id);
         chat.users.splice(index, 1);
         chat.save(function(err, data) {
             if (err) {
                 console.log(err);
-                return res.status(500).send();
+                return res.status(500).send('Database error');
             }
             return res.send();
         });

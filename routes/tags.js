@@ -1,16 +1,15 @@
-var express = require('express');
-var mongoose = require('mongoose');
-var router = express.Router();
-var Tag = require('../models/tag');
+const express = require('express');
+const router = express.Router();
+const Tag = require('../models/tag');
 const userAuth = require('../userAuth');
-var User = require('../models/user');
-var Message = require('../models/message');
+const User = require('../models/user');
+const Message = require('../models/message');
 
 router.get('/', userAuth.isAuthenticated, function(req, res) {
     Tag.find({}, (err, tags) => {
         if (err) {
             console.log(err);
-            return res.status(500).send();
+            return res.status(500).send('Database error');
         }
         res.render('tags/index', {
             tags: tags
@@ -24,21 +23,21 @@ router.get('/create', userAuth.isAuthenticated, function(req, res) {
 
 router.get('/:id', userAuth.isAuthenticated, function(req, res) {
     Tag.findById(req.params.id)
-    .populate({
-        path: 'messages',
-        populate: {
-            path: 'user'
-        }
-    })
-    .exec((err, tag) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send();
-        }
-        res.render('tags/show', {
-            tag: tag
+        .populate({
+            path: 'messages',
+            populate: {
+                path: 'user'
+            }
+        })
+        .exec((err, tag) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Database error');
+            }
+            res.render('tags/show', {
+                tag: tag
+            });
         });
-    });
 });
 
 // TODO: Only the creator may update the tag
@@ -49,7 +48,7 @@ router.get('/:id/update', userAuth.isAuthenticated, function(req, res) {
     Tag.findById(id, function(err, tag) {
         if (err) {
             console.log(err);
-            return res.status(500).send();
+            return res.status(500).send('Database error');
         }
         res.render('tags/update', {
             tag: tag
@@ -88,7 +87,7 @@ router.post('/', userAuth.isAuthenticated, function(req, res) {
         }, (err) => {
             if (err) {
                 console.log(err);
-                return res.status(500).send(err);
+                return res.status(500).send('Database error');
             }
             req.flash('success', 'Yeah! Your new tag was created.');
             return res.redirect('/users/' + req.user._id + '/tags');
@@ -106,9 +105,7 @@ router.delete('/:id', userAuth.isAuthenticated, function(req, res) {
     }, (err) => {
         if (err) {
             console.log(err);
-            return res.status(500).render('error', {
-                error: err
-            });
+            return res.status(500).send('Database error');
         }
         req.flash('success', 'Your tag was deleted.');
         return res.redirect('/users/' + req.user._id + '/tags');
@@ -128,9 +125,7 @@ router.patch('/:id', userAuth.isAuthenticated, function(req, res) {
     }, (err) => {
         if (err) {
             console.log(err);
-            return res.status(500).render('error', {
-                error: err
-            });
+            return res.status(500).send('Database error');
         }
         req.flash('success', 'Your tag was updated.');
         return res.redirect('/users/' + req.user._id + '/tags');
