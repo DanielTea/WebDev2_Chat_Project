@@ -89,6 +89,7 @@ passport.deserializeUser((id, done) => {
 });
 
 app.use((req, res, next) => {
+    app.locals.siteTitle = process.env.SITE_TITLE;
     app.locals.activeUser = req.user;
     app.locals.flashError = req.flash('error');
     app.locals.flashSuccess = req.flash('success');
@@ -146,9 +147,12 @@ app.use('/users', require('./routes/users'));
 app.use('/tags', require('./routes/tags'));
 app.use('/chats', require('./routes/chats'));
 app.use('/api', require('./routes/api'));
-// app.use('/messages', require('./routes/messages'));
 
 app.use('/development', require('./routes/development'));
+
+app.get('*', function(req, res) {
+    res.render('404');
+});
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -87,7 +87,7 @@ router.post('/seed-database', (req, res) => {
         }
     }
 
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 2; i++) {
         users.forEach((user) => {
             var messages = [];
             var chatPartners = [user];

@@ -1,0 +1,20 @@
+<% include partials/head %>
+<% if(activeUser) { %>
+    <% include partials/nav %>
+<% } %>
+<main class="container">
+    <h1>Error 404</h1>
+    <% include partials/flashMessages %>
+    <p>
+        Sorry, we couldn't find that site. Would you like to search for something?
+    </p>
+    <form method="GET" action="/search">
+        <div class="input-group">
+            <input type="search" name="q" class="form-control" placeholder="Search here..."/>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+
+    </form>
+</main>
+<% include partials/scripts %>
+<% include partials/footer %>

@@ -9,7 +9,7 @@ const Chat = require('../models/chat');
 // TODO
 router.get('/', userAuth.isAuthenticated, function(req, res, next) {
     res.render('index', {
-        title: 'Express'
+        title: process.env.SITE_TITLE
     });
 });
 

@@ -9,10 +9,14 @@
         </div>
         <div class="chat-history" id="chat-history">
             <% tag.messages.forEach(function (message) { %>
-                <div class="message<%= activeUser._id.equals(message.user._id) ? ' message-active-user' : '' %>">
-                    <% if (!activeUser._id.equals(message.user._id)) { %>
+                <div class="message<%= message.user != null && activeUser._id.equals(message.user._id) ? ' message-active-user' : '' %>">
+                    <% if (message.user != null && !activeUser._id.equals(message.user._id)) { %>
                         <div class="message-author">
                             <a href="/users/<%= message.user._id %>"><%= message.user.firstName + ' ' + message.user.lastName %></a>
+                        </div>
+                    <% } else if (message.user == null) { %>
+                        <div class="message-author">
+                            <i class="text-muted">User deleted</i>
                         </div>
                     <% } %>
                     <div class="message-content"><%= message.content %></div>

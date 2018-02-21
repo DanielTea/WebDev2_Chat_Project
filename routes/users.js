@@ -79,6 +79,7 @@ function setObjectValue(data, data_name, value, do_hash = false) {
 }
 
 router.patch('/:id', userAuth.isActiveUser, function(req, res) {
+    var id = req.params.id;
     var data = {};
     setObjectValue(data, 'firstName', req.body.firstName);
     setObjectValue(data, 'lastName', req.body.lastName);
@@ -89,7 +90,7 @@ router.patch('/:id', userAuth.isActiveUser, function(req, res) {
     setObjectValue(data, 'password', req.body.password, true);
 
     User.update({
-        _id: req.params.id
+        _id: id
     }, {
         $set: data
     }, (err) => {

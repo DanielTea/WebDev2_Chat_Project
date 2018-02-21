@@ -11,6 +11,7 @@ router.get('/login', (req, res) => {
             res.status(500).send('Database error');
         }
         res.render('login', {
+            title: process.env.SITE_TITLE,
             developmentUser: user,
             developmentPassword: process.env.DEV_USER_PASSWORD
         });
@@ -28,7 +29,7 @@ router.post('/login',
 router.get('/logout', function(req, res) {
     req.logout();
     req.flash('success', 'You successfully logged out.');
-    res.redirect('/');
+    res.redirect('/login');
 });
 
 module.exports = router;
