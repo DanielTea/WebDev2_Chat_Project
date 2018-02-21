@@ -2,8 +2,8 @@
 <% include ../partials/nav %>
 <aside class="chat-aside">
     <div class="chat-heading">Chats</div>
-    <div class="chat-add">
-        <a href="#"><i class="fa fa-plus" aria-label="Add a chat"></i></a>
+    <div class="chat-add" id="chat-add">
+        <a data-toggle="modal" href="#chat-modal"><i class="fa fa-plus" aria-label="Add a chat"></i></a>
     </div>
     <div class="chat-list" id="chat-list">
         <% chats.forEach(function(chat) { %>
@@ -23,12 +23,39 @@
     </form>
 </footer>
 
+<div class="modal" tabindex="-1" role="dialog" id="chat-modal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Users</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <select id="chat-modal-select" class="custom-select" multiple>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button id="chat-add-button" type="button" class="btn btn-primary ">Add selected users</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <% include ../partials/scripts %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
 <script>
 const socket = io.connect(":<%= process.env.PORT %>");
+
 const chatHistory = $('#chat-history');
 const chatList = $('#chat-list');
+
+
+const chatAdd = $('#chat-add')
+const chatModalSelect = $('#chat-modal-select');
+const chatAddButton = $('#chat-add-button');
 const myUserId = '<%= activeUser._id %>';
 
 function requestChat(chatId, onSuccess, onError) {
@@ -115,6 +142,57 @@ $('#chat-form').submit(function (e) {
     $('#message-input').val('');
 });
 
+// Adding a new chat
+chatAdd.on("click","a",function (e) {
+    getChatParners((users) => {
+        if(false){ //TODO: Remove me
+            users.forEach(function (user){
+            var first = escapeHTML(user.firstName);
+            var last = escapeHTML(user.lastName);
+            var id = user._id;
+            if(id != myUserId){
+            var userOption = "<option id='" + id + "'>" + first + last + "</option>";
+            chatModalSelect.append(userOption);
+            }
+            });
+            chatModalSelect.append('');
+        }
+        },
+    (err) => alert(err));
+})
+
+function getChatParners(onSuccess, onError) {
+    $.ajax({
+        url: '',//TODO: Change me to proper URL
+        method: 'GET',
+        success: (data) => onSuccess(data)
+    }).fail((data) => onError(data));
+}
+
+function createNewChat(users, onSuccess, onError) {
+    $.ajax({
+        url: '', //TODO: Change me to proper URL
+        method: 'POST',
+        success: (data) => onSuccess(data) //TODO: Reload page? Get the new chat? Something smart like that...
+    }).fail((data) => onError(data));
+}
+
+chatAddButton.click(function(_){
+    if(false){ //TODO: Remove me
+        var users = [];
+        $('#chat-modal-select option:selected').each(function(select){
+            users.push(select.attr('id'));
+        })
+        createNewChat(users)
+    }
+})
+//Override multiple select behaviour, no ctrl/strg required
+$('#chat-modal-select option').mousedown(function(e) {
+    e.preventDefault();
+    this.selected = !this.selected;
+    return false;
+});
+//Socket IO
 socket.on('chat-message', function (data) {
     buildAndShowMessageDiv(data);
     window.scroll(0, document.documentElement.offsetHeight);
