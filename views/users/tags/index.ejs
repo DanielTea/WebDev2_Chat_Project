@@ -1,5 +1,6 @@
 <% include ../../partials/head %>
 <% include ../../partials/nav %>
+<!-- Personal Tags fit better under /users then with the rest of /tags -->
 <main class="container">
     <% include ../../partials/flashMessages %>
     <h1>Your Tags</h1>
@@ -77,6 +78,7 @@
 </div>
 <% include ../../partials/scripts %>
 <script>
+    //functions for tag behaviour; add, delete as toggle & server communication, error handling
     function requestDeleteTag(tagId, onSuccess, onError) {
         $.ajax({
             url: '/users/<%= activeUser._id %>/tags/' + tagId,
